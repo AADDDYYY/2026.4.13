@@ -40,48 +40,48 @@ export default function About() {
   ];
 
   return (
-    <div className="pt-32 pb-24 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-40 relative">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-blue/5 rounded-full blur-[200px] -z-10"></div>
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+        <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
         
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-6xl"
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-7xl"
         >
-          <div className="flex items-center gap-4 mb-12">
-            <div className="h-px w-12 bg-brand-blue"></div>
-            <span className="text-brand-blue font-bold uppercase tracking-widest text-[12px]">
+          <div className="flex items-center gap-6 mb-16">
+            <div className="h-px w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
               Corporate Profile
             </span>
           </div>
-          <h1 className="text-5xl md:text-8xl font-black mb-12 tracking-tight leading-tight">
+          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
             {t("about.hero.title")}<br />
             <span className="text-brand-blue">{t("about.hero.subtitle")}</span>
           </h1>
-          <p className="text-brand-dark/60 text-xl md:text-2xl font-light leading-relaxed max-w-3xl">
+          <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("about.hero.desc")}
           </p>
         </motion.div>
       </div>
 
       {/* Stats Grid */}
-      <section className="py-32 border-y border-brand-border bg-brand-gray mb-40">
+      <section className="py-48 border-y border-brand-border bg-brand-gray mb-56">
         <div className="max-w-[1800px] mx-auto px-6 md:px-20">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-24">
             {stats.map((stat, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
+                transition={{ delay: idx * 0.15, duration: 1 }}
               >
-                <div className="text-[12px] font-bold text-brand-blue uppercase tracking-widest mb-4">{stat.label}</div>
-                <div className="text-5xl md:text-7xl font-black text-brand-dark tracking-tight">
-                  {stat.value}<span className="text-sm font-bold ml-3 text-brand-dark/20">{stat.unit}</span>
+                <div className="text-[11px] font-black text-brand-blue uppercase tracking-[0.3em] mb-6">{stat.label}</div>
+                <div className="text-6xl md:text-9xl font-black text-brand-dark tracking-tighter">
+                  {stat.value}<span className="text-xl font-black ml-4 text-brand-dark/20 uppercase tracking-widest">{stat.unit}</span>
                 </div>
               </motion.div>
             ))}
@@ -90,42 +90,43 @@ export default function About() {
       </section>
 
       {/* Content Section 1 */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-40">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-32 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 1.2 }}
             className="lg:col-span-6"
           >
-            <span className="text-brand-blue font-bold uppercase tracking-widest text-[12px] mb-8 block">Industrial Strength</span>
-            <h2 className="text-4xl md:text-6xl font-black text-brand-dark mb-12 tracking-tight leading-tight">
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-12 block">Industrial Strength</span>
+            <h2 className="text-5xl md:text-8xl font-black text-brand-dark mb-16 tracking-tighter leading-[0.9]">
               {t("about.strength.title")}<br />
               <span className="text-brand-blue">{t("about.strength.subtitle")}</span>
             </h2>
-            <p className="text-brand-dark/60 text-lg mb-12 leading-relaxed font-light">
+            <p className="text-brand-dark/40 text-2xl mb-16 leading-relaxed font-light max-w-2xl">
               {t("about.strength.desc")}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue border border-brand-blue/20">
-                  <Microscope size={24} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+              <div className="space-y-6">
+                <div className="w-16 h-16 rounded-3xl bg-brand-blue/10 flex items-center justify-center text-brand-blue border border-brand-blue/20">
+                  <Microscope size={32} />
                 </div>
-                <h4 className="text-brand-dark font-bold text-xl">{t("about.strength.team")}</h4>
-                <p className="text-brand-dark/40 text-sm font-medium leading-relaxed">{t("about.strength.team_desc")}</p>
+                <h4 className="text-brand-dark font-black text-2xl tracking-tight">{t("about.strength.team")}</h4>
+                <p className="text-brand-dark/40 text-base font-medium leading-relaxed">{t("about.strength.team_desc")}</p>
               </div>
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue border border-brand-blue/20">
-                  <Globe size={24} />
+              <div className="space-y-6">
+                <div className="w-16 h-16 rounded-3xl bg-brand-blue/10 flex items-center justify-center text-brand-blue border border-brand-blue/20">
+                  <Globe size={32} />
                 </div>
-                <h4 className="text-brand-dark font-bold text-xl">{t("about.strength.vision")}</h4>
-                <p className="text-brand-dark/40 text-sm font-medium leading-relaxed">{t("about.strength.vision_desc")}</p>
+                <h4 className="text-brand-dark font-black text-2xl tracking-tight">{t("about.strength.vision")}</h4>
+                <p className="text-brand-dark/40 text-base font-medium leading-relaxed">{t("about.strength.vision_desc")}</p>
               </div>
             </div>
           </motion.div>
           
           <div className="lg:col-span-6 relative">
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl">
+            <div className="aspect-square rounded-[60px] overflow-hidden shadow-2xl">
               <img 
                 src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000" 
                 alt="Seaton Production Base" 
@@ -133,71 +134,72 @@ export default function About() {
                 referrerPolicy="no-referrer"
               />
             </div>
-            <div className="absolute -bottom-8 -left-8 bg-brand-blue p-10 rounded-3xl shadow-2xl text-white">
-              <Factory size={40} className="mb-4" />
-              <div className="text-xl font-bold tracking-tight">{t("about.strength.smart")}</div>
-              <div className="text-white/60 text-[10px] uppercase tracking-widest font-bold mt-2">Smart Manufacturing</div>
+            <div className="absolute -bottom-12 -left-12 bg-brand-blue p-16 rounded-[40px] shadow-2xl text-white">
+              <Factory size={48} className="mb-6" />
+              <div className="text-2xl font-black tracking-tighter uppercase">{t("about.strength.smart")}</div>
+              <div className="text-white/60 text-[10px] uppercase tracking-[0.3em] font-black mt-3">Smart Manufacturing</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Certifications & Honors Showcase */}
-      <section className="py-32 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-40">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <span className="text-brand-blue font-bold uppercase tracking-widest text-[12px] mb-4 block">Authoritative Endorsement</span>
-            <h2 className="text-4xl md:text-6xl font-black text-brand-dark mb-8 tracking-tight">{t("about.honors.title")}<span className="text-brand-blue">{t("about.honors.subtitle")}</span></h2>
-            <p className="text-brand-dark/60 max-w-2xl mx-auto font-light leading-relaxed text-lg">
+      <section className="py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-56">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="text-center mb-32">
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-8 block">Authoritative Endorsement</span>
+            <h2 className="text-5xl md:text-8xl font-black text-brand-dark mb-12 tracking-tighter leading-[0.9]">{t("about.honors.title")}<span className="text-brand-blue">{t("about.honors.subtitle")}</span></h2>
+            <p className="text-brand-dark/40 max-w-4xl mx-auto font-light leading-relaxed text-2xl">
               {t("about.honors.desc")}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-32">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="p-12 rounded-3xl bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-xl transition-all duration-500 group"
+              transition={{ duration: 1 }}
+              className="p-16 rounded-[50px] bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-2xl transition-all duration-700 group"
             >
-              <Award className="text-brand-blue mb-8 group-hover:scale-110 transition-transform" size={48} />
-              <h3 className="text-2xl font-bold mb-4 tracking-tight text-brand-dark">{t("about.honors.giant")}</h3>
-              <p className="text-brand-dark/50 font-medium leading-relaxed mb-8">{t("about.honors.giant_desc")}</p>
-              <div className="flex items-center gap-2 text-brand-blue text-xs font-bold uppercase tracking-widest">
+              <Award className="text-brand-blue mb-10 group-hover:scale-110 transition-transform" size={64} />
+              <h3 className="text-3xl font-black mb-6 tracking-tight text-brand-dark">{t("about.honors.giant")}</h3>
+              <p className="text-brand-dark/40 font-medium leading-relaxed mb-10 text-lg">{t("about.honors.giant_desc")}</p>
+              <div className="flex items-center gap-3 text-brand-blue text-xs font-black uppercase tracking-[0.2em]">
                 <span>{t("about.honors.view_cert")}</span>
-                <ChevronRight size={14} />
+                <ChevronRight size={18} />
               </div>
             </motion.div>
 
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="p-12 rounded-3xl bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-xl transition-all duration-500 group"
+              transition={{ delay: 0.15, duration: 1 }}
+              className="p-16 rounded-[50px] bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-2xl transition-all duration-700 group"
             >
-              <Users className="text-brand-blue mb-8 group-hover:scale-110 transition-transform" size={48} />
-              <h3 className="text-2xl font-bold mb-4 tracking-tight text-brand-dark">{t("about.honors.phd")}</h3>
-              <p className="text-brand-dark/50 font-medium leading-relaxed mb-8">{t("about.honors.phd_desc")}</p>
-              <div className="flex items-center gap-2 text-brand-blue text-xs font-bold uppercase tracking-widest">
+              <Users className="text-brand-blue mb-10 group-hover:scale-110 transition-transform" size={64} />
+              <h3 className="text-3xl font-black mb-6 tracking-tight text-brand-dark">{t("about.honors.phd")}</h3>
+              <p className="text-brand-dark/40 font-medium leading-relaxed mb-10 text-lg">{t("about.honors.phd_desc")}</p>
+              <div className="flex items-center gap-3 text-brand-blue text-xs font-black uppercase tracking-[0.2em]">
                 <span>{t("about.honors.view_cert")}</span>
-                <ChevronRight size={14} />
+                <ChevronRight size={18} />
               </div>
             </motion.div>
 
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="p-12 rounded-3xl bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-xl transition-all duration-500 group"
+              transition={{ delay: 0.3, duration: 1 }}
+              className="p-16 rounded-[50px] bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-2xl transition-all duration-700 group"
             >
-              <ShieldCheck className="text-brand-blue mb-8 group-hover:scale-110 transition-transform" size={48} />
-              <h3 className="text-2xl font-bold mb-4 tracking-tight text-brand-dark">{t("about.honors.patents_title")}</h3>
-              <p className="text-brand-dark/50 font-medium leading-relaxed mb-8">{t("about.honors.patents_desc")}</p>
-              <div className="flex items-center gap-2 text-brand-blue text-xs font-bold uppercase tracking-widest">
+              <ShieldCheck className="text-brand-blue mb-10 group-hover:scale-110 transition-transform" size={64} />
+              <h3 className="text-3xl font-black mb-6 tracking-tight text-brand-dark">{t("about.honors.patents_title")}</h3>
+              <p className="text-brand-dark/40 font-medium leading-relaxed mb-10 text-lg">{t("about.honors.patents_desc")}</p>
+              <div className="flex items-center gap-3 text-brand-blue text-xs font-black uppercase tracking-[0.2em]">
                 <span>{t("about.honors.patent_list")}</span>
-                <ChevronRight size={14} />
+                <ChevronRight size={18} />
               </div>
             </motion.div>
           </div>
@@ -247,20 +249,20 @@ export default function About() {
       </section>
 
       {/* Manufacturing Gallery */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-40">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
-          <div>
-            <span className="text-brand-blue font-bold uppercase tracking-widest text-[12px] mb-6 block">Production Base</span>
-            <h2 className="text-4xl md:text-6xl font-black text-brand-dark tracking-tight">{t("about.manufacturing.title")}</h2>
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-32 gap-12">
+          <div className="max-w-4xl">
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-8 block">Production Base</span>
+            <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">{t("about.manufacturing.title")}</h2>
           </div>
-          <p className="text-brand-dark/40 max-w-md font-medium leading-relaxed">
+          <p className="text-brand-dark/40 max-w-xl font-medium leading-relaxed text-xl">
             {t("about.manufacturing.desc")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-8">
-            <div className="aspect-[16/9] rounded-3xl overflow-hidden shadow-lg group">
+            <div className="aspect-[16/9] rounded-[60px] overflow-hidden shadow-2xl group">
               <img 
                 src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200" 
                 alt="Automated Production Line" 
@@ -270,7 +272,7 @@ export default function About() {
             </div>
           </div>
           <div className="md:col-span-4">
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-lg group">
+            <div className="aspect-square rounded-[60px] overflow-hidden shadow-2xl group">
               <img 
                 src="https://images.unsplash.com/photo-1565608438257-fac3c27beb36?auto=format&fit=crop&q=80&w=800" 
                 alt="Quality Control" 
@@ -280,7 +282,7 @@ export default function About() {
             </div>
           </div>
           <div className="md:col-span-4">
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-lg group">
+            <div className="aspect-square rounded-[60px] overflow-hidden shadow-2xl group">
               <img 
                 src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800" 
                 alt="R&D Lab" 
@@ -290,7 +292,7 @@ export default function About() {
             </div>
           </div>
           <div className="md:col-span-8">
-            <div className="aspect-[16/9] rounded-3xl overflow-hidden shadow-lg group">
+            <div className="aspect-[16/9] rounded-[60px] overflow-hidden shadow-2xl group">
               <img 
                 src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=1200" 
                 alt="Warehouse & Logistics" 
@@ -303,24 +305,24 @@ export default function About() {
       </section>
 
       {/* Culture Section */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-40">
-        <div className="text-center mb-24">
-          <span className="text-brand-blue font-bold uppercase tracking-widest text-[12px] mb-6 block">Corporate Culture</span>
-          <h2 className="text-4xl md:text-6xl font-black text-brand-dark tracking-tight">{t("about.culture.title")}</h2>
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
+        <div className="text-center mb-32">
+          <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-8 block">Corporate Culture</span>
+          <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">{t("about.culture.title")}</h2>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {values.map((value, idx) => (
             <motion.div 
               key={idx}
-              whileHover={{ y: -10 }}
-              className="p-12 rounded-3xl bg-brand-gray border border-brand-border text-center group hover:border-brand-blue/30 transition-all duration-500"
+              whileHover={{ y: -15 }}
+              className="p-16 rounded-[50px] bg-brand-gray border border-brand-border text-center group hover:border-brand-blue/30 transition-all duration-700 shadow-sm hover:shadow-2xl"
             >
-              <div className="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-brand-blue mx-auto mb-8 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
+              <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue mx-auto mb-10 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
                 {value.icon}
               </div>
-              <h3 className="text-2xl font-bold mb-6 tracking-tight text-brand-dark">{value.title}</h3>
-              <p className="text-brand-dark/50 text-sm leading-relaxed font-medium">
+              <h3 className="text-3xl font-black mb-8 tracking-tight text-brand-dark">{value.title}</h3>
+              <p className="text-brand-dark/40 text-base leading-relaxed font-medium">
                 {value.desc}
               </p>
             </motion.div>

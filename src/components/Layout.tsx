@@ -158,13 +158,23 @@ export const Header = () => {
           ))}
 
           {/* Language Switcher */}
-          <div className="flex items-center gap-6 ml-4">
-            <button 
-              onClick={() => i18n.changeLanguage(i18n.language === 'zh' ? 'en' : 'zh')}
-              className={`text-[11px] font-black uppercase tracking-widest transition-colors ${isScrolled || !isHome || isMenuOpen ? "text-brand-dark/60 hover:text-brand-blue" : "text-white/60 hover:text-white"}`}
-            >
-              {i18n.language === 'zh' ? 'EN' : '中文'}
-            </button>
+          <div className="flex items-center gap-4 ml-4">
+            {[
+              { id: 'zh', label: '简' },
+              { id: 'zh-HK', label: '繁' },
+              { id: 'en', label: 'EN' },
+              { id: 'ja', label: 'JP' },
+              { id: 'ko', label: 'KR' },
+              { id: 'ru', label: 'RU' }
+            ].map((lang) => (
+              <button 
+                key={lang.id}
+                onClick={() => i18n.changeLanguage(lang.id)}
+                className={`text-[10px] font-black uppercase tracking-tighter transition-colors ${i18n.language === lang.id ? "text-brand-blue" : (isScrolled || !isHome || isMenuOpen ? "text-brand-dark/40 hover:text-brand-blue" : "text-white/40 hover:text-white")}`}
+              >
+                {lang.label}
+              </button>
+            ))}
           </div>
         </nav>
 
@@ -189,15 +199,19 @@ export const Header = () => {
           >
             <nav className="flex flex-col gap-10 overflow-y-auto pb-20">
               {/* Mobile Language Switcher */}
-              <div className="flex flex-wrap gap-4 mb-8 p-6 bg-white/[0.03] rounded-[32px] border border-white/5">
+              <div className="flex flex-wrap gap-3 mb-8 p-6 bg-white/[0.03] rounded-[32px] border border-white/5">
                 {[
                   { id: 'zh', label: '简体' },
-                  { id: 'en', label: 'EN' }
+                  { id: 'zh-HK', label: '繁体' },
+                  { id: 'en', label: 'EN' },
+                  { id: 'ja', label: '日本語' },
+                  { id: 'ko', label: '한국어' },
+                  { id: 'ru', label: 'Русский' }
                 ].map((lang) => (
                   <button
                     key={lang.id}
                     onClick={() => i18n.changeLanguage(lang.id)}
-                    className={`px-5 py-2 rounded-full text-[10px] font-mono uppercase tracking-widest transition-all ${i18n.language === lang.id ? "bg-brand-blue text-white" : "bg-white/[0.05] text-white/40 border border-white/5"}`}
+                    className={`px-4 py-2 rounded-full text-[10px] font-mono uppercase tracking-widest transition-all ${i18n.language === lang.id ? "bg-brand-blue text-white" : "bg-white/[0.05] text-white/40 border border-white/5"}`}
                   >
                     {lang.label}
                   </button>
@@ -371,7 +385,7 @@ export default function Layout({ children }: LayoutProps) {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="w-12 h-12 bg-white/5 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white/40 hover:text-brand-blue hover:border-brand-blue transition-all group"
+          className="w-12 h-12 bg-white backdrop-blur-md border border-brand-border rounded-full flex items-center justify-center text-brand-dark/40 hover:text-brand-blue hover:border-brand-blue transition-all group shadow-lg"
         >
           <ArrowLeft size={20} className="rotate-90" />
           <div className="absolute right-full mr-4 px-3 py-1 bg-brand-blue text-white text-[10px] font-bold uppercase tracking-widest rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
