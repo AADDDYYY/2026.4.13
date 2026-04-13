@@ -47,7 +47,8 @@ export default function Contact() {
             <div className="h-px w-16 bg-brand-blue"></div>
           </div>
           <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
-            {t("contact.hero.title")}
+            {t("contact.hero.title")}<br />
+            <span className="text-brand-blue">Contact & Support</span>
           </h1>
           <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
             {t("contact.hero.desc")}

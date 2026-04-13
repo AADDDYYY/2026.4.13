@@ -57,7 +57,7 @@ export default function Sustainability() {
           </div>
           <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
             {t("sustainability_page.hero.title")}<br />
-            <span className="text-emerald-500">{t("sustainability_page.hero.subtitle")}</span>
+            <span className="text-emerald-500">Sustainability & ESG</span>
           </h1>
           <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("sustainability_page.hero.desc")}

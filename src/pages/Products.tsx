@@ -50,8 +50,10 @@ export default function Products() {
 
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            product.type.toLowerCase().includes(searchQuery.toLowerCase());
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSearch = product.name.toLowerCase().includes(searchLower) || 
+                            product.type.toLowerCase().includes(searchLower) ||
+                            product.category.toLowerCase().includes(searchLower);
       
       const matchesDivision = activeDivision === "all" || product.divisions.includes(activeDivision);
       const matchesIndustry = activeIndustry === "all" || (product.substrates as any)[activeIndustry] === true;

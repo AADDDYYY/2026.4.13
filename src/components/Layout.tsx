@@ -56,6 +56,7 @@ export const Header = () => {
     { to: "/news", label: t("nav.news", "新闻中心") },
     { to: "/rd", label: t("nav.rd", "研发创新") },
     { to: "/sustainability", label: t("nav.sustainability", "可持续发展") },
+    { to: "/contact", label: t("nav.contact") },
   ];
 
   const productMegaMenu = [
@@ -314,6 +315,24 @@ export const Footer = () => {
               <li><Link to="/products?search=SEAPUR" className="hover:text-brand-blue transition-colors">SEAPUR Series</Link></li>
               <li><Link to="/products?search=SEAPUA" className="hover:text-brand-blue transition-colors">SEAPUA Series</Link></li>
               <li><Link to="/products?search=消光" className="hover:text-brand-blue transition-colors">Self-Matting Series</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[11px] font-black mb-10 text-brand-dark/30 tracking-widest uppercase">{t("nav.contact")}</h4>
+            <ul className="space-y-5 text-brand-dark/70 text-[13px] font-bold">
+              <li className="flex items-center gap-3">
+                <Activity size={16} className="text-brand-blue" />
+                <a href="tel:0751-3822233" className="hover:text-brand-blue transition-colors">0751-3822233</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail size={16} className="text-brand-blue" />
+                <a href="mailto:sales@seaton.com.cn" className="hover:text-brand-blue transition-colors">sales@seaton.com.cn</a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Globe size={16} className="text-brand-blue mt-1 shrink-0" />
+                <span className="leading-relaxed">{t("contact.info.address_val")}</span>
+              </li>
             </ul>
           </div>
 

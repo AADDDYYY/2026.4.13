@@ -77,7 +77,7 @@ export default function Divisions() {
           </div>
           <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
             {t("divisions_page.hero.title")}<br />
-            <span className="text-brand-blue">{t("divisions_page.hero.subtitle")}</span>
+            <span className="text-brand-blue">Business Structure & Divisions</span>
           </h1>
           <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("divisions_page.hero.desc")}

@@ -59,7 +59,7 @@ export default function About() {
           </div>
           <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
             {t("about.hero.title")}<br />
-            <span className="text-brand-blue">{t("about.hero.subtitle")}</span>
+            <span className="text-brand-blue">Corporate Profile & History</span>
           </h1>
           <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("about.hero.desc")}

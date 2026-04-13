@@ -33,7 +33,7 @@ export default function RD() {
           </div>
           <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
             {t("rd.hero.title")}<br />
-            <span className="text-brand-dark/30">{t("rd.hero.subtitle")}</span>
+            <span className="text-brand-blue">R&D Innovation Center</span>
           </h1>
           <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
             {t("rd.hero.desc")}

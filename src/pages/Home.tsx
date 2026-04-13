@@ -169,7 +169,8 @@ const FeaturedTechnologies = () => {
           <div className="max-w-4xl">
             <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-8 block">Innovation Hub</span>
             <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">
-              引领行业的技术革新
+              引领行业的技术革新<br />
+              <span className="text-brand-blue">Innovation Hub</span>
             </h2>
           </div>
           <Link to="/innovation" className="text-brand-blue font-black flex items-center gap-4 hover:underline text-lg uppercase tracking-[0.3em] group">
@@ -249,7 +250,10 @@ const MarketSectors = () => {
       <div className="max-w-[1800px] mx-auto">
         <div className="text-center mb-32">
           <span className="text-brand-blue font-black uppercase tracking-[0.4em] text-[11px] mb-8 block">Market Applications</span>
-          <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">赋能多元行业</h2>
+          <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">
+            赋能多元行业<br />
+            <span className="text-brand-blue">Market Applications</span>
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -296,7 +300,10 @@ const GlobalPresence = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
           <div>
             <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-8 block">Global Network</span>
-            <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter mb-16 leading-[0.9]">全球化布局<br />本地化服务</h2>
+            <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter mb-16 leading-[0.9]">
+              全球化布局<br />本地化服务<br />
+              <span className="text-brand-blue">Global Network</span>
+            </h2>
             <p className="text-brand-dark/50 text-2xl leading-relaxed mb-20 max-w-2xl font-light">
               西顿新材料在亚洲、欧洲及美洲设有多个研发中心与销售分支，确保为全球客户提供高效、及时的技术支持与供应链保障。
             </p>
