@@ -62,11 +62,11 @@ export const Header = () => {
     {
       title: t("mega.by_division", "按事业部分类"),
       items: [
-        { label: t("divisions.plastic", "塑胶涂料树脂"), to: "/products?division=塑胶涂料树脂事业部" },
-        { label: t("divisions.ink", "印刷油墨树脂"), to: "/products?division=印刷油墨树脂事业部" },
-        { label: t("divisions.wood", "木器涂料树脂"), to: "/products?division=木器涂料树脂事业部" },
-        { label: t("divisions.metal", "金属/薄膜涂料树脂"), to: "/products?division=金属 / 薄膜涂料树脂事业部" },
-        { label: t("divisions.leather", "皮革/纺织/胶粘剂树脂"), to: "/products?division=皮革 / 纺织 / 胶粘剂树脂事业部" },
+        { label: t("divisions.plastic", "塑胶涂料树脂"), to: "/products?division=plastic" },
+        { label: t("divisions.ink", "印刷油墨树脂"), to: "/products?division=ink" },
+        { label: t("divisions.wood", "木器涂料树脂"), to: "/products?division=wood" },
+        { label: t("divisions.metal", "金属/薄膜涂料树脂"), to: "/products?division=metal" },
+        { label: t("divisions.leather", "皮革/纺织/胶粘剂树脂"), to: "/products?division=leather" },
       ]
     },
     {

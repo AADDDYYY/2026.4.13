@@ -30,90 +30,91 @@ export default function Contact() {
   }, [initialType, initialProduct]);
 
   return (
-    <div className="pt-32 pb-24 bg-white text-brand-dark min-h-screen">
+    <div className="pt-48 pb-32 bg-white text-brand-dark min-h-screen overflow-hidden">
       <div className="max-w-[1800px] mx-auto px-6 md:px-20">
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-32"
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-56 relative"
         >
-          <div className="flex items-center justify-center gap-4 mb-12">
-            <div className="h-px w-12 bg-brand-blue"></div>
-            <span className="text-brand-blue font-bold uppercase tracking-widest text-[12px]">
+          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+          <div className="flex items-center justify-center gap-6 mb-16">
+            <div className="h-px w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
               Contact & Support
             </span>
-            <div className="h-px w-12 bg-brand-blue"></div>
+            <div className="h-px w-16 bg-brand-blue"></div>
           </div>
-          <h1 className="text-5xl md:text-8xl font-black mb-12 tracking-tight leading-tight">
+          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
             {t("contact.hero.title")}
           </h1>
-          <p className="text-brand-dark/60 text-xl md:text-2xl max-w-4xl mx-auto font-light leading-relaxed">
+          <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
             {t("contact.hero.desc")}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 mb-40">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-32 mb-56">
           <div className="lg:col-span-5">
-            <h2 className="text-4xl md:text-6xl font-black mb-12 tracking-tight leading-tight text-brand-dark">
+            <h2 className="text-5xl md:text-8xl font-black mb-16 tracking-tighter leading-[0.9] text-brand-dark">
               {t("contact.info.title")}<br />
               <span className="text-brand-blue">{t("contact.info.subtitle")}</span>
             </h2>
-            <p className="text-brand-dark/60 text-lg mb-20 leading-relaxed font-light">
+            <p className="text-brand-dark/40 text-2xl mb-24 leading-relaxed font-light max-w-xl">
               {t("contact.info.desc")}
             </p>
 
-            <div className="space-y-12">
-              <div className="flex items-start gap-8 border-t border-brand-border pt-12 group">
-                <div className="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
-                  <Phone size={28} />
+            <div className="space-y-16">
+              <div className="flex items-start gap-12 border-t border-brand-border pt-16 group">
+                <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
+                  <Phone size={32} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-2xl mb-2 text-brand-dark tracking-tight">{t("contact.info.phone")}</h4>
-                  <p className="text-brand-dark/60 text-lg font-medium">400 0069 655</p>
-                  <p className="text-brand-dark/30 text-[10px] font-bold uppercase tracking-widest mt-2">{t("contact.info.phone_hours")}</p>
+                  <h4 className="font-black text-3xl mb-4 text-brand-dark tracking-tight">{t("contact.info.phone")}</h4>
+                  <p className="text-brand-dark/40 text-xl font-medium">400 0069 655</p>
+                  <p className="text-brand-dark/20 text-[11px] font-black uppercase tracking-[0.3em] mt-4">{t("contact.info.phone_hours")}</p>
                 </div>
               </div>
-              <div className="flex items-start gap-8 border-t border-brand-border pt-12 group">
-                <div className="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
-                  <Mail size={28} />
+              <div className="flex items-start gap-12 border-t border-brand-border pt-16 group">
+                <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
+                  <Mail size={32} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-2xl mb-2 text-brand-dark tracking-tight">{t("contact.info.email")}</h4>
-                  <p className="text-brand-dark/60 text-lg font-medium">info@seatonchem.com</p>
+                  <h4 className="font-black text-3xl mb-4 text-brand-dark tracking-tight">{t("contact.info.email")}</h4>
+                  <p className="text-brand-dark/40 text-xl font-medium">info@seatonchem.com</p>
                 </div>
               </div>
-              <div className="flex items-start gap-8 border-t border-brand-border pt-12 group">
-                <div className="w-16 h-16 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
-                  <MapPin size={28} />
+              <div className="flex items-start gap-12 border-t border-brand-border pt-16 group">
+                <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
+                  <MapPin size={32} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-2xl mb-2 text-brand-dark tracking-tight">{t("contact.info.address")}</h4>
-                  <p className="text-brand-dark/60 text-lg font-medium leading-relaxed max-w-md">{t("contact.info.address_val")}</p>
+                  <h4 className="font-black text-3xl mb-4 text-brand-dark tracking-tight">{t("contact.info.address")}</h4>
+                  <p className="text-brand-dark/40 text-xl font-medium leading-relaxed max-w-md">{t("contact.info.address_val")}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-7 bg-brand-gray p-8 md:p-16 rounded-[40px] border border-brand-border shadow-sm relative overflow-hidden">
+          <div className="lg:col-span-7 bg-brand-gray p-12 md:p-24 rounded-[60px] border border-brand-border shadow-2xl relative overflow-hidden">
             <AnimatePresence>
               {isSubmitted ? (
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
-                  className="absolute inset-0 z-20 bg-white flex flex-col items-center justify-center p-12 text-center"
+                  className="absolute inset-0 z-20 bg-white flex flex-col items-center justify-center p-16 text-center"
                 >
-                  <div className="w-20 h-20 bg-brand-blue rounded-full flex items-center justify-center text-white mb-10 shadow-xl shadow-brand-blue/20">
-                    <CheckCircle2 size={40} />
+                  <div className="w-24 h-24 bg-brand-blue rounded-full flex items-center justify-center text-white mb-12 shadow-2xl shadow-brand-blue/20">
+                    <CheckCircle2 size={48} />
                   </div>
-                  <h3 className="text-4xl font-black mb-6 text-brand-dark">{t("contact.form.success_title")}</h3>
-                  <p className="text-brand-dark/60 text-lg font-medium leading-relaxed">
+                  <h3 className="text-5xl font-black mb-8 text-brand-dark tracking-tight">{t("contact.form.success_title")}</h3>
+                  <p className="text-brand-dark/40 text-2xl font-medium leading-relaxed max-w-md">
                     {t("contact.form.success_desc")}
                   </p>
                   <button 
                     onClick={() => setIsSubmitted(false)}
-                    className="mt-10 text-brand-blue font-bold uppercase tracking-widest text-[11px] hover:underline"
+                    className="mt-12 text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] hover:underline"
                   >
                     {t("contact.form.resubmit")}
                   </button>
@@ -121,52 +122,52 @@ export default function Contact() {
               ) : null}
             </AnimatePresence>
 
-            <h3 className="text-2xl font-bold mb-10 tracking-tight text-brand-dark">{t("contact.form.help")}</h3>
+            <h3 className="text-3xl font-black mb-16 tracking-tight text-brand-dark">{t("contact.form.help")}</h3>
             
-            <div className="grid grid-cols-3 gap-4 mb-10">
+            <div className="grid grid-cols-3 gap-6 mb-16">
               <button 
                 onClick={() => setRequestType("general")}
-                className={`flex flex-col items-center gap-3 p-5 rounded-2xl border transition-all ${requestType === "general" ? "bg-brand-blue border-brand-blue text-white shadow-lg shadow-brand-blue/20" : "bg-white border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"}`}
+                className={`flex flex-col items-center gap-4 p-8 rounded-3xl border transition-all duration-500 ${requestType === "general" ? "bg-brand-blue border-brand-blue text-white shadow-2xl shadow-brand-blue/20" : "bg-white border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"}`}
               >
-                <MessageSquare size={24} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">{t("contact.form.general")}</span>
+                <MessageSquare size={32} />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t("contact.form.general")}</span>
               </button>
               <button 
                 onClick={() => setRequestType("tds")}
-                className={`flex flex-col items-center gap-3 p-5 rounded-2xl border transition-all ${requestType === "tds" ? "bg-brand-blue border-brand-blue text-white shadow-lg shadow-brand-blue/20" : "bg-white border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"}`}
+                className={`flex flex-col items-center gap-4 p-8 rounded-3xl border transition-all duration-500 ${requestType === "tds" ? "bg-brand-blue border-brand-blue text-white shadow-2xl shadow-brand-blue/20" : "bg-white border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"}`}
               >
-                <FileText size={24} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">{t("contact.form.tds")}</span>
+                <FileText size={32} />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t("contact.form.tds")}</span>
               </button>
               <button 
                 onClick={() => setRequestType("sample")}
-                className={`flex flex-col items-center gap-3 p-5 rounded-2xl border transition-all ${requestType === "sample" ? "bg-brand-blue border-brand-blue text-white shadow-lg shadow-brand-blue/20" : "bg-white border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"}`}
+                className={`flex flex-col items-center gap-4 p-8 rounded-3xl border transition-all duration-500 ${requestType === "sample" ? "bg-brand-blue border-brand-blue text-white shadow-2xl shadow-brand-blue/20" : "bg-white border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"}`}
               >
-                <Beaker size={24} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">{t("contact.form.sample")}</span>
+                <Beaker size={32} />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t("contact.form.sample")}</span>
               </button>
             </div>
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-brand-dark/40 uppercase tracking-widest">{t("contact.form.name")}</label>
-                  <input type="text" placeholder={t("contact.form.name_placeholder")} className="w-full px-6 py-4 rounded-xl border border-brand-border bg-white focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/5 outline-none transition-all font-medium text-sm text-brand-dark" />
+            <form className="space-y-10" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-4">
+                  <label className="text-[11px] font-black text-brand-dark/40 uppercase tracking-[0.3em]">{t("contact.form.name")}</label>
+                  <input type="text" placeholder={t("contact.form.name_placeholder")} className="w-full px-8 py-6 rounded-2xl border border-brand-border bg-white focus:border-brand-blue focus:ring-8 focus:ring-brand-blue/5 outline-none transition-all font-medium text-lg text-brand-dark" />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-brand-dark/40 uppercase tracking-widest">{t("contact.form.email")}</label>
-                  <input type="email" placeholder={t("contact.form.email_placeholder")} className="w-full px-6 py-4 rounded-xl border border-brand-border bg-white focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/5 outline-none transition-all font-medium text-sm text-brand-dark" />
+                <div className="space-y-4">
+                  <label className="text-[11px] font-black text-brand-dark/40 uppercase tracking-[0.3em]">{t("contact.form.email")}</label>
+                  <input type="email" placeholder={t("contact.form.email_placeholder")} className="w-full px-8 py-6 rounded-2xl border border-brand-border bg-white focus:border-brand-blue focus:ring-8 focus:ring-brand-blue/5 outline-none transition-all font-medium text-lg text-brand-dark" />
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-brand-dark/40 uppercase tracking-widest">{t("contact.form.phone")}</label>
-                  <input type="tel" placeholder={t("contact.form.phone_placeholder")} className="w-full px-6 py-4 rounded-xl border border-brand-border bg-white focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/5 outline-none transition-all font-medium text-sm text-brand-dark" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-4">
+                  <label className="text-[11px] font-black text-brand-dark/40 uppercase tracking-[0.3em]">{t("contact.form.phone")}</label>
+                  <input type="tel" placeholder={t("contact.form.phone_placeholder")} className="w-full px-8 py-6 rounded-2xl border border-brand-border bg-white focus:border-brand-blue focus:ring-8 focus:ring-brand-blue/5 outline-none transition-all font-medium text-lg text-brand-dark" />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-brand-dark/40 uppercase tracking-widest">{t("contact.form.company")}</label>
-                  <input type="text" placeholder={t("contact.form.company_placeholder")} className="w-full px-6 py-4 rounded-xl border border-brand-border bg-white focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/5 outline-none transition-all font-medium text-sm text-brand-dark" />
+                <div className="space-y-4">
+                  <label className="text-[11px] font-black text-brand-dark/40 uppercase tracking-[0.3em]">{t("contact.form.company")}</label>
+                  <input type="text" placeholder={t("contact.form.company_placeholder")} className="w-full px-8 py-6 rounded-2xl border border-brand-border bg-white focus:border-brand-blue focus:ring-8 focus:ring-brand-blue/5 outline-none transition-all font-medium text-lg text-brand-dark" />
                 </div>
               </div>
 
@@ -174,32 +175,32 @@ export default function Contact() {
                 <motion.div 
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="space-y-2"
+                  className="space-y-4"
                 >
-                  <label className="text-[11px] font-bold text-brand-blue uppercase tracking-widest">{t("contact.form.product")}</label>
+                  <label className="text-[11px] font-black text-brand-blue uppercase tracking-[0.3em]">{t("contact.form.product")}</label>
                   <input 
                     type="text" 
                     value={productName}
                     onChange={(e) => setProductName(e.target.value)}
                     placeholder={t("contact.form.product_placeholder")} 
-                    className="w-full px-6 py-4 rounded-xl border border-brand-blue/30 bg-brand-blue/5 focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/5 outline-none transition-all font-bold text-sm text-brand-blue" 
+                    className="w-full px-8 py-6 rounded-2xl border border-brand-blue/30 bg-brand-blue/5 focus:border-brand-blue focus:ring-8 focus:ring-brand-blue/5 outline-none transition-all font-black text-lg text-brand-blue" 
                   />
                 </motion.div>
               )}
 
-              <div className="space-y-2">
-                <label className="text-[11px] font-bold text-brand-dark/40 uppercase tracking-widest">{t("contact.form.desc")}</label>
-                <textarea rows={4} placeholder={t("contact.form.desc_placeholder")} className="w-full px-6 py-4 rounded-xl border border-brand-border bg-white focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/5 outline-none transition-all resize-none font-medium text-sm text-brand-dark"></textarea>
+              <div className="space-y-4">
+                <label className="text-[11px] font-black text-brand-dark/40 uppercase tracking-[0.3em]">{t("contact.form.desc")}</label>
+                <textarea rows={5} placeholder={t("contact.form.desc_placeholder")} className="w-full px-8 py-6 rounded-2xl border border-brand-border bg-white focus:border-brand-blue focus:ring-8 focus:ring-brand-blue/5 outline-none transition-all resize-none font-medium text-lg text-brand-dark"></textarea>
               </div>
               
-              <button className="w-full py-5 bg-brand-blue text-white rounded-xl font-bold hover:bg-brand-blue/90 transition-all flex items-center justify-center gap-3 shadow-lg shadow-brand-blue/20 uppercase tracking-widest text-[11px]">
-                {t("contact.form.submit")} <ArrowRight size={16} />
+              <button className="w-full py-8 bg-brand-blue text-white rounded-2xl font-black hover:bg-brand-dark transition-all flex items-center justify-center gap-4 shadow-2xl shadow-brand-blue/30 uppercase tracking-[0.3em] text-[11px]">
+                {t("contact.form.submit")} <ArrowRight size={20} />
               </button>
             </form>
           </div>
         </div>
 
-        <div className="rounded-[40px] overflow-hidden h-[450px] shadow-lg border border-brand-border grayscale hover:grayscale-0 transition-all duration-1000">
+        <div className="rounded-[80px] overflow-hidden h-[600px] shadow-2xl border border-brand-border grayscale hover:grayscale-0 transition-all duration-1000 mb-32">
           <iframe 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3674.8767!2d114.3!3d23.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDAwJzAwLjAiTiAxMTTCsDE4JzAwLjAiRQ!5e0!3m2!1sen!2scn!4v1620000000000!5m2!1sen!2scn" 
             width="100%" 
@@ -208,6 +209,7 @@ export default function Contact() {
             allowFullScreen={true} 
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
+            title="Office Location"
           ></iframe>
         </div>
       </div>

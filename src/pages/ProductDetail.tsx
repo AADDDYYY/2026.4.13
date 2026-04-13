@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { products } from "../data/products";
 import { ArrowLeft, CheckCircle2, FlaskConical, Activity, Thermometer, Droplets, ShieldCheck, BarChart3 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { 
   Radar, 
   RadarChart, 
@@ -12,6 +13,7 @@ import {
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const product = products.find((p) => p.id === id);
 
   if (!product) {
@@ -53,59 +55,59 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="pt-32 pb-24 bg-white min-h-screen text-brand-dark">
+    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       <div className="max-w-[1800px] mx-auto px-6 md:px-20">
         {/* Breadcrumb */}
-        <Link to="/products" className="inline-flex items-center gap-4 text-brand-dark/40 hover:text-brand-blue transition-colors mb-16 group">
-          <ArrowLeft size={18} className="group-hover:-translate-x-2 transition-transform" />
-          <span className="text-[11px] font-bold uppercase tracking-widest">返回产品中心</span>
+        <Link to="/products" className="inline-flex items-center gap-6 text-brand-dark/40 hover:text-brand-blue transition-colors mb-24 group">
+          <ArrowLeft size={24} className="group-hover:-translate-x-3 transition-transform" />
+          <span className="text-[11px] font-black uppercase tracking-[0.3em]">{t("common.back_to_products", "返回产品中心")}</span>
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-start">
           {/* Left: Visual & Description */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="relative aspect-square rounded-[40px] overflow-hidden border border-brand-border mb-16 shadow-sm">
+            <div className="relative aspect-square rounded-[60px] overflow-hidden border border-brand-border mb-24 shadow-2xl group">
               <img 
                 src={product.image} 
                 alt={product.name} 
-                className="w-full h-full object-cover transition-all duration-1000"
+                className="w-full h-full object-cover transition-all duration-1000 scale-105 group-hover:scale-100"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute top-8 left-8">
-                <span className="px-6 py-2 bg-brand-blue/10 backdrop-blur-md text-brand-blue text-[10px] font-bold uppercase tracking-widest rounded-full border border-brand-blue/20">
+              <div className="absolute top-12 left-12">
+                <span className="px-8 py-3 bg-brand-blue/10 backdrop-blur-xl text-brand-blue text-[11px] font-black uppercase tracking-[0.3em] rounded-full border border-brand-blue/20 shadow-2xl">
                   {product.category}
                 </span>
               </div>
             </div>
 
-            <h1 className="text-5xl md:text-8xl font-black mb-10 tracking-tight leading-tight">{product.name}</h1>
-            <div className="flex flex-wrap items-center gap-6 mb-10">
-              <p className="text-brand-blue text-[11px] font-bold uppercase tracking-widest">{product.type}</p>
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-border"></span>
-              <div className="flex flex-wrap gap-4">
+            <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">{product.name}</h1>
+            <div className="flex flex-wrap items-center gap-10 mb-16">
+              <p className="text-brand-blue text-[11px] font-black uppercase tracking-[0.3em]">{product.type}</p>
+              <span className="w-2 h-2 rounded-full bg-brand-border"></span>
+              <div className="flex flex-wrap gap-6">
                 {product.divisions.map(d => (
-                  <p key={d} className="text-brand-dark/40 text-[11px] font-bold uppercase tracking-widest">{d}</p>
+                  <p key={d} className="text-brand-dark/40 text-[11px] font-black uppercase tracking-[0.3em]">{d}</p>
                 ))}
               </div>
             </div>
             
-            <div className="max-w-2xl">
-              <p className="text-brand-dark/60 text-xl md:text-2xl font-light leading-relaxed mb-12">
+            <div className="max-w-4xl">
+              <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed mb-24">
                 {product.description}
               </p>
             </div>
 
-            <div className="mb-12">
-              <h3 className="text-[11px] font-bold uppercase tracking-widest text-brand-dark/40 mb-6">适用基材 / Substrates</h3>
-              <div className="flex flex-wrap gap-3">
+            <div className="mb-24">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40 mb-10">适用基材 / Substrates</h3>
+              <div className="flex flex-wrap gap-4">
                 {Object.entries(product.substrates).filter(([_, v]) => v).map(([k]) => {
                   const labelMap: any = { metal: "金属", plastic: "塑胶", ink: "油墨", wood: "木器", leather: "皮革/纺织" };
                   return (
-                    <span key={k} className="px-6 py-3 bg-brand-gray border border-brand-border rounded-xl text-xs text-brand-dark/60 font-bold">
+                    <span key={k} className="px-10 py-4 bg-brand-gray border border-brand-border rounded-2xl text-xs text-brand-dark/40 font-black uppercase tracking-[0.2em]">
                       {labelMap[k] || k}
                     </span>
                   );
@@ -113,59 +115,60 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="space-y-6 mb-16">
-              <h3 className="text-[11px] font-bold uppercase tracking-widest text-brand-dark/40 mb-8 flex items-center gap-3">
-                <ShieldCheck size={18} className="text-brand-blue" />
+            <div className="space-y-10 mb-24">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40 mb-12 flex items-center gap-6">
+                <ShieldCheck size={24} className="text-brand-blue" />
                 核心性能亮点
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {product.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-start gap-4 p-6 bg-brand-gray border border-brand-border rounded-2xl shadow-sm">
-                    <CheckCircle2 size={20} className="text-brand-blue shrink-0 mt-0.5" />
-                    <span className="text-base text-brand-dark/70 font-medium leading-relaxed">{feature}</span>
+                  <div key={idx} className="flex items-start gap-6 p-10 bg-brand-gray border border-brand-border rounded-[40px] shadow-sm group hover:border-brand-blue/30 transition-all duration-700">
+                    <CheckCircle2 size={24} className="text-brand-blue shrink-0 mt-1" />
+                    <span className="text-xl text-brand-dark/60 font-medium leading-relaxed">{feature}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Performance Radar Chart */}
-            <div className="bg-brand-gray border border-brand-border rounded-[40px] p-8 md:p-12 shadow-sm">
-              <div className="flex items-center gap-3 mb-10">
-                <BarChart3 size={20} className="text-brand-blue" />
-                <h3 className="text-[11px] font-bold uppercase tracking-widest text-brand-dark/40">性能综合评估 / Performance Radar</h3>
+            <div className="bg-brand-gray border border-brand-border rounded-[60px] p-12 md:p-20 shadow-2xl">
+              <div className="flex items-center gap-6 mb-16">
+                <BarChart3 size={24} className="text-brand-blue" />
+                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40">性能综合评估 / Performance Radar</h3>
               </div>
-              <div className="h-[350px] w-full">
+              <div className="h-[450px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart cx="50%" cy="50%" outerRadius="80%" data={performanceData}>
                     <PolarGrid stroke="rgba(0,0,0,0.05)" />
                     <PolarAngleAxis 
                       dataKey="subject" 
-                      tick={{ fill: 'rgba(0,0,0,0.4)', fontSize: 11, fontWeight: 'bold' }} 
+                      tick={{ fill: 'rgba(0,0,0,0.3)', fontSize: 11, fontWeight: '900', letterSpacing: '0.2em' }} 
                     />
                     <Radar
                       name={product.name}
                       dataKey="A"
                       stroke="#0066cc"
                       fill="#0066cc"
-                      fillOpacity={0.15}
+                      fillOpacity={0.1}
                     />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
-              <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="mt-16 grid grid-cols-2 md:grid-cols-3 gap-10">
                 {performanceData.map((item) => (
-                  <div key={item.subject} className="flex flex-col gap-2">
-                    <span className="text-[10px] text-brand-dark/30 uppercase font-bold tracking-widest">{item.subject}</span>
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 h-1.5 bg-brand-border rounded-full overflow-hidden">
+                  <div key={item.subject} className="flex flex-col gap-4">
+                    <span className="text-[10px] text-brand-dark/30 uppercase font-black tracking-[0.3em]">{item.subject}</span>
+                    <div className="flex items-center gap-6">
+                      <div className="flex-1 h-2 bg-brand-border rounded-full overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
-                          animate={{ width: `${item.A}%` }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
+                          whileInView={{ width: `${item.A}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
                           className="h-full bg-brand-blue"
                         />
                       </div>
-                      <span className="text-[11px] font-bold text-brand-blue">{item.A}%</span>
+                      <span className="text-[12px] font-black text-brand-blue tracking-tighter">{item.A}%</span>
                     </div>
                   </div>
                 ))}
@@ -175,49 +178,49 @@ const ProductDetail = () => {
 
           {/* Right: Technical Specifications */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="bg-brand-gray border border-brand-border rounded-[40px] p-8 lg:p-16 shadow-sm sticky top-32"
+            transition={{ duration: 1.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-brand-gray border border-brand-border rounded-[60px] p-12 lg:p-24 shadow-2xl lg:sticky lg:top-48"
           >
-            <div className="mb-12">
-              <h2 className="text-3xl font-black mb-2 tracking-tight text-brand-dark">技术参数表</h2>
-              <p className="text-brand-dark/30 text-[11px] uppercase tracking-widest font-bold">标准实验室分析数据</p>
+            <div className="mb-16">
+              <h2 className="text-5xl font-black mb-4 tracking-tighter text-brand-dark">技术参数表</h2>
+              <p className="text-brand-dark/30 text-[11px] uppercase tracking-[0.3em] font-black">标准实验室分析数据</p>
             </div>
 
-            <div className="space-y-px bg-brand-border border border-brand-border rounded-2xl overflow-hidden shadow-sm">
+            <div className="space-y-px bg-brand-border border border-brand-border rounded-[32px] overflow-hidden shadow-2xl">
               {technicalSpecs.map((spec, idx) => (
-                <div key={idx} className="flex items-center justify-between p-6 bg-white hover:bg-brand-gray transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <div className="text-brand-blue opacity-40 group-hover:opacity-100 transition-opacity">
+                <div key={idx} className="flex items-center justify-between p-10 bg-white hover:bg-brand-gray transition-all duration-500 group">
+                  <div className="flex items-center gap-6">
+                    <div className="text-brand-blue opacity-20 group-hover:opacity-100 transition-opacity duration-500">
                       {spec.icon}
                     </div>
-                    <span className="text-xs font-bold text-brand-dark/40 uppercase tracking-widest">{spec.label}</span>
+                    <span className="text-[11px] font-black text-brand-dark/40 uppercase tracking-[0.3em]">{spec.label}</span>
                   </div>
-                  <span className="text-lg font-bold tracking-tight text-brand-dark">{spec.value}</span>
+                  <span className="text-2xl font-black tracking-tighter text-brand-dark">{spec.value}</span>
                 </div>
               ))}
             </div>
 
-            <div className="mt-16">
-              <h3 className="text-[11px] font-bold uppercase tracking-widest text-brand-dark/40 mb-8">典型应用领域</h3>
-              <div className="flex flex-wrap gap-3">
-                <span className="px-8 py-4 bg-white border border-brand-border rounded-full text-xs font-bold text-brand-dark/40 hover:text-brand-blue hover:border-brand-blue transition-all shadow-sm">
+            <div className="mt-24">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40 mb-12">典型应用领域</h3>
+              <div className="flex flex-wrap gap-4">
+                <span className="px-10 py-5 bg-white border border-brand-border rounded-full text-[11px] font-black text-brand-dark/40 hover:text-brand-blue hover:border-brand-blue transition-all shadow-sm uppercase tracking-[0.2em]">
                   工业涂装
                 </span>
-                <span className="px-8 py-4 bg-white border border-brand-border rounded-full text-xs font-bold text-brand-dark/40 hover:text-brand-blue hover:border-brand-blue transition-all shadow-sm">
+                <span className="px-10 py-5 bg-white border border-brand-border rounded-full text-[11px] font-black text-brand-dark/40 hover:text-brand-blue hover:border-brand-blue transition-all shadow-sm uppercase tracking-[0.2em]">
                   高性能保护
                 </span>
               </div>
             </div>
 
-            <div className="mt-20 pt-12 border-t border-brand-border">
+            <div className="mt-32 pt-16 border-t border-brand-border">
               <Link 
                 to={`/contact?type=tds&product=${encodeURIComponent(product.name)}`}
-                className="w-full py-6 bg-brand-blue text-white rounded-2xl font-bold hover:bg-brand-blue/90 transition-all shadow-lg shadow-brand-blue/20 flex items-center justify-center gap-4 group uppercase tracking-widest text-[11px]"
+                className="w-full py-10 bg-brand-blue text-white rounded-3xl font-black hover:bg-brand-dark transition-all shadow-2xl shadow-brand-blue/30 flex items-center justify-center gap-6 group uppercase tracking-[0.3em] text-[12px]"
               >
                 索取技术说明书 (TDS)
-                <ArrowLeft size={18} className="rotate-180 group-hover:translate-x-2 transition-transform" />
+                <ArrowLeft size={24} className="rotate-180 group-hover:translate-x-4 transition-transform" />
               </Link>
             </div>
           </motion.div>

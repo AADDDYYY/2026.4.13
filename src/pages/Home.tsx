@@ -10,17 +10,66 @@ const Hero = () => {
   const scale = useTransform(scrollY, [0, 800], [1, 1.05]);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center bg-white">
+    <section className="relative h-screen w-full overflow-hidden flex items-center bg-[#F4F7FA]">
       {/* Background Layer */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div style={{ scale, opacity }} className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=2000" 
-            alt="Microstructure Visualization" 
-            className="w-full h-full object-cover opacity-80"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/40 to-white"></div>
+          {/* Base Color with subtle satin gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#F4F7FA] via-[#E9EFF5] to-[#F4F7FA]"></div>
+          
+          {/* Cleverness: Molecular Lattice Pattern (Benzene Rings) */}
+          <div 
+            className="absolute inset-0 opacity-[0.04]" 
+            style={{ 
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='104' viewBox='0 0 60 104' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 104l30-17.32V69.36L30 52 0 69.36v17.32L30 104zM30 52l30-17.32V17.32L30 0 0 17.32v17.32L30 52z' fill='%230046AD' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`,
+              backgroundSize: '120px 208px'
+            }}
+          ></div>
+
+          {/* Cleverness: Floating "Micro-Particles" */}
+          <div className="absolute inset-0">
+            {[...Array(15)].map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ 
+                  x: Math.random() * 100 + "%", 
+                  y: Math.random() * 100 + "%",
+                  scale: Math.random() * 0.5 + 0.5
+                }}
+                animate={{ 
+                  y: ["0%", "-10%", "0%"],
+                  opacity: [0.1, 0.2, 0.1]
+                }}
+                transition={{ 
+                  duration: 8 + Math.random() * 10, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+                className="absolute w-2 h-2 bg-brand-blue/20 rounded-full blur-[2px]"
+              />
+            ))}
+          </div>
+
+          {/* Cleverness: Large Abstract Polymer Chain (Subtle SVG) */}
+          <svg className="absolute -right-[10%] top-[10%] w-[60%] h-[80%] opacity-[0.03] text-brand-blue" viewBox="0 0 200 200">
+            <motion.path
+              d="M 20,180 Q 40,140 80,160 T 140,120 T 180,40"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="0.5"
+              strokeDasharray="2,2"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            />
+            <circle cx="20" cy="180" r="1" fill="currentColor" />
+            <circle cx="80" cy="160" r="1" fill="currentColor" />
+            <circle cx="140" cy="120" r="1" fill="currentColor" />
+            <circle cx="180" cy="40" r="1" fill="currentColor" />
+          </svg>
+
+          {/* Bottom Satin Fade */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F4F7FA]"></div>
         </motion.div>
       </div>
 
@@ -211,14 +260,18 @@ const MarketSectors = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.15, duration: 1 }}
-              className="group relative aspect-[3/4.5] rounded-[60px] overflow-hidden cursor-pointer shadow-2xl"
             >
-              <img src={sector.img} alt={sector.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" referrerPolicy="no-referrer" />
-              <div className="absolute inset-0 bg-brand-dark/50 group-hover:bg-brand-dark/30 transition-colors duration-700"></div>
-              <div className="absolute inset-0 p-12 flex flex-col justify-end">
-                <h3 className="text-3xl font-black text-white mb-4 tracking-tight">{sector.title}</h3>
-                <p className="text-white/50 text-xs font-black uppercase tracking-[0.3em]">{sector.en}</p>
-              </div>
+              <Link 
+                to={`/products?industry=${sector.en === "Leather Finishing" ? "leather" : sector.en === "Consumer Electronics" ? "plastic" : sector.en === "Industrial Coatings" ? "metal" : "wood"}`}
+                className="group relative aspect-[3/4.5] rounded-[60px] overflow-hidden cursor-pointer shadow-2xl block"
+              >
+                <img src={sector.img} alt={sector.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-brand-dark/50 group-hover:bg-brand-dark/30 transition-colors duration-700"></div>
+                <div className="absolute inset-0 p-12 flex flex-col justify-end">
+                  <h3 className="text-3xl font-black text-white mb-4 tracking-tight">{sector.title}</h3>
+                  <p className="text-white/50 text-xs font-black uppercase tracking-[0.3em]">{sector.en}</p>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>
