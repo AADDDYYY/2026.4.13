@@ -1,0 +1,706 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "divisions": "Divisions",
+    "products": "Products",
+    "market_applications": "Market Applications",
+    "innovation": "Innovation",
+    "news": "News Center",
+    "rd": "R&D Innovation",
+    "sustainability": "Sustainability",
+    "contact": "Contact Us"
+  },
+  "hero": {
+    "title_part1": "Microstructure",
+    "title_part2": "Defining Future",
+    "title_part3": "Performance Frontier",
+    "subtitle": "SEADON New Materials specializes in the R&D and manufacturing of high-performance waterborne acrylic and polyurethane resins, providing sustainable digital lab-grade solutions for global industrial coatings.",
+    "cta_products": "Explore Products",
+    "cta_about": "Learn More"
+  },
+  "common": {
+    "loading": "Loading...",
+    "more": "View More"
+  },
+  "mega": {
+    "by_division": "By Division",
+    "by_series": "By Series",
+    "by_industry": "By Industry",
+    "view_all": "View All Products"
+  },
+  "layout": {
+    "privacy_notice": "We use necessary cookies to ensure the proper functioning and security of our official website. By continuing to visit, you agree to our privacy policy.",
+    "learn_more": "Learn More",
+    "back_to_top": "Back to Top",
+    "online_inquiry": "Online Inquiry"
+  },
+  "divisions": {
+    "plastic": "Plastic Coatings",
+    "ink": "Printing Inks",
+    "wood": "Wood Coatings",
+    "metal": "Metal/Film Coatings",
+    "leather": "Leather/Textile/Adhesives"
+  },
+  "industries": {
+    "plastic": "Plastic Apps",
+    "metal": "Metal Apps",
+    "wood": "Wood Apps",
+    "ink": "Ink Apps",
+    "leather": "Leather/Textile Apps"
+  },
+  "footer": {
+    "description": "Seaton New Materials is a leading global provider of water-based resin solutions, committed to driving the green transformation of the chemical industry through technological innovation.",
+    "quick_links": "Quick Links",
+    "core_series": "Core Product Series",
+    "subscribe": "Subscribe",
+    "subscribe_desc": "Subscribe to our mailing list for the latest product news and industry updates.",
+    "email_placeholder": "Your Email",
+    "subscribe_btn": "Subscribe",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "rights": "© 2026 Seaton New Materials. All Rights Reserved.",
+    "privacy_notice": "We use necessary cookies to ensure the proper functioning and security of our website. By continuing to visit, you agree to our privacy policy.",
+    "learn_more": "Learn More",
+    "back_to_top": "Back to Top",
+    "online_chat": "Online Inquiry"
+  },
+  "products": {
+    "title": "Product Center",
+    "subtitle": "Based on deep material science accumulation, Seaton provides you with comprehensive water-based solutions from basic resins to specialty functional polymers.",
+    "catalog": "Technical Product Catalog",
+    "tds": "Technical Parameters / TDS Retrieval",
+    "search_placeholder": "Search product model (e.g., SEACRYL 11P22)",
+    "no_results": "No matching products found",
+    "table": {
+      "name_type": "Product Name / Type",
+      "appearance": "Appearance",
+      "solid": "Solids (%)",
+      "ph": "pH",
+      "viscosity": "Viscosity",
+      "tg_mfft": "TG/MFFT",
+      "features": "Main Features",
+      "actions": "Actions",
+      "view_details": "View Details"
+    },
+    "cta": {
+      "title": "Custom Development Services",
+      "desc": "Seaton Application R&D Center (Guangzhou Technology R&D Center) is dedicated to providing 'tailor-made' resin development and technical support based on your specific application scenarios.",
+      "btn": "Contact Technical Expert"
+    }
+  },
+  "home": {
+    "hero": {
+      "title_part1": "Microstructure",
+      "title_part2": "Defining Future",
+      "title_part3": "Performance Limits",
+      "desc": "We don't just manufacture resins; we reshape the soul of materials at the atomic scale. Through precise particle design, we provide global industry with performance that exceeds expectations.",
+      "explore_btn": "Explore Product Center",
+      "sample_btn": "Request Free Samples"
+    },
+    "innovation": {
+      "title": "Core Technology Matrix",
+      "subtitle": "Based on deep material science accumulation, Seaton provides you with comprehensive water-based solutions from basic resins to specialty functional polymers.",
+      "tech1": { "title": "Self-Matting Tech", "desc": "Seaton core patent, molecular-level spontaneous matting without adding matting powder." },
+      "tech2": { "title": "High Performance PUD", "desc": "Excellent flexibility and wear resistance, defining new standards for leather finishing." },
+      "tech3": { "title": "Waterborne UV", "desc": "Perfect combination of eco-friendliness and efficiency, instant curing, extreme hardness." },
+      "tech4": { "title": "Anti-Fingerprint Coating", "desc": "Designed for metal and electronic products, long-lasting oleophobic, easy to clean." }
+    },
+    "sustainability": {
+      "title": "Green Chemistry",
+      "subtitle": "Driving Sustainable Growth",
+      "desc": "We are deeply aware of the chemical industry's impact on the environment. Seaton is committed to developing 100% water-based, low VOC, zero matting powder added eco-friendly resins, helping our customers achieve carbon neutrality goals while improving product performance.",
+      "voc": "Low VOC Emissions",
+      "voc_desc": "Complies with the world's most stringent environmental regulations.",
+      "circular": "Circular Economy",
+      "circular_desc": "Optimizing production processes to reduce waste emissions.",
+      "badge": "Water-based Eco Solution"
+    },
+    "applications": {
+      "title": "Full Scenario Coverage",
+      "view_all": "View All Applications",
+      "leather": "Leather Finishing",
+      "electronics": "Consumer Electronics",
+      "industrial": "Industrial Coatings",
+      "wood": "Wood & Furniture"
+    },
+    "rd": {
+      "title": "R&D Driven",
+      "subtitle": "Exploring Material Boundaries",
+      "desc": "Seaton has a 5000㎡ application R&D center in Nanxiong, Guangdong. We not only produce resins but are also committed to providing 'tailor-made' resin development and technical support based on customers' specific application scenarios.",
+      "patents": "Invention Patents",
+      "experts": "Senior Industry Experts",
+      "btn": "Enter R&D Center"
+    },
+    "video": {
+      "title": "Audiovisual Seaton",
+      "subtitle": "Witness the Power of Innovation",
+      "desc": "Through the corporate film, gain a deep understanding of Seaton New Materials' R&D strength, intelligent manufacturing base, and our commitment to a green future.",
+      "film_title": "Corporate Image Film 2024",
+      "video_title": "Seaton New Materials: Defining New Heights in Green Chemistry"
+    },
+    "global": {
+      "title": "Global Innovation Network",
+      "desc": "Based in China, serving the world. Seaton provides immediate technical support to customers in 50+ countries and regions through its global R&D centers and sales network.",
+      "hq": "Nanxiong R&D Center",
+      "sales": "Guangzhou Marketing Center",
+      "europe": "Europe Office",
+      "sea": "Southeast Asia Center"
+    },
+    "final_cta": {
+      "title": "Ready to Start Your Green Transformation?",
+      "desc": "Contact our technical experts for customized water-based resin solutions.",
+      "btn": "Consult Now",
+      "browse": "Browse Catalog"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "About Seaton",
+      "subtitle": "New Materials",
+      "desc": "Guangdong Seaton New Material Technology Co., Ltd. has been focusing on the research, development, and production of water-based eco-friendly products for over a decade. It is a fine chemical new material enterprise integrating R&D, production, sales, and service."
+    },
+    "stats": {
+      "base": "Production Base Area",
+      "capacity": "Annual Production Capacity",
+      "patents": "Core Patents Authorized",
+      "clients": "Global Customers Served",
+      "unit_m2": "m²",
+      "unit_tons": "Tons",
+      "unit_items": "Items",
+      "unit_companies": "Companies"
+    },
+    "strength": {
+      "title": "Solid Industrial Foundation",
+      "subtitle": "and Technical Strength",
+      "desc": "The company's production base covers an area of 37,200 square meters, with an annual production capacity of 60,000 tons. As a national high-tech enterprise, a national 'Little Giant' enterprise, and a Guangdong Provincial Doctoral Workstation, we have more than 20 international leading automated production lines and have introduced a full set of Siemens automation operating systems to ensure that every product meets high international standards.",
+      "team": "International R&D Team",
+      "team_desc": "Led by overseas high-level talents and PhDs from prestigious universities, focusing on the frontier exploration of water-based polymer materials.",
+      "vision": "Global Vision",
+      "vision_desc": "Certified by ISO9001, ISO14001, and ISO45001, products are benchmarked against world-class quality.",
+      "smart": "Smart Manufacturing"
+    },
+    "honors": {
+      "title": "Authoritative Endorsement",
+      "subtitle": "and Intellectual Property",
+      "desc": "Seaton always adheres to independent R&D and has built a deep technical barrier and intellectual property protection system through multiple national certifications.",
+      "giant": "Specialized & Innovative",
+      "giant_desc": "National 'Little Giant' enterprise certification, representing our specialization and innovation in niche fields.",
+      "phd": "Doctoral Workstation",
+      "phd_desc": "Guangdong Provincial Doctoral Workstation, gathering top scientific research forces to continuously overcome industry technical problems.",
+      "patents_title": "30+ Core Patents",
+      "patents_desc": "Nearly 30 national patents have been applied for and authorized, building a deep technical moat.",
+      "view_cert": "View Certificate",
+      "patent_list": "Patent List"
+    },
+    "manufacturing": {
+      "title": "Smart Manufacturing Base",
+      "desc": "A modern production base covering 37,200㎡, equipped with 20+ automated production lines, with an annual capacity of 60,000 tons."
+    },
+    "culture": {
+      "title": "Corporate Culture",
+      "mission": "Corporate Mission",
+      "mission_desc": "Committed to the R&D and application of water-based polymer materials, creating a green and healthy life for humanity.",
+      "vision": "Corporate Vision",
+      "vision_desc": "To become a leading global supplier of water-based polymer materials, leading the industry to new heights of green environmental protection.",
+      "values": "Core Values",
+      "values_desc": "Innovation, Quality, Service, Win-win. Customer-centric, quality-based.",
+      "spirit": "Corporate Spirit",
+      "spirit_desc": "Integrity, Pragmatism, Pioneering, Enterprising. Down-to-earth, brave to explore the frontiers of material science."
+    },
+    "commitment": {
+      "title": "Our Core Commitment",
+      "desc": "Seaton New Materials always adheres to the development philosophy of 'technological innovation, green environmental protection'. We not only provide standardized water-based matte resins, polyurethanes, acrylics, and UV products, but can also develop high-performance customized products according to customer needs, providing a full set of water-based solutions."
+    }
+  },
+  "rd": {
+    "hero": {
+      "title": "R&D",
+      "subtitle": "Innovation",
+      "desc": "Innovation is the core driving force of Seaton New Materials. We continuously invest in R&D, committed to overcoming technical problems in the field of water-based resins and providing the industry with more advanced materials."
+    },
+    "stats": {
+      "investment": "R&D Investment Ratio",
+      "patents": "Total Core Patents",
+      "staff": "Professional R&D Staff",
+      "partners": "Partner Universities"
+    },
+    "lab": {
+      "title": "Led by PhDs",
+      "subtitle": "High-spec Laboratory",
+      "desc": "Seaton New Materials has a 5,000㎡ application R&D center in Guangdong, equipped with world-leading experimental equipment. Our R&D team is led by overseas high-level talents and PhDs from prestigious universities, focusing on frontier research of water-based polymer materials, and has established deep industry-university-research cooperation with many well-known chemical colleges.",
+      "team": "Postdoctoral/Doctoral Research Team",
+      "team_desc": "Relying on the 'Guangdong Provincial Doctoral Workstation', gathering top industry talents, focusing on breakthrough research on the underlying logic of water-based resins.",
+      "center": "Precision Analysis & Testing Center",
+      "center_desc": "Equipped with GC-MS, GPC, DSC, laser particle size analyzer and other precision instruments to achieve full-dimensional data monitoring from raw materials to finished products.",
+      "custom": "Molecular-level Customized Development",
+      "custom_desc": "Based on particle design theory, through precise regulation of polymer microstructures, providing customers with 'tailor-made' resin solutions.",
+      "advanced": "Advanced Materials Exploration",
+      "rapid": "Rapid Application Development"
+    },
+    "testing": {
+      "title": "Strict",
+      "subtitle": "Testing System",
+      "desc": "Seaton not only focuses on the synthesis of resins but also on their performance in final applications. We have established a full set of application simulation laboratories to ensure that every resin has undergone extreme environment tests before being launched to the market.",
+      "cnas": "Our laboratory management system is built with reference to CNAS standards to ensure the objectivity and authority of testing results.",
+      "chemical": "Chemical Resistance Test",
+      "chemical_desc": "Acid and alkali resistance, solvent resistance, alcohol wipe test",
+      "aging": "Aging Performance Test",
+      "aging_desc": "QUV artificial aging, yellowing resistance, high temperature test",
+      "mechanical": "Mechanical Performance Test",
+      "mechanical_desc": "Tensile strength, elongation at break, hardness test",
+      "simulation": "Application Simulation Test",
+      "simulation_desc": "Simulate real painting environment, verify final effect"
+    },
+    "philosophy": {
+      "title": "Application-oriented",
+      "subtitle": "Basic Research",
+      "desc": "Seaton's R&D is not limited to the laboratory. We have a deep understanding of terminal application scenarios. Through in-depth research on polymer physics, interface chemistry, and film-forming mechanisms, we solve actual production pain points for customers and promote the water-based process."
+    }
+  },
+  "contact": {
+    "hero": {
+      "title": "Contact & Support",
+      "desc": "Professional customer service and technical team, ready to provide you with all-round support and service."
+    },
+    "info": {
+      "title": "Start Your",
+      "subtitle": "Green Materials Journey",
+      "desc": "Whether you need customized product development or seek existing water-based resin solutions, our expert team will serve you wholeheartedly.",
+      "phone": "Phone",
+      "phone_hours": "Mon - Fri, 8:00 - 18:00",
+      "email": "Email",
+      "address": "Headquarters",
+      "address_val": "No. 1, Ping'an 3rd West Road, Nanxiong High-tech Zone, Shaoguan, Guangdong"
+    },
+    "form": {
+      "help": "How can we help you?",
+      "general": "General Inquiry",
+      "tds": "Request TDS",
+      "sample": "Request Sample",
+      "name": "Your Name",
+      "name_placeholder": "Mr. Zhang",
+      "email": "Email",
+      "email_placeholder": "example@company.com",
+      "phone": "Phone",
+      "phone_placeholder": "138 **** ****",
+      "company": "Company Name",
+      "company_placeholder": "Chemical Co., Ltd.",
+      "product": "Product Model",
+      "product_placeholder": "e.g., SEACRYL 11P22",
+      "desc": "Description",
+      "desc_placeholder": "Please briefly describe your needs...",
+      "submit": "Submit Request",
+      "success_title": "Submitted Successfully!",
+      "success_desc": "Thank you for your inquiry. Our expert team will contact you within 24 hours.",
+      "resubmit": "Submit Again"
+    }
+  },
+  "divisions_page": {
+    "hero": {
+      "title": "Business",
+      "subtitle": "Divisions",
+      "desc": "Seaton New Materials precisely meets the needs of various industries through specialized division operations, providing targeted technical support and services."
+    },
+    "items": {
+      "leather": {
+        "title": "Leather Chemicals Division",
+        "desc": "Provide one-stop full-range leather chemical solutions, covering the entire process flow such as finishing, fatliquoring, and retanning, helping the leather industry green upgrade."
+      },
+      "resin": {
+        "title": "Waterborne Resin Division",
+        "desc": "Focus on resin R&D in fields such as plastics, wood, and water-based inks, quickly providing customers with high-performance, environmentally friendly one-stop solutions."
+      },
+      "automotive": {
+        "title": "Automotive Interior Division",
+        "desc": "Provide a series of high-end interior leather solutions for various types of cars, meeting the automotive industry's strict requirements for environmental protection, durability, and aesthetics."
+      },
+      "uv": {
+        "title": "Waterborne UV Division",
+        "desc": "A leader in environmentally friendly water-based UV technology, products are widely used in various fields, providing excellent curing speed and surface performance."
+      },
+      "battery": {
+        "title": "Power Battery Adhesive Division",
+        "desc": "Focus on the R&D of high-adhesion functional adhesives for battery separators, helping to improve the safety and efficiency of new energy power batteries."
+      },
+      "custom": {
+        "title": "Customized Solutions",
+        "desc": "Provide 'tailor-made' resin development and technical support services based on customers' special application scenarios and performance requirements."
+      },
+      "view_products": "View Related Products"
+    },
+    "global": {
+      "title": "Serving Global",
+      "subtitle": "1000+ Industry Leaders",
+      "desc": "Our division teams work closely with industry leaders around the world to jointly promote material technology progress and create a green future.",
+      "contact": "Contact Corresponding Division"
+    }
+  },
+  "market_apps": {
+    "hero": {
+      "title": "Market Applications",
+      "desc": "Seaton New Materials' technology is widely used in multiple core industrial fields, providing excellent surface treatment and functional solutions for different industries through innovative water-based technology."
+    },
+    "items": {
+      "automotive": {
+        "title": "Automotive Industry",
+        "desc": "Provide high-performance water-based coating solutions for automotive interiors, dashboards, seat leathers, and exterior parts. Meet strict weather resistance, chemical resistance, and environmental emission standards.",
+        "features": ["Automotive Interior Leather Finishing", "Dashboard Tactile Coatings", "High Weather Resistance Exterior Paint", "Low VOC Environmental Standards"]
+      },
+      "electronics": {
+        "title": "Electronics & Appliances",
+        "desc": "Provide excellent touch, hardness, and protection performance for 3C electronic products, smart homes, and large appliance shells. Enhance product added value and user experience.",
+        "features": ["3C Electronic Skin-feel Coating", "Home Appliance High-gloss/Matte Paint", "Anti-fingerprint Protective Coating", "Excellent Adhesion"]
+      },
+      "packaging": {
+        "title": "Packaging & Print",
+        "desc": "Cover tobacco and alcohol packaging, food packaging, and various types of film printing. Provide water-based ink binders with high resolubility, high color development, and excellent transfer performance.",
+        "features": ["Tobacco/Alcohol Gravure Ink", "Film Surface/Reverse Printing", "Eco-friendly Water-based Varnish", "Excellent Color Development"]
+      },
+      "home": {
+        "title": "Home & Architecture",
+        "desc": "Focus on wood furniture, flooring, and interior decoration. Provide coating systems that prevent grain raising, are highly transparent, fast-drying, and environmentally friendly, protecting home health.",
+        "features": ["Wood Furniture Topcoat/Primer", "Anti-grain Raising Tech", "High Transparency Wood Grain", "Low Odor Eco-system"]
+      },
+      "leather": {
+        "title": "Leather & Fashion",
+        "desc": "Provide a full set of water-based finishing solutions for shoe materials, bags, and garment leather. Give leather a natural look, delicate feel, and excellent physical properties.",
+        "features": ["Leather Finishing Agents", "Water-based Shoe Glue", "Abrasion Resistant Bag Coating", "Fashion Color Performance"]
+      },
+      "sports": {
+        "title": "Industrial & Sports",
+        "desc": "Applied to sports equipment, motorcycles, and special industrial fields. Provide high-strength, high-toughness, and special functional coating protection.",
+        "features": ["Sports Equipment Wear Paint", "Motorcycle Decorative Coating", "Special Functional Adhesives", "High Strength Protection"]
+      },
+      "view_details": "View Detailed Solutions"
+    },
+    "custom": {
+      "title": "Industry Not Found?",
+      "desc": "Seaton has a strong R&D team that can provide customized water-based resin development and overall technical solutions based on your special application needs.",
+      "cta": "Contact Technical Experts"
+    }
+  },
+  "innovation_page": {
+    "hero": {
+      "title": "Innovation Driven",
+      "subtitle": "Beauty of Materials",
+      "desc": "Seaton New Materials has always stood at the forefront of waterborne polymer science, providing more environmentally friendly and efficient surface treatment solutions for global industries through continuous R&D investment and technological breakthroughs."
+    },
+    "philosophy": {
+      "title": "In the Name of Science",
+      "subtitle": "Reshaping the Future of Materials",
+      "item1_title": "Precise Synthesis Control",
+      "item1_desc": "Achieve ultimate stability and breakthroughs in product performance through precise control of polymer molecular weight distribution and functional group arrangement.",
+      "item2_title": "Application-Oriented R&D",
+      "item2_desc": "Deeply understand downstream application scenarios, providing full-link technical support from construction and compatibility to final performance.",
+      "badge": "Independent Intellectual Property"
+    },
+    "technologies": {
+      "title": "Core Technology Breakthroughs",
+      "items": {
+        "self_matting": {
+          "title": "Waterborne Self-Matting Patent",
+          "desc": "Seaton's independently developed self-matting technology completely says goodbye to traditional matting powder addition. Through polymer molecular structure design, the coating achieves spontaneous matting, giving the surface an extremely delicate touch and excellent scratch resistance.",
+          "tags": ["Patent Tech", "Molecular Design", "Skin-feel Experience"]
+        },
+        "uv": {
+          "title": "Multi-functional Waterborne UV",
+          "desc": "Breakthrough stable synthesis of 3, 6, and 9 functional group water-based UV resins. While maintaining water-based environmental characteristics, it provides hardness, gloss, and chemical resistance comparable to or even exceeding solvent-based UV.",
+          "tags": ["Fast Curing", "High Hardness", "Low Shrinkage"]
+        },
+        "pud": {
+          "title": "Aliphatic Soft-Touch PUD",
+          "desc": "Specially developed for 3C electronics and automotive interiors. Simulating the delicate texture of human skin, it has excellent anti-yellowing performance and resilience, redefining the tactile dimension of high-performance coatings.",
+          "tags": ["Automotive Interior", "3C Electronics", "Anti-yellowing"]
+        },
+        "anti_fingerprint": {
+          "title": "Nano-Hybrid Anti-Fingerprint",
+          "desc": "Utilize nano-modification technology to reduce surface energy, making fingerprint residues inconspicuous and extremely easy to wipe. While maintaining the original color texture of metal, it provides long-term anti-corrosion protection.",
+          "tags": ["Nano Tech", "Easy Clean", "Anti-corrosion"]
+        }
+      }
+    },
+    "center": {
+      "title": "Guangzhou R&D Center",
+      "desc": "Located in Panyu, Guangzhou, the Seaton Application R&D Center has advanced synthesis laboratories, precision testing instruments, and a full set of application simulation equipment. We not only develop resins but are also committed to providing customers with 'tailor-made' overall technical solutions.",
+      "team_title": "International R&D Team",
+      "team_desc": "Seaton brings together a team of PhDs and experts from world-renowned universities, led by high-level overseas talents, ensuring that we always maintain technological leadership in the field of polymer synthesis.",
+      "stats": {
+        "capacity": "Annual Capacity",
+        "area": "R&D Center Area",
+        "patents": "Core Patent Tech",
+        "experts": "Industry Expert Team"
+      }
+    },
+    "vision": {
+      "title": "Driving Global Green Material Revolution",
+      "desc": "Seaton New Materials will continue to explore the infinite possibilities of polymer science, creating a safer, more environmentally friendly, and better future for mankind through innovative water-based technology.",
+      "badge1": "National High-tech Enterprise",
+      "badge2": "Global Tech Service Network"
+    }
+  },
+  "news_page": {
+    "hero": {
+      "title": "News &",
+      "subtitle": "Insights",
+      "desc": "Here you can find all news about Seaton New Materials and the industries we serve. Please select news by topic."
+    },
+    "filters": {
+      "search_placeholder": "Search news or articles...",
+      "all": "All",
+      "corporate": "Corporate News",
+      "leather": "Leather",
+      "packaging": "Packaging",
+      "coatings": "High Performance",
+      "sustainability": "Sustainability",
+      "press_release": "Press Release",
+      "article": "Article"
+    },
+    "items": {
+      "read_more": "Read More",
+      "no_results": "No news content matching the criteria"
+    }
+  },
+  "sustainability_page": {
+    "hero": {
+      "title": "Green Chemistry",
+      "subtitle": "Guarding the Future",
+      "desc": "Seaton New Materials is committed to being a pioneer in green chemistry. We integrate sustainability into every stage of product R&D, production, and supply chain, using technology to protect our environment."
+    },
+    "stats": {
+      "voc": "VOC Reduction Contribution",
+      "energy": "Renewable Energy Share",
+      "investment": "Eco-R&D Investment",
+      "base": "Zero-Pollution Production Base",
+      "unit_tons": "tons/year"
+    },
+    "esg": {
+      "title": "ESG Strategic Framework",
+      "environmental": {
+        "title": "Environmental Responsibility",
+        "desc": "By promoting waterborne technologies, we aim to help downstream industries reduce VOC emissions by 50% by 2030. We are also deploying photovoltaic power at our production bases to optimize our energy structure.",
+        "items": ["100% Waterborne R&D", "Clean Energy Transition", "Zero Wastewater Discharge Goal"]
+      },
+      "social": {
+        "title": "Social Value",
+        "desc": "We focus on employee growth and community well-being. Through the 'Seaton Scholarship' and industry talent programs, we promote the popularization of polymer science and talent development.",
+        "items": ["Talent Development Programs", "Community Environmental Welfare", "Safety Production Guarantee"]
+      },
+      "governance": {
+        "title": "Corporate Governance",
+        "desc": "We adhere to transparent and compliant business principles. We have established a robust supply chain compliance assessment system to ensure every drop of raw material meets the strictest global environmental and ethical standards.",
+        "items": ["Transparent Supply Chain", "Compliance Management System", "Risk Management Mechanism"]
+      }
+    },
+    "management": {
+      "title": "Full Lifecycle Green Management",
+      "desc": "We focus not only on the environmental properties of our products but also on optimizing the carbon footprint throughout the lifecycle from raw material sourcing and manufacturing to packaging and transportation. By introducing bio-based raw materials and recycling processes, we are redefining the boundaries of chemical production.",
+      "item1_title": "Low VOC Emissions",
+      "item1_desc": "All products meet the strictest international environmental standards, helping customers achieve green production.",
+      "item2_title": "Resource Recycling",
+      "item2_desc": "Establish a complete wastewater treatment and resource recovery system to achieve zero pollution in the production process.",
+      "item3_title": "Bio-based Raw Materials",
+      "item3_desc": "Continuously increase the proportion of bio-based raw materials in our products to reduce dependence on fossil resources."
+    },
+    "vision": {
+      "title": "Building a Green Future Together",
+      "desc": "We invite global partners to explore sustainable material science together and contribute to protecting our planet.",
+      "cta_join": "Join Green Action",
+      "cta_browse": "Browse Eco-Products"
+    }
+  },
+  "market_data": {
+    "automotive": {
+      "overview": "As the global automotive industry transitions towards green, eco-friendly, and low-VOC solutions, Seaton New Materials provides comprehensive waterborne coating solutions for automotive interiors, dashboards, and exterior components. We are committed to enhancing cabin comfort and aesthetics while ensuring material durability and safety.",
+      "challenges": [
+        "Strict VOC emission standards and odor control",
+        "Extremely high requirements for high and low temperature cycle endurance",
+        "Excellent adhesion to various substrates (ABS, PC, Leather)",
+        "Outstanding scratch and chemical resistance (sunscreen, sweat, etc.)"
+      ],
+      "solutions": [
+        {
+          "title": "Waterborne Interior Leather Coating System",
+          "desc": "Using high-performance PUD resins, it gives synthetic and genuine leather a delicate touch and excellent physical properties, meeting the strict tests of automotive OEMs.",
+          "products": ["seapur-50a01", "seapur-50a02", "seapur-50g71", "seapur-50g75", "seapur-50g80", "seapur-50g72"]
+        },
+        {
+          "title": "Tactile Coating Solutions",
+          "desc": "Provides an ultimate 'skin-feel' experience for dashboards and center consoles, with excellent matting effects and anti-fingerprint properties.",
+          "products": ["seamatt-11m01", "seamatt-11m02"]
+        }
+      ],
+      "benefits": [
+        "Ultra-low VOC emissions, protecting in-car air quality",
+        "Excellent tactile aesthetic design",
+        "Long-lasting weather resistance and physical protection",
+        "Compliant with major global OEM standards"
+      ],
+      "coreAdvantages": [
+        { "title": "Self-Matting Core Technology", "desc": "Achieves extremely low gloss without adding matting agents, with higher film transparency and no white fog phenomenon." },
+        { "title": "Excellent Chemical Resistance", "desc": "Passes strict sunscreen, sweat, and alcohol tests, ensuring interiors stay like new." },
+        { "title": "Low Odor / Low VOC", "desc": "Specially designed for enclosed car environments, far exceeding national and European emission requirements." }
+      ]
+    },
+    "electronics": {
+      "overview": "In the 3C electronics and smart appliance sectors, appearance texture and surface protection are core product competitiveness. Seaton's high-performance waterborne resins enhance product visual quality while providing excellent surface hardness and wear resistance.",
+      "challenges": [
+        "Uniform coating on complex geometric shapes",
+        "Precise control of high-gloss and matte effects",
+        "Excellent resistance to alcohol and cosmetics",
+        "Fast curing to improve production efficiency"
+      ],
+      "solutions": [
+        {
+          "title": "3C Electronics Surface Coating",
+          "desc": "For phone cases and laptop shells, providing high-hardness, scratch-resistant waterborne UV or two-component systems.",
+          "products": ["searays-uv101", "searays-uv107", "searays-uv214", "searays-uv300", "searays-uv100", "searays-uv101a", "searays-uv202", "searays-uv205", "searays-uv213"]
+        },
+        {
+          "title": "Appliance Exterior Decoration",
+          "desc": "Provides rich color expression and long-term anti-corrosion protection for refrigerator and washing machine panels.",
+          "products": ["seacryl-11a01", "seapur-50g85", "seacryl-11p22", "seacryl-11p28", "seacryl-11p27", "seacryl-11p58", "seacryl-11p51", "seacryl-13g29", "seacryl-23g24", "seacryl-20g04", "seacryl-20g05", "seacryl-12g37", "seacryl-23g27", "seapur-40g30", "seapur-40p35", "seapur-50g24"]
+        }
+      ],
+      "benefits": [
+        "Ultimate surface flatness and gloss control",
+        "Excellent chemical resistance",
+        "Efficient application performance",
+        "Enhancing the tech-feel of end products"
+      ],
+      "coreAdvantages": [
+        { "title": "Excellent Substrate Adhesion", "desc": "Outstanding adhesion to various electronic substrates like PC, ABS, and metal." },
+        { "title": "High Hardness and Wear Resistance", "desc": "Film hardness can reach 2H or more, effectively resisting scratches and wear in daily use." },
+        { "title": "Precise Color Reproduction", "desc": "High-transparency base material ensures metal powders or pigments present the truest visual effects." }
+      ]
+    },
+    "packaging": {
+      "overview": "Seaton has deep technical accumulation in the packaging and printing field, especially in high-end tobacco and alcohol packaging, food packaging, and film printing. Our waterborne binders are widely recognized for their excellent color development and transferability.",
+      "challenges": [
+        "Resolubility balance under high-speed printing",
+        "Adhesion to non-polar films (OPP, PET)",
+        "Strict environmental regulations on residual solvents",
+        "Visual requirements for high gloss and high transparency"
+      ],
+      "solutions": [
+        {
+          "title": "High-end Tobacco & Alcohol Packaging Ink",
+          "desc": "Provides high-resolubility, high-color-development waterborne acrylic emulsions, ensuring clear printing patterns and vibrant colors.",
+          "products": ["seacryl-11k20", "seacryl-11k38", "seacryl-11k40", "seacryl-11k10", "seacryl-11k12", "seacryl-11k16", "seacryl-11k37"]
+        },
+        {
+          "title": "Film Printing & Inkjet",
+          "desc": "Specially developed for flexible packaging and digital printing, with excellent composite strength and color development performance.",
+          "products": ["seapur-50k06", "seacryl-11k50", "seadit-55a01", "seapur-50k76", "seapur-55x10", "seapur-50k12", "seapur-50k05", "seapur-50k09", "seapur-50k50a", "seapur-50k15"]
+        }
+      ],
+      "benefits": [
+        "Zero solvent residue, food-grade safety compliant",
+        "Excellent printing adaptability",
+        "Extremely high color reproduction",
+        "Helping the packaging industry transition to green"
+      ],
+      "coreAdvantages": [
+        { "title": "High Color Development & Transfer", "desc": "Excellent pigment wetting, ensuring high color saturation and clear dots." },
+        { "title": "Excellent Resolubility", "desc": "No plate plugging during high-speed printing, easy to clean after shutdown, improving efficiency." },
+        { "title": "Multi-substrate Applicability", "desc": "Widely applicable to paper, PE, PET, BOPP, and other packaging materials." }
+      ]
+    },
+    "home": {
+      "overview": "Health and aesthetics in the home environment are equally important. Seaton's waterborne wood coatings and decorative resins eliminate formaldehyde and VOC hazards while preserving the most natural texture and touch of wood.",
+      "challenges": [
+        "Wood grain raising issues caused by waterborne coatings",
+        "Balance between film transparency and fullness",
+        "Resistance to water, heat, and household chemicals",
+        "Drying speed control during application"
+      ],
+      "solutions": [
+        {
+          "title": "High-end Wood Furniture Coatings",
+          "desc": "Uses unique anti-grain-raising technology, providing transparency and hardness comparable to solvent-based paints.",
+          "products": ["seacryl-11w01", "seacryl-11w18", "seacryl-11w19", "seacryl-11w08", "seapur-50g71", "seapur-30g01", "seapur-50g33", "seapua-51w02", "searays-uv210"]
+        },
+        {
+          "title": "Interior Decoration & Flooring",
+          "desc": "High-wear, anti-slip waterborne floor paint systems providing long-lasting protection for homes.",
+          "products": ["High-wear PUD", "Self-crosslinking Emulsion"]
+        }
+      ],
+      "benefits": [
+        "Odor-free and eco-friendly, ready to move in after painting",
+        "Perfectly showcases the natural beauty of wood",
+        "Excellent scratch and stain resistance",
+        "Long-lasting protection for home surfaces"
+      ],
+      "coreAdvantages": [
+        { "title": "Patented Anti-Grain-Raising Tech", "desc": "Effectively solves wood fiber swelling caused by waterborne paint, resulting in a smooth and delicate film." },
+        { "title": "High Transparency & Fullness", "desc": "Deeply wets wood texture, presenting a clear and thick feel like solvent-based paint." },
+        { "title": "Rapid Drying Performance", "desc": "Excellent early anti-blocking property, shortening production cycles and increasing capacity." }
+      ]
+    },
+    "leather": {
+      "overview": "Seaton provides a full set of waterborne leather finishing solutions for the fashion industry. Whether pursuing extreme softness for garment leather or durability for footwear leather, we provide precise technical support.",
+      "challenges": [
+        "Preservation and modification of natural leather texture",
+        "Balance between coating softness and toughness",
+        "Excellent flex resistance and dry/wet rub performance",
+        "Implementation of fashion colors and special effects"
+      ],
+      "solutions": [
+        {
+          "title": "Wet End Processing",
+          "desc": "Provides a full set of wet-end auxiliaries from degreasing and liming to retanning and fatliquoring, optimizing basic leather quality.",
+          "products": ["seaaid-88w01", "seaaid-88w02", "seaaid-88w04"]
+        },
+        {
+          "title": "Leather Finishing",
+          "desc": "Extremely soft tactile resins and functional auxiliaries give leather a silk-like delicate texture and high gloss.",
+          "products": ["seapur-50g80", "seafin-99f01", "seafin-99f05", "seapur-50l02", "seapur-50l01", "seapur-50g90"]
+        }
+      ],
+      "benefits": [
+        "Enhancing leather grade and added value",
+        "Compliant with international eco-textile standards",
+        "Rich choice of surface effects",
+        "Excellent processing adaptability"
+      ],
+      "coreAdvantages": [
+        { "title": "Ultimate Tactile Design", "desc": "From silky to meaty, providing diverse surface tactile adjustment solutions." },
+        { "title": "Excellent Flex Resistance", "desc": "The film has extremely high elasticity and toughness, no cracking after tens of thousands of flex tests." },
+        { "title": "Environmental Compliance", "desc": "Fully meets ZDHC, OEKO-TEX, and other major international environmental certifications." }
+      ]
+    },
+    "industrial": {
+      "overview": "In extreme industrial environments and high-intensity sports scenarios, material protection performance is critical. Seaton's special functional resins provide indestructible protection for industrial equipment and sports gear.",
+      "challenges": [
+        "Extremely high requirements for impact and fatigue resistance",
+        "Long-term anti-corrosion protection for metal substrates",
+        "Integration of special functionalities (e.g., anti-slip, anti-static)",
+        "Performance stability under extreme climates"
+      ],
+      "solutions": [
+        {
+          "title": "Industrial Protection & Metal",
+          "desc": "For hardware and mechanical equipment, providing fast-drying, high-adhesion, high-salt-spray-resistant waterborne anti-rust solutions.",
+          "products": ["seapur-50m01", "seapur-50g85", "seacryl-11p28"]
+        },
+        {
+          "title": "Power Battery & Energy",
+          "desc": "Specially developed for the new energy sector, providing binders and separator coatings with excellent electrochemical stability.",
+          "products": ["seapur-50b01", "seapur-50k01a"]
+        }
+      ],
+      "benefits": [
+        "Outstanding physical protection strength",
+        "Extending equipment service life",
+        "Multi-functional integrated solutions",
+        "Efficient and eco-friendly application experience"
+      ],
+      "coreAdvantages": [
+        { "title": "High-Toughness Protection System", "desc": "The film does not peel or crack under severe impact, providing long-term protection for equipment." },
+        { "title": "Excellent Anti-Corrosion Performance", "desc": "Passes hundreds of hours of salt spray testing, effectively blocking moisture and oxygen from corroding metal." },
+        { "title": "Multi-functional Integration", "desc": "Special functions like anti-static, anti-slip, and high-temperature resistance can be integrated as needed." }
+      ]
+    }
+  }
+}

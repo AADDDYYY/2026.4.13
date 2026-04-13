@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西顿化学 - 产品技术目录</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050a14;
+            color: #ffffff;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+        .brand-blue { color: #0066ff; }
+        .bg-brand-blue { background-color: #0066ff; }
+        .border-brand-blue { border-color: #0066ff; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050a14; }
+        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #333; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <h1 class="text-4xl font-bold tracking-tighter mb-2">西顿化学产品目录</h1>
+                    <p class="text-white/40 text-sm uppercase tracking-widest font-light">Technical Product Catalog / TDS Repository</p>
+                </div>
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <input type="text" id="searchInput" placeholder="搜索产品型号或类型..." 
+                        class="w-full md:w-80 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue transition-all">
+                </div>
+            </div>
+        </header>
+
+        <nav class="mb-8 flex flex-wrap gap-2" id="divisionFilters">
+            <button class="filter-btn active px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-brand-blue text-white transition-all" data-division="all">全部事业部</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-white/5 text-white/40 hover:bg-white/10 transition-all" data-division="塑胶涂料树脂事业部">塑胶事业部</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-white/5 text-white/40 hover:bg-white/10 transition-all" data-division="印刷油墨树脂事业部">油墨事业部</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-white/5 text-white/40 hover:bg-white/10 transition-all" data-division="木器涂料树脂事业部">木器事业部</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-white/5 text-white/40 hover:bg-white/10 transition-all" data-division="金属 / 薄膜涂料树脂事业部">金属事业部</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-white/5 text-white/40 hover:bg-white/10 transition-all" data-division="皮革 / 纺织 / 胶粘剂树脂事业部">皮革事业部</button>
+        </nav>
+
+        <div class="glass-card rounded-3xl overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[1000px]">
+                <thead>
+                    <tr class="bg-white/5 text-[10px] font-bold uppercase tracking-widest text-white/40 border-b border-white/5">
+                        <th class="p-6">产品名称 / 类型</th>
+                        <th class="p-6">外观</th>
+                        <th class="p-6">固含 (%)</th>
+                        <th class="p-6">pH</th>
+                        <th class="p-6">粘度</th>
+                        <th class="p-6">TG/MFFT</th>
+                        <th class="p-6">主要特征</th>
+                        <th class="p-6 text-right">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody" class="divide-y divide-white/5">
+                    <!-- Products will be injected here -->
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="mt-12 text-center text-white/20 text-[10px] uppercase tracking-[0.3em]">
+            &copy; 2026 西顿化学应用研发中心 / 版权所有
+        </footer>
+    </div>
+
+    <script>
+        const products = [
+            {
+                name: "SEACRYL 11P22",
+                type: "水性丙烯酸乳液",
+                divisions: ["塑胶涂料树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "20",
+                mfft: "15",
+                features: ["银排佳", "耐醇", "高硬度"]
+            },
+            {
+                name: "SEACRYL 11P27",
+                type: "水性丙烯酸乳液",
+                divisions: ["塑胶涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "15",
+                mfft: "10",
+                features: ["高丰满度", "耐水煮"]
+            },
+            {
+                name: "SEACRYL 11P28",
+                type: "水性丙烯酸乳液",
+                divisions: ["塑胶涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "25",
+                mfft: "20",
+                features: ["高硬度", "耐刮擦"]
+            },
+            {
+                name: "SEACRYL 11P51",
+                type: "水性丙烯酸乳液",
+                divisions: ["塑胶涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "10",
+                mfft: "5",
+                features: ["柔韧性好", "重涂性优"]
+            },
+            {
+                name: "SEACRYL 11P58",
+                type: "水性丙烯酸乳液",
+                divisions: ["塑胶涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "30",
+                mfft: "25",
+                features: ["高耐候", "耐污"]
+            },
+            {
+                name: "SEACRYL 13G29",
+                type: "水性丙烯酸乳液",
+                divisions: ["塑胶涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "0",
+                mfft: "-5",
+                features: ["低 MFFT", "成膜性优"]
+            },
+            {
+                name: "SEACRYL 23G24",
+                type: "水性丙烯酸乳液",
+                divisions: ["塑胶涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "18",
+                mfft: "12",
+                features: ["银排优异", "高光泽"]
+            },
+            {
+                name: "SEAPUR 33G31",
+                type: "水性 UV 光固化树脂",
+                divisions: ["塑胶涂料树脂事业部", "金属 / 薄膜涂料树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "4.0-6.0",
+                viscosity: "＜500",
+                tg: "50",
+                mfft: "-",
+                features: ["高硬度", "耐刮", "UV 固化"]
+            },
+            {
+                name: "SEAPUR 33G32",
+                type: "水性 UV 光固化树脂",
+                divisions: ["塑胶涂料树脂事业部", "金属 / 薄膜涂料树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "4.0-6.0",
+                viscosity: "＜500",
+                tg: "45",
+                mfft: "-",
+                features: ["高丰满度", "耐污"]
+            },
+            {
+                name: "SEAPUR 33G32A",
+                type: "水性 UV 光固化树脂",
+                divisions: ["塑胶涂料树脂事业部", "金属 / 薄膜涂料树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "4.0-6.0",
+                viscosity: "＜500",
+                tg: "48",
+                mfft: "-",
+                features: ["高硬度", "耐黄变"]
+            },
+            {
+                name: "SEAPUR 33G41",
+                type: "水性 UV 光固化树脂",
+                divisions: ["塑胶涂料树脂事业部", "金属 / 薄膜涂料树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "45±1",
+                pH: "4.0-6.0",
+                viscosity: "＜600",
+                tg: "55",
+                mfft: "-",
+                features: ["高耐磨", "耐化学品"]
+            },
+            {
+                name: "SEAPUR 33G44",
+                type: "水性 UV 光固化树脂",
+                divisions: ["塑胶涂料树脂事业部", "金属 / 薄膜涂料树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "45±1",
+                pH: "4.0-6.0",
+                viscosity: "＜600",
+                tg: "52",
+                mfft: "-",
+                features: ["高光泽", "耐候"]
+            },
+            {
+                name: "SEAPUR 40G30",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["塑胶涂料树脂事业部", "木器涂料树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-20",
+                mfft: "＜0",
+                features: ["高弹性", "附着力优"]
+            },
+            {
+                name: "SEAPUR 40P35",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["塑胶涂料树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-15",
+                mfft: "＜0",
+                features: ["高韧性", "耐冲击"]
+            },
+            {
+                name: "SEAPUR 50G75",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["塑胶涂料树脂事业部", "木器涂料树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-30",
+                mfft: "＜0",
+                features: ["肤感", "高弹性", "抗刮"]
+            },
+            {
+                name: "SEAPUR 50G80",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["塑胶涂料树脂事业部", "木器涂料树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-25",
+                mfft: "＜0",
+                features: ["滑感", "耐污", "肤感"]
+            },
+            {
+                name: "SEACRYL 11K20",
+                type: "水性丙烯酸乳液",
+                divisions: ["印刷油墨树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "15",
+                mfft: "10",
+                features: ["展色性优", "附着力强"]
+            },
+            {
+                name: "SEACRYL 11K37",
+                type: "水性丙烯酸乳液",
+                divisions: ["印刷油墨树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "20",
+                mfft: "15",
+                features: ["转移性佳", "复合强度高"]
+            },
+            {
+                name: "SEACRYL 11K38",
+                type: "水性丙烯酸乳液",
+                divisions: ["印刷油墨树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "25",
+                mfft: "20",
+                features: ["耐高温", "防爆色"]
+            },
+            {
+                name: "SEAPUR 50K01A",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-10",
+                mfft: "＜0",
+                features: ["高附着力", "成膜柔韧"]
+            },
+            {
+                name: "SEAPUR 50K05",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-15",
+                mfft: "＜0",
+                features: ["消光效率高", "定墨性优"]
+            },
+            {
+                name: "SEAPUR 50K06",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-20",
+                mfft: "＜0",
+                features: ["柔韧性好", "耐折"]
+            },
+            {
+                name: "SEAPUR 50K08",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-5",
+                mfft: "＜0",
+                features: ["高光泽", "转移性佳"]
+            },
+            {
+                name: "SEAPUR 50K09",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "0",
+                mfft: "＜0",
+                features: ["复合强度高", "耐水"]
+            },
+            {
+                name: "SEAPUR 50K12",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-10",
+                mfft: "＜0",
+                features: ["研磨一体化", "展色性优"]
+            },
+            {
+                name: "SEAPUR 50G76",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-25",
+                mfft: "＜0",
+                features: ["肤感", "哑光"]
+            },
+            {
+                name: "SEAPUR 50K50A",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-15",
+                mfft: "＜0",
+                features: ["高附着力", "耐黄变"]
+            },
+            {
+                name: "SEAPUR 55X10",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["印刷油墨树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "30±1",
+                pH: "7.0-8.0",
+                viscosity: "＜800",
+                tg: "-30",
+                mfft: "＜0",
+                features: ["高弹性", "耐折"]
+            },
+            {
+                name: "SEACRYL 11W01",
+                type: "水性丙烯酸乳液",
+                divisions: ["木器涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "15",
+                mfft: "10",
+                features: ["打磨性优", "防涨筋"]
+            },
+            {
+                name: "SEACRYL 11W08",
+                type: "水性丙烯酸乳液",
+                divisions: ["木器涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "20",
+                mfft: "15",
+                features: ["通透", "乙醇相容性优"]
+            },
+            {
+                name: "SEACRYL 11W18",
+                type: "水性丙烯酸乳液",
+                divisions: ["木器涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "25",
+                mfft: "20",
+                features: ["高硬度", "耐水"]
+            },
+            {
+                name: "SEACRYL 11W19",
+                type: "水性丙烯酸乳液",
+                divisions: ["木器涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "18",
+                mfft: "12",
+                features: ["防涨筋", "干燥快"]
+            },
+            {
+                name: "SEAPUR 30G01",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["木器涂料树脂事业部", "皮革 / 纺织 / 胶粘剂树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "30±1",
+                pH: "7.0-8.0",
+                viscosity: "＜800",
+                tg: "-25",
+                mfft: "＜0",
+                features: ["高弹性", "手感好"]
+            },
+            {
+                name: "SEAPUR 50G33",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["木器涂料树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-15",
+                mfft: "＜0",
+                features: ["高油润感", "肉厚感"]
+            },
+            {
+                name: "SEAPUR 50G71",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["木器涂料树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-20",
+                mfft: "＜0",
+                features: ["抗刮", "耐化学品"]
+            },
+            {
+                name: "SEAPUA 51W02",
+                type: "水性聚氨酯丙烯酸复合乳液 (PUA)",
+                divisions: ["木器涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜500",
+                tg: "10",
+                mfft: "5",
+                features: ["高硬度", "柔韧性好"]
+            },
+            {
+                name: "SEACRYL 11K10",
+                type: "水性羟基丙烯酸分散体",
+                divisions: ["金属 / 薄膜涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜300",
+                tg: "25",
+                mfft: "20",
+                features: ["高硬度", "耐候"]
+            },
+            {
+                name: "SEACRYL 11K12",
+                type: "水性羟基丙烯酸分散体",
+                divisions: ["金属 / 薄膜涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜300",
+                tg: "20",
+                mfft: "15",
+                features: ["附着力优", "耐水"]
+            },
+            {
+                name: "SEACRYL 11K16",
+                type: "水性羟基丙烯酸分散体",
+                divisions: ["金属 / 薄膜涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜300",
+                tg: "30",
+                mfft: "25",
+                features: ["高耐候", "耐黄变"]
+            },
+            {
+                name: "SEACRYL 12G37",
+                type: "水性丙烯酸乳液",
+                divisions: ["金属 / 薄膜涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "15",
+                mfft: "10",
+                features: ["成膜平整", "复合强度高"]
+            },
+            {
+                name: "SEACRYL 20G05",
+                type: "水性丙烯酸乳液",
+                divisions: ["金属 / 薄膜涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "0",
+                mfft: "-5",
+                features: ["低 MFFT", "柔韧性好"]
+            },
+            {
+                name: "SEACRYL 23G27",
+                type: "水性丙烯酸乳液",
+                divisions: ["金属 / 薄膜涂料树脂事业部"],
+                appearance: "半透明液体",
+                solidContent: "40±1",
+                pH: "7.0-9.0",
+                viscosity: "＜200",
+                tg: "20",
+                mfft: "15",
+                features: ["耐高温", "耐化学品"]
+            },
+            {
+                name: "SEAPUR 50G24",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["金属 / 薄膜涂料树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-10",
+                mfft: "＜0",
+                features: ["高附着力", "耐水"]
+            },
+            {
+                name: "SEAPUR 50W06",
+                type: "水性聚氨酯分散体 (PUD)",
+                divisions: ["金属 / 薄膜涂料树脂事业部"],
+                appearance: "乳白色液体",
+                solidContent: "35±1",
+                pH: "7.0-8.0",
+                viscosity: "＜1000",
+                tg: "-15",
+                mfft: "＜0",
+                features: ["柔韧性好", "耐冲击"]
+            }
+        ];
+
+        let currentDivision = 'all';
+        let searchQuery = '';
+
+        function renderProducts() {
+            const tbody = document.getElementById('productTableBody');
+            const filtered = products.filter(p => {
+                const matchesDivision = currentDivision === 'all' || p.divisions.includes(currentDivision);
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                     p.type.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesDivision && matchesSearch;
+            });
+
+            tbody.innerHTML = filtered.map(p => `
+                <tr class="hover:bg-white/[0.03] transition-colors group">
+                    <td class="p-6">
+                        <div class="text-sm font-bold tracking-tight group-hover:text-brand-blue transition-colors">${p.name}</div>
+                        <div class="text-[10px] text-white/20 uppercase tracking-widest mt-1">${p.type}</div>
+                        ${p.divisions.length > 1 && currentDivision !== 'all' && !p.divisions[0].includes(currentDivision) ? 
+                          `<span class="inline-block mt-2 px-2 py-0.5 bg-brand-blue/10 text-brand-blue text-[8px] font-bold rounded uppercase tracking-widest">通用款 / 关联型号</span>` : ''}
+                    </td>
+                    <td class="p-6 text-xs text-white/60">${p.appearance}</td>
+                    <td class="p-6 text-xs text-white/60">${p.solidContent}</td>
+                    <td class="p-6 text-xs text-white/60">${p.pH}</td>
+                    <td class="p-6 text-xs text-white/60">${p.viscosity}</td>
+                    <td class="p-6">
+                        <div class="flex flex-col text-[10px]">
+                            <span class="text-white/60">TG: ${p.tg}</span>
+                            <span class="text-white/40">MFFT: ${p.mfft}</span>
+                        </div>
+                    </td>
+                    <td class="p-6">
+                        <div class="flex flex-wrap gap-1">
+                            ${p.features.map(f => `<span class="px-2 py-0.5 bg-white/5 rounded text-[9px] text-white/40 border border-white/5">${f}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="p-6 text-right">
+                        <a href="/contact?type=tds&product=${encodeURIComponent(p.name)}" class="text-[10px] font-bold uppercase tracking-widest text-brand-blue hover:underline">索取 TDS</a>
+                    </td>
+                </tr>
+            `).join('');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-20 text-center text-white/20 font-light">未找到匹配的产品</td></tr>`;
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderProducts();
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-brand-blue', 'text-white');
+                    b.classList.add('bg-white/5', 'text-white/40');
+                });
+                btn.classList.add('active', 'bg-brand-blue', 'text-white');
+                btn.classList.remove('bg-white/5', 'text-white/40');
+                currentDivision = btn.dataset.division;
+                renderProducts();
+            });
+        });
+
+        renderProducts();
+    </script>
+</body>
+</html>
