@@ -9,10 +9,10 @@ export default function BusinessDetail() {
 
   if (!data) {
     return (
-      <div className="pt-32 pb-24 bg-[#050a14] min-h-screen text-white flex items-center justify-center">
+      <div className="pt-32 pb-24 bg-white min-h-screen text-brand-dark flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">未找到该业务领域</h1>
-          <Link to="/" className="text-brand-blue hover:underline">返回首页</Link>
+          <h1 className="text-4xl font-black mb-8 tracking-tight">未找到该业务领域</h1>
+          <Link to="/" className="text-brand-blue hover:underline font-bold text-[11px] uppercase tracking-widest">返回首页</Link>
         </div>
       </div>
     );
@@ -21,38 +21,38 @@ export default function BusinessDetail() {
   const Icon = data.icon;
 
   return (
-    <div className="bg-[#050a14] min-h-screen text-white">
+    <div className="bg-white min-h-screen text-brand-dark">
       {/* Hero Section */}
-      <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
+      <div className="relative h-[70vh] min-h-[600px] overflow-hidden">
         <img 
           src={data.heroImage} 
           alt={data.title} 
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050a14] via-[#050a14]/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
         
-        <div className="absolute inset-0 flex items-end pb-20">
-          <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
+        <div className="absolute inset-0 flex items-end pb-24">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-20 w-full">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             >
               <Link 
                 to="/" 
-                className="inline-flex items-center gap-2 text-white/60 hover:text-brand-blue mb-8 transition-colors group"
+                className="inline-flex items-center gap-4 text-brand-dark/40 hover:text-brand-blue mb-12 transition-colors group font-bold text-[11px] uppercase tracking-widest"
               >
-                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                <ArrowLeft size={18} className="group-hover:-translate-x-2 transition-transform" />
                 返回首页
               </Link>
-              <div className="flex items-center gap-6 mb-6">
-                <div className="p-4 bg-brand-blue rounded-2xl text-white">
-                  <Icon size={32} />
+              <div className="flex items-center gap-10 mb-8">
+                <div className="p-6 bg-brand-blue rounded-[32px] text-white shadow-xl shadow-brand-blue/20">
+                  <Icon size={40} />
                 </div>
                 <div>
-                  <h1 className="text-5xl md:text-7xl font-bold tracking-tighter">{data.title}</h1>
-                  <p className="text-brand-blue font-bold uppercase tracking-[0.3em] text-xs mt-2">{data.en}</p>
+                  <h1 className="text-5xl md:text-8xl font-black tracking-tight leading-tight">{data.title}</h1>
+                  <p className="text-brand-blue font-bold uppercase tracking-widest text-[11px] mt-4">{data.en}</p>
                 </div>
               </div>
             </motion.div>
@@ -60,51 +60,55 @@ export default function BusinessDetail() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <section className="mb-20">
-              <h2 className="text-3xl font-bold mb-8 flex items-center gap-4">
-                <Info className="text-brand-blue" /> 业务介绍
-              </h2>
-              <p className="text-white/50 text-xl font-light leading-relaxed">
+            <section className="mb-32">
+              <div className="flex items-center gap-4 mb-10">
+                <div className="h-px w-12 bg-brand-blue"></div>
+                <h2 className="text-brand-blue font-bold uppercase tracking-widest text-[11px]">业务介绍</h2>
+              </div>
+              <p className="text-brand-dark/60 text-2xl md:text-3xl font-light leading-relaxed">
                 {data.description}
               </p>
             </section>
 
-            <section className="mb-20">
-              <h2 className="text-3xl font-bold mb-10 flex items-center gap-4">
-                <Zap className="text-brand-blue" /> 核心优势
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <section className="mb-32">
+              <div className="flex items-center gap-4 mb-12">
+                <div className="h-px w-12 bg-brand-blue"></div>
+                <h2 className="text-brand-blue font-bold uppercase tracking-widest text-[11px]">核心优势</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {data.features.map((feature, idx) => (
-                  <div key={idx} className="p-8 rounded-3xl bg-white/[0.02] border border-white/5 flex gap-4 items-start hover:border-brand-blue/30 transition-all">
-                    <CheckCircle2 className="text-brand-blue shrink-0 mt-1" size={20} />
-                    <p className="text-white/60 font-light">{feature}</p>
+                  <div key={idx} className="p-10 rounded-[32px] bg-brand-gray border border-brand-border flex gap-6 items-start group hover:border-brand-blue/30 transition-all duration-500 shadow-sm">
+                    <CheckCircle2 className="text-brand-blue shrink-0 mt-1" size={24} />
+                    <p className="text-brand-dark/60 font-medium text-lg leading-relaxed group-hover:text-brand-dark transition-colors">{feature}</p>
                   </div>
                 ))}
               </div>
             </section>
 
-            <section className="mb-20">
-              <h2 className="text-3xl font-bold mb-10 flex items-center gap-4">
-                <Package className="text-brand-blue" /> 推荐产品系列
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <section className="mb-32">
+              <div className="flex items-center gap-4 mb-12">
+                <div className="h-px w-12 bg-brand-blue"></div>
+                <h2 className="text-brand-blue font-bold uppercase tracking-widest text-[11px]">推荐产品系列</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 {data.productSeries.map((series, idx) => (
-                  <div key={idx} className="group rounded-[32px] overflow-hidden bg-white/[0.02] border border-white/5 hover:border-brand-blue/20 transition-all">
-                    <div className="aspect-video overflow-hidden">
+                  <div key={idx} className="group rounded-[40px] overflow-hidden bg-brand-gray border border-brand-border hover:border-brand-blue/30 transition-all duration-700 shadow-sm hover:shadow-xl">
+                    <div className="aspect-video overflow-hidden relative">
                       <img 
                         src={series.image} 
                         alt={series.name} 
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-all duration-1000"
                         referrerPolicy="no-referrer"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
                     </div>
-                    <div className="p-8">
-                      <h3 className="text-xl font-bold mb-4">{series.name}</h3>
-                      <p className="text-white/40 text-sm font-light leading-relaxed">{series.desc}</p>
+                    <div className="p-10">
+                      <h3 className="text-2xl font-black text-brand-dark mb-4 group-hover:text-brand-blue transition-colors">{series.name}</h3>
+                      <p className="text-brand-dark/50 text-base font-medium leading-relaxed">{series.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -115,35 +119,35 @@ export default function BusinessDetail() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-32 space-y-12">
-              <div className="p-10 rounded-[40px] bg-gradient-to-br from-brand-blue/20 to-transparent border border-brand-blue/20">
-                <h3 className="text-2xl font-bold mb-8">技术参数</h3>
+              <div className="p-10 rounded-[40px] bg-brand-gray border border-brand-border shadow-sm">
+                <h3 className="text-2xl font-black mb-10 text-brand-dark">技术参数</h3>
                 <div className="space-y-6">
                   {data.technicalSpecs.map((spec, idx) => (
-                    <div key={idx} className="flex justify-between items-center border-b border-white/5 pb-4">
-                      <span className="text-white/40 text-sm">{spec.label}</span>
-                      <span className="text-white font-medium">{spec.value}</span>
+                    <div key={idx} className="flex justify-between items-center border-b border-brand-border pb-6">
+                      <span className="text-brand-dark/30 text-[11px] font-bold uppercase tracking-widest">{spec.label}</span>
+                      <span className="text-brand-dark/70 font-bold">{spec.value}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="p-10 rounded-[40px] border border-white/10 bg-white/[0.02]">
-                <h3 className="text-2xl font-bold mb-8">应用领域</h3>
+              <div className="p-10 rounded-[40px] border border-brand-border bg-brand-gray shadow-sm">
+                <h3 className="text-2xl font-black mb-10 text-brand-dark">应用领域</h3>
                 <div className="flex flex-wrap gap-3">
                   {data.applications.map((app, idx) => (
-                    <span key={idx} className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/60 text-xs">
+                    <span key={idx} className="px-5 py-2 rounded-full bg-white border border-brand-border text-brand-dark/40 text-[10px] font-bold uppercase tracking-widest shadow-sm">
                       {app}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="p-10 rounded-[40px] bg-brand-blue text-white text-center">
-                <h4 className="font-bold mb-4">获取技术资料</h4>
-                <p className="text-white/70 text-sm mb-8 font-light">如需详细的产品说明书 (TDS) 或安全说明书 (MSDS)，请联系我们。</p>
+              <div className="p-10 rounded-[40px] bg-brand-blue text-white text-center shadow-xl shadow-brand-blue/20">
+                <h4 className="text-2xl font-black mb-6">获取技术资料</h4>
+                <p className="text-white/70 text-base mb-10 font-medium leading-relaxed">如需详细的产品说明书 (TDS) 或安全说明书 (MSDS)，请联系我们。</p>
                 <Link 
                   to="/contact"
-                  className="w-full py-4 bg-white text-brand-dark rounded-2xl font-bold hover:bg-brand-blue hover:text-white transition-all inline-block"
+                  className="w-full py-5 bg-white text-brand-blue rounded-full font-bold text-[11px] uppercase tracking-widest hover:bg-brand-dark hover:text-white transition-all duration-500 inline-block shadow-lg"
                 >
                   立即联系
                 </Link>

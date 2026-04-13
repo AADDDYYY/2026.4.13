@@ -64,21 +64,30 @@ export default function MarketApplications() {
   ];
 
   return (
-    <div className="pt-32 pb-24 bg-[#050a14] min-h-screen text-white">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+    <div className="pt-32 pb-24 bg-white min-h-screen text-brand-dark">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-24"
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-40"
         >
-          <span className="text-brand-blue font-bold uppercase tracking-[0.3em] text-xs mb-4 block">Market Applications</span>
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">{t("market_apps.hero.title")}</h1>
-          <p className="text-white/40 text-lg max-w-3xl mx-auto font-light leading-relaxed">
+          <div className="flex items-center justify-center gap-4 mb-12">
+            <div className="h-px w-12 bg-brand-blue"></div>
+            <span className="text-brand-blue font-bold uppercase tracking-widest text-[12px]">
+              Market Applications
+            </span>
+            <div className="h-px w-12 bg-brand-blue"></div>
+          </div>
+          <h1 className="text-5xl md:text-8xl font-black mb-12 tracking-tight leading-tight">
+            {t("market_apps.hero.title")}
+          </h1>
+          <p className="text-brand-dark/60 text-xl md:text-2xl max-w-4xl mx-auto font-light leading-relaxed">
             {t("market_apps.hero.desc")}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-40">
           {applications.map((app, index) => (
             <motion.div
               key={app.id}
@@ -86,37 +95,37 @@ export default function MarketApplications() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group relative rounded-[40px] overflow-hidden bg-white/[0.02] border border-white/5 hover:border-brand-blue/30 transition-all duration-700"
+              className="group relative rounded-[40px] overflow-hidden bg-brand-gray border border-brand-border hover:border-brand-blue/30 transition-all duration-700 shadow-sm hover:shadow-xl"
             >
-              <div className="aspect-[16/9] overflow-hidden relative">
+              <div className="aspect-[16/10] overflow-hidden relative">
                 <img 
                   src={app.image} 
                   alt={app.title} 
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050a14] via-[#050a14]/20 to-transparent"></div>
-                <div className="absolute bottom-8 left-8 p-4 bg-brand-blue rounded-2xl text-white shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+                <div className="absolute bottom-8 left-8 p-6 bg-brand-blue rounded-[32px] text-white shadow-xl shadow-brand-blue/20">
                   {app.icon}
                 </div>
               </div>
-
-              <div className="p-10">
-                <div className="flex justify-between items-start mb-6">
+              
+              <div className="p-12">
+                <div className="flex justify-between items-start mb-10">
                   <div>
-                    <h3 className="text-3xl font-bold mb-1 tracking-tight">{app.title}</h3>
-                    <p className="text-brand-blue text-[10px] uppercase tracking-widest font-bold opacity-60">{app.en}</p>
+                    <h3 className="text-3xl font-black mb-4 tracking-tight group-hover:text-brand-blue transition-colors text-brand-dark">{app.title}</h3>
+                    <p className="text-brand-blue text-[11px] font-bold uppercase tracking-widest">{app.en}</p>
                   </div>
                 </div>
                 
-                <p className="text-white/40 mb-10 font-light leading-relaxed">
+                <p className="text-brand-dark/50 text-base mb-12 font-medium leading-relaxed">
                   {app.desc}
                 </p>
 
-                <div className="grid grid-cols-2 gap-4 mb-10">
+                <div className="grid grid-cols-2 gap-6 mb-12">
                   {app.features.map(feature => (
-                    <div key={feature} className="flex items-center gap-3 text-xs text-white/30 font-medium">
-                      <div className="w-1 h-1 bg-brand-blue rounded-full"></div>
+                    <div key={feature} className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-brand-dark/30">
+                      <div className="w-1.5 h-1.5 bg-brand-blue rounded-full"></div>
                       {feature}
                     </div>
                   ))}
@@ -124,10 +133,13 @@ export default function MarketApplications() {
 
                 <Link 
                   to={`/market-applications/${app.id}`} 
-                  className="inline-flex items-center gap-3 text-brand-blue font-bold text-xs uppercase tracking-widest group/link"
+                  className="inline-flex items-center gap-4 text-brand-dark font-bold text-[11px] uppercase tracking-widest group/link"
                 >
-                  {t("market_apps.items.view_details")}
-                  <ArrowRight size={16} className="transition-transform group-hover/link:translate-x-2" />
+                  <span className="relative">
+                    {t("market_apps.items.view_details")}
+                    <span className="absolute -bottom-2 left-0 w-0 h-px bg-brand-blue group-hover/link:w-full transition-all duration-500"></span>
+                  </span>
+                  <ArrowRight size={18} className="text-brand-blue transition-transform group-hover/link:translate-x-2" />
                 </Link>
               </div>
             </motion.div>
@@ -139,18 +151,17 @@ export default function MarketApplications() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-32 p-16 rounded-[50px] bg-gradient-to-br from-brand-blue/20 to-transparent border border-white/5 text-center relative overflow-hidden"
+          className="mt-32 p-16 lg:p-32 rounded-[60px] bg-brand-gray border border-brand-border text-center relative overflow-hidden shadow-sm"
         >
-          <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/10 rounded-full blur-[100px] -z-10"></div>
-          <h2 className="text-4xl font-bold mb-6 tracking-tight">{t("market_apps.custom.title")}</h2>
-          <p className="text-white/40 max-w-2xl mx-auto mb-12 text-lg font-light leading-relaxed">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[150px] -z-10"></div>
+          <h2 className="text-5xl md:text-8xl font-black mb-10 tracking-tight leading-tight text-brand-dark">{t("market_apps.custom.title")}</h2>
+          <p className="text-brand-dark/50 max-w-4xl mx-auto mb-16 text-xl md:text-2xl font-light leading-relaxed">
             {t("market_apps.custom.desc")}
           </p>
-          <Link 
-            to="/contact" 
-            className="px-12 py-5 bg-brand-blue text-white rounded-full font-bold hover:bg-brand-blue/80 transition-all inline-block shadow-xl shadow-brand-blue/20"
-          >
-            {t("market_apps.custom.cta")}
+          <Link to="/contact" className="group relative overflow-hidden px-16 py-6 bg-brand-blue text-white rounded-full inline-block shadow-lg shadow-brand-blue/20">
+            <span className="relative z-10 font-bold tracking-widest text-[11px] uppercase transition-colors group-hover:text-white">
+              {t("market_apps.custom.cta")}
+            </span>
           </Link>
         </motion.div>
       </div>

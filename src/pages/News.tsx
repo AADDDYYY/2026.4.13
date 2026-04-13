@@ -88,39 +88,47 @@ export default function News() {
   });
 
   return (
-    <div className="pt-32 pb-24 bg-[#050a14] min-h-screen text-white overflow-hidden">
+    <div className="pt-32 pb-24 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-40 relative">
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] -z-10"></div>
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-40 relative">
+        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-brand-blue/5 rounded-full blur-[200px] -z-10"></div>
         
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           className="text-center"
         >
-          <span className="text-brand-blue font-bold uppercase tracking-[0.5em] text-[10px] mb-8 block">News & Insights</span>
-          <h1 className="text-6xl md:text-9xl font-bold mb-12 tracking-tighter">
-            {t("news_page.hero.title")}<span className="text-white/20 italic font-light">{t("news_page.hero.subtitle")}</span>
+          <div className="flex items-center justify-center gap-4 mb-12">
+            <div className="h-px w-12 bg-brand-blue"></div>
+            <span className="text-brand-blue font-bold uppercase tracking-widest text-[12px]">
+              News & Insights
+            </span>
+            <div className="h-px w-12 bg-brand-blue"></div>
+          </div>
+          <h1 className="text-5xl md:text-8xl font-black mb-12 tracking-tight leading-tight">
+            {t("news_page.hero.title")}<br />
+            <span className="text-brand-blue">{t("news_page.hero.subtitle")}</span>
           </h1>
-          <p className="text-white/40 text-xl max-w-3xl mx-auto font-light leading-relaxed">
+          <p className="text-brand-dark/60 text-xl md:text-2xl max-w-4xl mx-auto font-light leading-relaxed">
             {t("news_page.hero.desc")}
           </p>
         </motion.div>
       </div>
 
       {/* Filters Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-24 space-y-16">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 space-y-12">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-12">
           {/* Type Toggle */}
-          <div className="flex gap-px bg-white/5 border border-white/5 rounded-full overflow-hidden p-1">
+          <div className="flex gap-px bg-brand-gray border border-brand-border rounded-full overflow-hidden p-1 shadow-sm">
             {types.map(type => (
               <button
                 key={type}
                 onClick={() => setActiveType(type)}
-                className={`px-10 py-3 rounded-full transition-all font-bold text-[10px] uppercase tracking-widest ${
+                className={`px-10 py-3 rounded-full transition-all font-bold text-[11px] uppercase tracking-widest ${
                   activeType === type 
-                  ? "bg-brand-blue text-white shadow-xl shadow-brand-blue/20" 
-                  : "text-white/40 hover:text-white"
+                  ? "bg-brand-blue text-white shadow-lg shadow-brand-blue/20" 
+                  : "text-brand-dark/40 hover:text-brand-blue"
                 }`}
               >
                 {t(`news_page.filters.${type}`)}
@@ -130,13 +138,13 @@ export default function News() {
 
           {/* Search Bar */}
           <div className="w-full lg:max-w-md relative group">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-brand-blue transition-colors" size={18} />
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-dark/20 group-focus-within:text-brand-blue transition-colors" size={18} />
             <input
               type="text"
               placeholder={t("news_page.filters.search_placeholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-16 pr-6 py-4 bg-white/[0.02] border border-white/5 rounded-full outline-none focus:border-brand-blue/30 focus:bg-white/[0.04] transition-all font-light text-sm"
+              className="w-full pl-16 pr-6 py-4 bg-brand-gray border border-brand-border rounded-full outline-none focus:border-brand-blue/30 focus:bg-white transition-all font-medium text-sm text-brand-dark shadow-sm"
             />
           </div>
         </div>
@@ -147,10 +155,10 @@ export default function News() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-8 py-3 rounded-full border transition-all text-[10px] font-bold uppercase tracking-widest ${
+              className={`px-8 py-3 rounded-full border transition-all text-[11px] font-bold uppercase tracking-widest ${
                 activeCategory === cat
-                ? "bg-white text-brand-dark border-white"
-                : "bg-transparent border-white/10 text-white/40 hover:border-brand-blue hover:text-brand-blue"
+                ? "bg-brand-blue text-white border-brand-blue shadow-lg shadow-brand-blue/20"
+                : "bg-white border-brand-border text-brand-dark/40 hover:border-brand-blue hover:text-brand-blue"
               }`}
             >
               {t(`news_page.filters.${cat}`)}
@@ -160,8 +168,8 @@ export default function News() {
       </div>
 
       {/* News Grid */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-40">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           <AnimatePresence mode="popLayout">
             {filteredNews.map((item, index) => (
               <motion.div
@@ -169,47 +177,46 @@ export default function News() {
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
+                exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="group bg-white/[0.02] border border-white/5 rounded-[40px] overflow-hidden hover:border-brand-blue/30 transition-all duration-700 flex flex-col h-full"
+                className="group bg-brand-gray border border-brand-border rounded-[40px] overflow-hidden hover:border-brand-blue/30 transition-all duration-700 flex flex-col h-full shadow-sm hover:shadow-xl"
               >
                 <div className="relative h-72 overflow-hidden">
                   <img 
                     src={item.image} 
                     alt={item.title} 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute top-8 left-8 bg-brand-blue text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-2xl">
+                  <div className="absolute top-8 left-8 bg-brand-blue text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
                     {t(`news_page.filters.${item.type}`)}
                   </div>
                 </div>
                 
-                <div className="p-12 flex-grow flex flex-col">
-                  <div className="flex items-center gap-6 text-white/20 text-[10px] font-bold uppercase tracking-widest mb-8">
+                <div className="p-10 flex-grow flex flex-col">
+                  <div className="flex items-center gap-6 text-brand-dark/30 text-[10px] font-bold uppercase tracking-widest mb-6">
                     <div className="flex items-center gap-2">
                       <Clock size={12} className="text-brand-blue" />
                       {item.date}
                     </div>
                     <div className="flex items-center gap-2">
                       <Tag size={12} className="text-brand-blue" />
-                      <span className="text-brand-blue/60">{t(`news_page.filters.${item.category}`)}</span>
+                      <span className="text-brand-blue">{t(`news_page.filters.${item.category}`)}</span>
                     </div>
                   </div>
                   
-                  <h3 className="text-2xl font-bold mb-6 group-hover:text-brand-blue transition-colors line-clamp-2 leading-tight tracking-tight">
+                  <h3 className="text-2xl font-black mb-6 group-hover:text-brand-blue transition-colors line-clamp-2 leading-tight tracking-tight text-brand-dark">
                     {item.title}
                   </h3>
                   
-                  <p className="text-white/40 text-sm mb-10 line-clamp-3 leading-relaxed font-light">
+                  <p className="text-brand-dark/50 text-base mb-10 line-clamp-3 leading-relaxed font-medium">
                     {item.summary}
                   </p>
                   
-                  <div className="mt-auto pt-10 border-t border-white/5">
-                    <Link to={`/news/${item.id}`} className="text-white font-bold text-[10px] uppercase tracking-[0.3em] flex items-center gap-4 group/btn">
+                  <div className="mt-auto pt-8 border-t border-brand-border">
+                    <Link to={`/news/${item.id}`} className="text-brand-blue font-bold text-[11px] uppercase tracking-widest flex items-center gap-3 group/btn">
                       {t("news_page.items.read_more")} 
-                      <div className="w-8 h-px bg-brand-blue group-hover/btn:w-12 transition-all duration-500"></div>
-                      <ArrowRight size={14} className="text-brand-blue group-hover/btn:translate-x-2 transition-transform" />
+                      <ArrowRight size={16} className="group-hover/btn:translate-x-2 transition-transform" />
                     </Link>
                   </div>
                 </div>
@@ -222,9 +229,9 @@ export default function News() {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-40 bg-white/[0.01] rounded-[60px] border border-white/5"
+            className="text-center py-40 bg-brand-gray rounded-[40px] border border-brand-border"
           >
-            <p className="text-white/20 text-xl font-light italic">{t("news_page.items.no_results")}</p>
+            <p className="text-brand-dark/30 text-xl font-bold">{t("news_page.items.no_results")}</p>
           </motion.div>
         )}
       </div>
