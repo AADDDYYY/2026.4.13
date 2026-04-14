@@ -70,7 +70,7 @@ export default function About() {
       {/* Stats Grid */}
       <section className="py-48 border-y border-brand-border bg-brand-gray mb-56">
         <div className="max-w-[1800px] mx-auto px-6 md:px-20">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-24">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24">
             {stats.map((stat, idx) => (
               <motion.div
                 key={idx}
@@ -80,8 +80,8 @@ export default function About() {
                 transition={{ delay: idx * 0.15, duration: 1 }}
               >
                 <div className="text-[11px] font-black text-brand-blue uppercase tracking-[0.3em] mb-6">{stat.label}</div>
-                <div className="text-6xl md:text-9xl font-black text-brand-dark tracking-tighter">
-                  {stat.value}<span className="text-xl font-black ml-4 text-brand-dark/20 uppercase tracking-widest">{stat.unit}</span>
+                <div className="text-5xl md:text-7xl lg:text-8xl font-black text-brand-dark tracking-tighter flex items-baseline gap-2">
+                  {stat.value}<span className="text-lg font-black text-brand-dark/20 uppercase tracking-widest">{stat.unit}</span>
                 </div>
               </motion.div>
             ))}

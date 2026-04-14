@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, Globe, Leaf, Zap, Microscope, Shield, Beaker, Users, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { WorldMap } from "../components/WorldMap";
 
 const Hero = () => {
   const { t } = useTranslation();
@@ -10,18 +11,29 @@ const Hero = () => {
   const scale = useTransform(scrollY, [0, 800], [1, 1.05]);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center bg-[#F4F7FA]">
+    <section className="relative h-screen w-full overflow-hidden flex items-center bg-brand-dark">
       {/* Background Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div style={{ scale, opacity }} className="absolute inset-0">
-          {/* Base Color with subtle satin gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#F4F7FA] via-[#E9EFF5] to-[#F4F7FA]"></div>
+          {/* Video Background */}
+          <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 bg-brand-dark/60 z-10"></div>
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              className="w-full h-full object-cover opacity-40"
+            >
+              <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27db3180c5707609397d4d6b39a7f1fa2370734&profile_id=164&oauth2_token_id=57447761" type="video/mp4" />
+            </video>
+          </div>
           
           {/* Cleverness: Molecular Lattice Pattern (Benzene Rings) */}
           <div 
-            className="absolute inset-0 opacity-[0.04]" 
+            className="absolute inset-0 opacity-[0.08] z-20" 
             style={{ 
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='104' viewBox='0 0 60 104' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 104l30-17.32V69.36L30 52 0 69.36v17.32L30 104zM30 52l30-17.32V17.32L30 0 0 17.32v17.32L30 52z' fill='%230046AD' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='104' viewBox='0 0 60 104' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 104l30-17.32V69.36L30 52 0 69.36v17.32L30 104zM30 52l30-17.32V17.32L30 0 0 17.32v17.32L30 52z' fill='%23FFFFFF' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`,
               backgroundSize: '120px 208px'
             }}
           ></div>
@@ -69,7 +81,7 @@ const Hero = () => {
           </svg>
 
           {/* Bottom Satin Fade */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F4F7FA]"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white"></div>
         </motion.div>
       </div>
 
@@ -82,26 +94,26 @@ const Hero = () => {
         >
           <div className="flex items-center gap-6 mb-12">
             <div className="h-[2px] w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black tracking-[0.3em] uppercase text-[11px]">
+            <span className="text-brand-blue font-black tracking-wider uppercase text-[11px]">
               {t("hero.lab", "Global Materials Science Leader")}
             </span>
           </div>
 
-          <h1 className="text-7xl md:text-[12rem] font-black tracking-tighter text-brand-dark mb-16 leading-[0.85]">
+          <h1 className="text-7xl md:text-[12rem] font-black tracking-tighter text-white mb-16 leading-[0.85]">
             {t("hero.title_part1", "微观结构")}<br />
             <span className="text-brand-blue">{t("hero.title_part2", "定义未来")}</span>
           </h1>
           
-          <p className="text-2xl md:text-4xl text-brand-dark/40 leading-relaxed mb-24 max-w-4xl font-light">
+          <p className="text-2xl md:text-4xl text-white/60 leading-relaxed mb-24 max-w-4xl font-light">
             {t("home.hero.desc", "西顿新材料致力于通过先进的聚合物合成技术，为全球工业提供高性能、可持续的表面处理解决方案。")}
           </p>
           
           <div className="flex flex-wrap gap-10">
-            <Link to="/products" className="group flex items-center gap-6 bg-brand-blue text-white px-14 py-7 rounded-full font-black transition-all hover:bg-brand-dark shadow-2xl shadow-brand-blue/30 text-lg">
+            <Link to="/products" className="group flex items-center gap-6 bg-brand-blue text-white px-14 py-7 rounded-full font-black transition-all hover:bg-white hover:text-brand-dark shadow-2xl shadow-brand-blue/30 text-lg">
               {t("home.hero.explore_btn", "探索产品中心")}
               <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
             </Link>
-            <Link to="/contact" className="group flex items-center gap-6 border-2 border-brand-border text-brand-dark px-14 py-7 rounded-full font-black transition-all hover:bg-brand-gray text-lg">
+            <Link to="/contact" className="group flex items-center gap-6 border-2 border-white/20 text-white px-14 py-7 rounded-full font-black transition-all hover:bg-white/10 text-lg">
               {t("home.hero.sample_btn", "索取样品")}
             </Link>
           </div>
@@ -115,7 +127,7 @@ const Hero = () => {
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           className="flex flex-col items-center gap-4"
         >
-          <span className="text-[11px] text-brand-dark/20 uppercase tracking-[0.5em] font-black">Scroll</span>
+          <span className="text-[11px] text-white/40 uppercase tracking-[0.5em] font-black">Scroll</span>
           <div className="w-[2px] h-16 bg-gradient-to-b from-brand-blue to-transparent"></div>
         </motion.div>
       </div>
@@ -320,16 +332,8 @@ const GlobalPresence = () => {
           </div>
           
           <div className="relative">
-            <div className="aspect-square rounded-full border-2 border-brand-border flex items-center justify-center relative bg-white shadow-2xl">
-              <motion.div 
-                animate={{ rotate: 360 }}
-                transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 border-4 border-dashed border-brand-blue/5 rounded-full"
-              ></motion.div>
-              <div className="text-center">
-                <Globe className="text-brand-blue mx-auto mb-10" size={120} />
-                <div className="text-brand-dark font-black text-3xl tracking-tighter uppercase">Connecting the World</div>
-              </div>
+            <div className="aspect-[4/3] lg:aspect-square rounded-[60px] border border-brand-border flex items-center justify-center relative bg-white/50 backdrop-blur-xl shadow-2xl overflow-hidden group">
+              <WorldMap />
             </div>
           </div>
         </div>

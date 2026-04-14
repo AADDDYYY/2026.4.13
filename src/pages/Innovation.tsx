@@ -187,8 +187,8 @@ export default function Innovation() {
                 {stats.map((stat, idx) => (
                   <div key={idx} className="group">
                     <div className="text-[11px] font-black text-brand-blue uppercase tracking-[0.3em] mb-6">{stat.label}</div>
-                    <div className="text-6xl font-black text-brand-dark tracking-tighter mb-2">
-                      {stat.value}<span className="text-xl font-black ml-4 text-brand-dark/20 uppercase tracking-widest">{stat.unit}</span>
+                    <div className="text-5xl md:text-6xl font-black text-brand-dark tracking-tighter mb-2 flex items-baseline gap-2">
+                      {stat.value}<span className="text-lg font-black text-brand-dark/20 uppercase tracking-widest">{stat.unit}</span>
                     </div>
                   </div>
                 ))}

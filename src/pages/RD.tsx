@@ -45,9 +45,9 @@ export default function RD() {
       <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-brand-border border border-brand-border rounded-[60px] overflow-hidden shadow-2xl">
           {rdStats.map((stat, idx) => (
-            <div key={idx} className="bg-brand-gray p-20 text-center hover:bg-white transition-all duration-700 group">
-              <div className="text-7xl md:text-9xl font-black mb-6 tracking-tighter group-hover:text-brand-blue transition-colors text-brand-dark">
-                {stat.value}<span className="text-2xl ml-3 text-brand-dark/20 uppercase tracking-widest">{stat.unit}</span>
+            <div key={idx} className="bg-brand-gray p-12 lg:p-20 text-center hover:bg-white transition-all duration-700 group">
+              <div className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter group-hover:text-brand-blue transition-colors text-brand-dark flex items-baseline justify-center gap-2">
+                {stat.value}<span className="text-xl text-brand-dark/20 uppercase tracking-widest font-black">{stat.unit}</span>
               </div>
               <div className="text-brand-dark/30 text-[11px] font-black uppercase tracking-[0.3em]">{stat.label}</div>
             </div>

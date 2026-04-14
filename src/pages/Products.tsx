@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Shield, Zap, Droplets, FlaskConical, ArrowRight, Sparkles, Search } from "lucide-react";
+import { Shield, Zap, Droplets, FlaskConical, ArrowRight, Sparkles, Search, Car, Smartphone, Package, Home, Scissors, Trophy } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { products } from "../data/products";
 import { useState, useMemo, useEffect } from "react";
@@ -33,12 +33,12 @@ export default function Products() {
   };
 
   const industryApplications = [
-    { id: "all", title: t("mega.by_industry") === "按应用领域" ? "全部行业" : "All Industries" },
-    { id: "plastic", title: t("industries.plastic"), value: "plastic" },
-    { id: "ink", title: t("industries.ink"), value: "ink" },
-    { id: "wood", title: t("industries.wood"), value: "wood" },
-    { id: "metal", title: t("industries.metal"), value: "metal" },
-    { id: "leather", title: t("industries.leather"), value: "leather" }
+    { id: "all", title: t("mega.by_industry") === "按应用领域" ? "全部行业" : "All Industries", icon: <Sparkles size={14} /> },
+    { id: "plastic", title: t("industries.plastic"), value: "plastic", icon: <Smartphone size={14} /> },
+    { id: "ink", title: t("industries.ink"), value: "ink", icon: <Package size={14} /> },
+    { id: "wood", title: t("industries.wood"), value: "wood", icon: <Home size={14} /> },
+    { id: "metal", title: t("industries.metal"), value: "metal", icon: <Car size={14} /> },
+    { id: "leather", title: t("industries.leather"), value: "leather", icon: <Scissors size={14} /> }
   ];
 
   // Update filters when URL changes
@@ -80,7 +80,7 @@ export default function Products() {
         >
           <div className="flex items-center gap-6 mb-16">
             <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
+            <span className="text-brand-blue font-black uppercase tracking-wider text-[11px]">
               Product Intelligence Center
             </span>
           </div>
@@ -140,12 +140,13 @@ export default function Products() {
                     whileHover={{ y: -4 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setActiveIndustry(ind.value || "all")}
-                    className={`px-8 py-4 rounded-2xl text-[11px] font-black tracking-[0.2em] uppercase transition-all duration-500 border ${
+                    className={`px-8 py-4 rounded-2xl text-[11px] font-black tracking-wider uppercase transition-all duration-500 border flex items-center gap-3 ${
                       isActive 
                         ? "bg-brand-blue/10 border-brand-blue text-brand-blue shadow-sm" 
                         : "bg-brand-gray border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"
                     }`}
                   >
+                    {ind.icon}
                     {ind.title}
                   </motion.button>
                 );
