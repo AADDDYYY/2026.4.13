@@ -99,8 +99,8 @@ export const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled || !isHome || isMenuOpen ? "bg-white/90 backdrop-blur-xl shadow-sm py-4" : "bg-transparent py-8"}`}>
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-3" onClick={() => setIsMenuOpen(false)}>
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 flex items-center">
+        <Link to="/" className="flex items-center gap-3 mr-auto" onClick={() => setIsMenuOpen(false)}>
           <img 
             src="https://ais-pre-g3czlublaxelm5kualarjo-292922663318.europe-west2.run.app/api/attachments/40600104-a63e-461b-907a-248679462551" 
             alt="西顿新材料" 
@@ -109,7 +109,7 @@ export const Header = () => {
           />
         </Link>
         
-        <nav className="hidden md:flex items-center gap-12">
+        <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <div 
               key={link.to}
@@ -119,7 +119,7 @@ export const Header = () => {
             >
               <Link 
                 to={link.to} 
-                className={`text-[11px] uppercase tracking-wider font-black transition-all duration-300 ${isScrolled || !isHome || isMenuOpen ? (location.pathname === link.to ? "text-brand-blue" : "text-brand-dark/70 hover:text-brand-blue") : (location.pathname === link.to ? "text-brand-blue" : "text-white/80 hover:text-white")}`}
+                className={`text-[12px] uppercase tracking-normal font-black transition-all duration-300 ${isScrolled || !isHome || isMenuOpen ? (location.pathname === link.to ? "text-brand-blue" : "text-brand-dark/70 hover:text-brand-blue") : (location.pathname === link.to ? "text-brand-blue" : "text-white/80 hover:text-white")}`}
               >
                 {link.label}
               </Link>
@@ -164,7 +164,7 @@ export const Header = () => {
           ))}
 
           {/* Language Switcher */}
-          <div className="flex items-center gap-4 ml-4">
+          <div className="flex items-center gap-4 ml-12">
             <button 
               onClick={() => setIsSearchOpen(true)}
               className={`p-2 transition-colors ${isScrolled || !isHome || isMenuOpen ? "text-brand-dark/40 hover:text-brand-blue" : "text-white/40 hover:text-white"}`}
