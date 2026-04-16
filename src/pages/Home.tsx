@@ -11,77 +11,47 @@ const Hero = () => {
   const scale = useTransform(scrollY, [0, 800], [1, 1.05]);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center bg-brand-dark">
+    <section className="relative min-h-screen w-full overflow-hidden flex items-center bg-white pb-32 pt-48">
       {/* Background Layer */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      <div className="absolute inset-0 z-0 overflow-hidden bg-[#F8FAFC]">
         <motion.div style={{ scale, opacity }} className="absolute inset-0">
-          {/* Video Background */}
+          {/* High-end Abstract Material Image */}
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-brand-dark/60 z-10"></div>
-            <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="w-full h-full object-cover opacity-40"
-            >
-              <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27db3180c5707609397d4d6b39a7f1fa2370734&profile_id=164&oauth2_token_id=57447761" type="video/mp4" />
-            </video>
+            <img 
+              src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
+              alt="Advanced Materials" 
+              className="w-full h-full object-cover opacity-[0.15]"
+            />
           </div>
           
-          {/* Cleverness: Molecular Lattice Pattern (Benzene Rings) */}
+          {/* Dynamic Gradients for a modern corporate feel */}
+          <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-brand-blue/10 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '8s' }}></div>
+          <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-300/15 rounded-full blur-[150px] animate-pulse" style={{ animationDuration: '12s' }}></div>
+
+          {/* Clean Architectural/Tech Grid */}
           <div 
-            className="absolute inset-0 opacity-[0.08] z-20" 
+            className="absolute inset-0 opacity-[0.03] z-10" 
             style={{ 
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='104' viewBox='0 0 60 104' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 104l30-17.32V69.36L30 52 0 69.36v17.32L30 104zM30 52l30-17.32V17.32L30 0 0 17.32v17.32L30 52z' fill='%23FFFFFF' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-              backgroundSize: '120px 208px'
+              backgroundImage: `linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)`,
+              backgroundSize: '4rem 4rem'
             }}
           ></div>
 
-          {/* Cleverness: Floating "Micro-Particles" */}
-          <div className="absolute inset-0">
-            {[...Array(15)].map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ 
-                  x: Math.random() * 100 + "%", 
-                  y: Math.random() * 100 + "%",
-                  scale: Math.random() * 0.5 + 0.5
-                }}
-                animate={{ 
-                  y: ["0%", "-10%", "0%"],
-                  opacity: [0.1, 0.2, 0.1]
-                }}
-                transition={{ 
-                  duration: 8 + Math.random() * 10, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-                className="absolute w-2 h-2 bg-brand-blue/20 rounded-full blur-[2px]"
-              />
-            ))}
-          </div>
+          {/* Decorative Glass Element (Promotional/Modern feel) */}
+          <motion.div 
+            animate={{ 
+              y: [0, -20, 0],
+              rotate: [0, 5, 0]
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[15%] right-[5%] w-[600px] h-[600px] bg-white/10 backdrop-blur-3xl border border-white/40 rounded-full shadow-[0_32px_64px_rgba(0,0,0,0.05)] z-10 hidden lg:block"
+          >
+            <div className="absolute inset-0 rounded-full border border-brand-blue/10 translate-x-8 translate-y-8"></div>
+            <div className="absolute inset-0 rounded-full border border-brand-blue/5 -translate-x-4 -translate-y-4"></div>
+          </motion.div>
 
-          {/* Cleverness: Large Abstract Polymer Chain (Subtle SVG) */}
-          <svg className="absolute -right-[10%] top-[10%] w-[60%] h-[80%] opacity-[0.03] text-brand-blue" viewBox="0 0 200 200">
-            <motion.path
-              d="M 20,180 Q 40,140 80,160 T 140,120 T 180,40"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="0.5"
-              strokeDasharray="2,2"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            />
-            <circle cx="20" cy="180" r="1" fill="currentColor" />
-            <circle cx="80" cy="160" r="1" fill="currentColor" />
-            <circle cx="140" cy="120" r="1" fill="currentColor" />
-            <circle cx="180" cy="40" r="1" fill="currentColor" />
-          </svg>
-
-          {/* Bottom Satin Fade */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white"></div>
+          {/* Bottom Fade to blend with next section */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/80 to-white z-20"></div>
         </motion.div>
       </div>
 
@@ -99,21 +69,21 @@ const Hero = () => {
             </span>
           </div>
 
-          <h1 className="text-7xl md:text-[12rem] font-black tracking-tighter text-white mb-16 leading-[0.85]">
+          <h1 className="text-7xl md:text-[12rem] font-black tracking-tighter text-brand-dark mb-16 leading-[0.85]">
             {t("hero.title_part1", "微观结构")}<br />
             <span className="text-brand-blue">{t("hero.title_part2", "定义未来")}</span>
           </h1>
           
-          <p className="text-2xl md:text-4xl text-white/60 leading-relaxed mb-24 max-w-4xl font-light">
+          <p className="text-2xl md:text-4xl text-brand-dark/60 leading-relaxed mb-24 max-w-4xl font-light">
             {t("home.hero.desc", "西顿新材料致力于通过先进的聚合物合成技术，为全球工业提供高性能、可持续的表面处理解决方案。")}
           </p>
           
           <div className="flex flex-wrap gap-10">
-            <Link to="/products" className="group flex items-center gap-6 bg-brand-blue text-white px-14 py-7 rounded-full font-black transition-all hover:bg-white hover:text-brand-dark shadow-2xl shadow-brand-blue/30 text-lg">
+            <Link to="/products" className="group flex items-center gap-6 bg-brand-blue text-white px-14 py-7 rounded-full font-black transition-all hover:bg-brand-dark hover:text-white shadow-2xl shadow-brand-blue/30 text-lg">
               {t("home.hero.explore_btn", "探索产品中心")}
               <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
             </Link>
-            <Link to="/contact" className="group flex items-center gap-6 border-2 border-white/20 text-white px-14 py-7 rounded-full font-black transition-all hover:bg-white/10 text-lg">
+            <Link to="/contact" className="group flex items-center gap-6 border-2 border-brand-dark/20 text-brand-dark px-14 py-7 rounded-full font-black transition-all hover:bg-brand-dark/5 text-lg">
               {t("home.hero.sample_btn", "索取样品")}
             </Link>
           </div>
@@ -127,7 +97,7 @@ const Hero = () => {
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           className="flex flex-col items-center gap-4"
         >
-          <span className="text-[11px] text-white/40 uppercase tracking-[0.5em] font-black">Scroll</span>
+          <span className="text-[11px] text-brand-dark/40 uppercase tracking-[0.5em] font-black">Scroll</span>
           <div className="w-[2px] h-16 bg-gradient-to-b from-brand-blue to-transparent"></div>
         </motion.div>
       </div>
@@ -346,10 +316,10 @@ export default function Home() {
   return (
     <div className="bg-white">
       <Hero />
-      <ValuePillars />
       <FeaturedTechnologies />
       <MarketSectors />
       <GlobalPresence />
+      <ValuePillars />
       
       {/* Final CTA */}
       <section className="py-64 bg-white px-6 md:px-20 text-center border-t border-brand-border">

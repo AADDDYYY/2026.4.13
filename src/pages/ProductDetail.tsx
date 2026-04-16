@@ -70,18 +70,10 @@ const ProductDetail = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="relative aspect-square rounded-[60px] overflow-hidden border border-brand-border mb-24 shadow-2xl group">
-              <img 
-                src={product.image} 
-                alt={product.name} 
-                className="w-full h-full object-cover transition-all duration-1000 scale-105 group-hover:scale-100"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute top-12 left-12">
-                <span className="px-8 py-3 bg-brand-blue/10 backdrop-blur-xl text-brand-blue text-[11px] font-black uppercase tracking-[0.3em] rounded-full border border-brand-blue/20 shadow-2xl">
-                  {product.category}
-                </span>
-              </div>
+            <div className="mb-12">
+              <span className="px-8 py-3 bg-brand-blue/10 backdrop-blur-xl text-brand-blue text-[11px] font-black uppercase tracking-[0.3em] rounded-full border border-brand-blue/20 shadow-2xl">
+                {product.category}
+              </span>
             </div>
 
             <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">{product.name}</h1>

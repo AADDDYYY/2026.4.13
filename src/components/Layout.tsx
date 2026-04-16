@@ -58,7 +58,6 @@ export const Header = () => {
     { to: "/products", label: t("nav.products"), hasMega: true },
     { to: "/market-applications", label: t("nav.market_applications", "市场应用") },
     { to: "/innovation", label: t("nav.innovation", "革新") },
-    { to: "/news", label: t("nav.news", "新闻中心") },
     { to: "/rd", label: t("nav.rd", "研发创新") },
     { to: "/sustainability", label: t("nav.sustainability", "可持续发展") },
     { to: "/contact", label: t("nav.contact") },
@@ -98,18 +97,18 @@ export const Header = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled || !isHome || isMenuOpen ? "bg-white/90 backdrop-blur-xl shadow-sm py-4" : "bg-transparent py-8"}`}>
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 flex items-center">
-        <Link to="/" className="flex items-center gap-3 mr-auto" onClick={() => setIsMenuOpen(false)}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled || !isHome || isMenuOpen ? "bg-white/90 backdrop-blur-xl shadow-sm py-6" : "bg-transparent py-10"}`}>
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-3 shrink-0" onClick={() => setIsMenuOpen(false)}>
           <img 
-            src="https://ais-pre-g3czlublaxelm5kualarjo-292922663318.europe-west2.run.app/api/attachments/40600104-a63e-461b-907a-248679462551" 
+            src="/logo.svg" 
             alt="西顿新材料" 
-            className={`h-10 md:h-12 w-auto transition-all duration-500 ${isScrolled || !isHome || isMenuOpen ? "brightness-0" : "brightness-0 invert"}`}
+            className="h-12 md:h-14 lg:h-16 w-auto transition-all duration-500"
             referrerPolicy="no-referrer" 
           />
         </Link>
         
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-8 xl:gap-12 ml-auto">
           {navLinks.map((link) => (
             <div 
               key={link.to}
@@ -119,7 +118,7 @@ export const Header = () => {
             >
               <Link 
                 to={link.to} 
-                className={`text-[12px] uppercase tracking-normal font-black transition-all duration-300 ${isScrolled || !isHome || isMenuOpen ? (location.pathname === link.to ? "text-brand-blue" : "text-brand-dark/70 hover:text-brand-blue") : (location.pathname === link.to ? "text-brand-blue" : "text-white/80 hover:text-white")}`}
+                className={`text-[12px] uppercase tracking-normal font-black transition-all duration-300 ${location.pathname === link.to ? "text-brand-blue" : "text-brand-dark/70 hover:text-brand-blue"}`}
               >
                 {link.label}
               </Link>
@@ -164,35 +163,57 @@ export const Header = () => {
           ))}
 
           {/* Language Switcher */}
-          <div className="flex items-center gap-4 ml-12">
+          <div className="flex items-center gap-4 ml-8 xl:ml-12">
             <button 
               onClick={() => setIsSearchOpen(true)}
-              className={`p-2 transition-colors ${isScrolled || !isHome || isMenuOpen ? "text-brand-dark/40 hover:text-brand-blue" : "text-white/40 hover:text-white"}`}
+              className="p-2 transition-colors text-brand-dark/40 hover:text-brand-blue"
             >
               <Search size={18} />
             </button>
             <div className="w-px h-4 bg-brand-border mx-2"></div>
-            {[
-              { id: 'zh', label: '简' },
-              { id: 'zh-HK', label: '繁' },
-              { id: 'en', label: 'EN' },
-              { id: 'ja', label: 'JP' },
-              { id: 'ko', label: 'KR' },
-              { id: 'ru', label: 'RU' }
-            ].map((lang) => (
-              <button 
-                key={lang.id}
-                onClick={() => i18n.changeLanguage(lang.id)}
-                className={`text-[10px] font-black uppercase tracking-tighter transition-colors ${i18n.language === lang.id ? "text-brand-blue" : (isScrolled || !isHome || isMenuOpen ? "text-brand-dark/40 hover:text-brand-blue" : "text-white/40 hover:text-white")}`}
-              >
-                {lang.label}
+            
+            <div className="relative group">
+              <button className="flex items-center gap-1.5 p-2 text-[12px] font-black uppercase tracking-tighter text-brand-dark/70 hover:text-brand-blue transition-colors">
+                <Globe size={16} />
+                <span>
+                  {[
+                    { id: 'zh', label: '简' },
+                    { id: 'zh-HK', label: '繁' },
+                    { id: 'en', label: 'EN' },
+                    { id: 'ja', label: 'JP' },
+                    { id: 'ko', label: 'KR' },
+                    { id: 'ru', label: 'RU' }
+                  ].find(l => l.id === i18n.language)?.label || '简'}
+                </span>
+                <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-300" />
               </button>
-            ))}
+              
+              <div className="absolute top-full right-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="bg-white border border-brand-border rounded-xl shadow-xl py-2 min-w-[120px] flex flex-col">
+                  {[
+                    { id: 'zh', label: '简体中文' },
+                    { id: 'zh-HK', label: '繁體中文' },
+                    { id: 'en', label: 'English' },
+                    { id: 'ja', label: '日本語' },
+                    { id: 'ko', label: '한국어' },
+                    { id: 'ru', label: 'Русский' }
+                  ].map((lang) => (
+                    <button 
+                      key={lang.id}
+                      onClick={() => i18n.changeLanguage(lang.id)}
+                      className={`text-left px-4 py-2.5 text-[12px] font-bold transition-colors hover:bg-brand-blue/5 ${i18n.language === lang.id ? "text-brand-blue bg-brand-blue/5" : "text-brand-dark/60 hover:text-brand-blue"}`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </nav>
 
         <button 
-          className={`md:hidden z-50 p-2 transition-colors ${isScrolled || !isHome || isMenuOpen ? "text-brand-dark" : "text-white"}`}
+          className="md:hidden z-50 p-2 transition-colors text-brand-dark"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label={isMenuOpen ? "关闭菜单" : "打开菜单"}
         >
@@ -347,9 +368,9 @@ export const Footer = () => {
       <div className="max-w-[1800px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 mb-24">
           <div className="col-span-1 lg:col-span-1">
-            <div className="flex items-center gap-2 mb-10">
-              <img src="https://ais-pre-g3czlublaxelm5kualarjo-292922663318.europe-west2.run.app/api/attachments/40600104-a63e-461b-907a-248679462551" alt="西顿新材料" className="h-10 md:h-12 w-auto brightness-0" referrerPolicy="no-referrer" />
-            </div>
+            <Link to="/" className="flex items-center gap-2 mb-10 inline-block">
+              <img src="/logo.svg" alt="西顿新材料" className="h-10 md:h-12 lg:h-14 w-auto" referrerPolicy="no-referrer" />
+            </Link>
             <p className="text-brand-dark/50 text-sm leading-relaxed mb-10 font-bold">
               {t("footer.description")}
             </p>
