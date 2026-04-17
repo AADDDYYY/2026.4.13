@@ -1,9 +1,12 @@
 import { motion } from "motion/react";
 import { Beaker, ShieldCheck, Globe, Users, Cpu, Award, Zap, Microscope, Binary, Network } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useCMSAsset } from "../hooks/useCMSAsset";
 
 const RDPhilosophy = () => {
   const { t } = useTranslation();
+  const { value: labImage } = useCMSAsset('innovation_lab_img', 'https://images.unsplash.com/photo-1532187875605-2fe35851142b?auto=format&fit=crop&q=80&w=1000');
+
   return (
     <section className="py-60 px-6 md:px-20 bg-white relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/2 h-full bg-brand-blue/5 blur-[250px] rounded-full -translate-y-1/2"></div>
@@ -46,7 +49,7 @@ const RDPhilosophy = () => {
           <div className="lg:col-span-6 relative">
             <div className="aspect-[4/5] rounded-[60px] overflow-hidden border border-brand-border p-6 bg-brand-gray backdrop-blur-sm shadow-2xl">
               <img 
-                src="https://images.unsplash.com/photo-1532187875605-2fe35851142b?auto=format&fit=crop&q=80&w=1000" 
+                src={labImage} 
                 alt="Lab" 
                 className="w-full h-full object-cover rounded-[40px] transition-opacity duration-1000"
                 referrerPolicy="no-referrer"

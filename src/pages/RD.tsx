@@ -1,9 +1,14 @@
 import { motion } from "motion/react";
 import { Microscope, Zap, FlaskConical, Binary, ShieldCheck, Cpu, TestTube, GraduationCap } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useCMSAsset } from "../hooks/useCMSAsset";
 
 export default function RD() {
   const { t } = useTranslation();
+
+  const { value: rdHeroBg } = useCMSAsset('rd_hero_bg', '');
+  const { value: rdLabImg1 } = useCMSAsset('rd_lab_img1', 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=600');
+  const { value: rdLabImg2 } = useCMSAsset('rd_lab_img2', 'https://images.unsplash.com/photo-1581093588401-22d3c9f5b9c5?auto=format&fit=crop&q=80&w=600');
 
   const rdStats = [
     { label: t("rd.stats.investment"), value: "15", unit: "%" },
@@ -16,7 +21,14 @@ export default function RD() {
     <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
-        <div className="absolute top-0 left-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        {rdHeroBg ? (
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+            <img src={rdHeroBg} alt="R&D Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          </div>
+        ) : (
+          <div className="absolute top-0 left-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        )}
         
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
@@ -116,7 +128,7 @@ export default function RD() {
               className="space-y-12"
             >
               <div className="aspect-[3/4] rounded-[60px] overflow-hidden border border-brand-border p-4 bg-brand-gray shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=600" alt="Lab 1" className="w-full h-full object-cover rounded-[40px]" referrerPolicy="no-referrer" />
+                <img src={rdLabImg1} alt="Lab 1" className="w-full h-full object-cover rounded-[40px]" referrerPolicy="no-referrer" />
               </div>
               <div className="p-12 rounded-[40px] bg-brand-blue text-white shadow-2xl shadow-brand-blue/20">
                 <FlaskConical size={48} className="mb-6" />
@@ -137,7 +149,7 @@ export default function RD() {
                 <div className="text-brand-dark/30 text-[10px] uppercase tracking-[0.3em] mt-3 font-black">Rapid Application</div>
               </div>
               <div className="aspect-[3/4] rounded-[60px] overflow-hidden border border-brand-border p-4 bg-brand-gray shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1581093588401-22d3c9f5b9c5?auto=format&fit=crop&q=80&w=600" alt="Lab 2" className="w-full h-full object-cover rounded-[40px]" referrerPolicy="no-referrer" />
+                <img src={rdLabImg2} alt="Lab 2" className="w-full h-full object-cover rounded-[40px]" referrerPolicy="no-referrer" />
               </div>
             </motion.div>
           </div>

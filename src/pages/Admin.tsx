@@ -335,8 +335,8 @@ export default function Admin() {
           </div>
         </div>
 
-        {/* ---- About & Products Actions ---- */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        {/* ---- About, Products & Divisions Actions ---- */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
             <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🏢 关于我们 (About Us)</h2>
             <div className="space-y-8">
@@ -360,55 +360,100 @@ export default function Admin() {
               </div>
             </div>
           </div>
+
+          <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
+            <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🏭 事业部 (Divisions)</h2>
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-sm font-black text-brand-dark mb-2">事业部页顶部横幅图</h3>
+                {user && <ImageUploadButton assetKey="divisions_hero_bg" label="上传顶部大图" user={user} />}
+              </div>
+              <div className="border-t border-brand-border pt-6">
+                <h3 className="text-sm font-black text-brand-dark mb-2">内容页 - 六大事业部图</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {user && <ImageUploadButton assetKey="division_inner_leather" label="皮革纺织" user={user} />}
+                  {user && <ImageUploadButton assetKey="division_inner_resin" label="水性树脂" user={user} />}
+                  {user && <ImageUploadButton assetKey="division_inner_auto" label="汽车内饰" user={user} />}
+                  {user && <ImageUploadButton assetKey="division_inner_uv" label="水性UV" user={user} />}
+                  {user && <ImageUploadButton assetKey="division_inner_battery" label="动力电池" user={user} />}
+                  {user && <ImageUploadButton assetKey="division_inner_custom" label="定制服务" user={user} />}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* ---- Other Inner Pages Actions ---- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
             <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">🌍 市场应用 (Market App)</h2>
-            <div>
-              <h3 className="text-sm font-black text-brand-dark mb-2">市场应用页横幅</h3>
-              {user && <ImageUploadButton assetKey="market_hero_bg" label="上传横幅图" user={user} />}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-black text-brand-dark mb-2">顶部横幅图</h3>
+                {user && <ImageUploadButton assetKey="market_hero_bg" label="上传横幅图" user={user} />}
+              </div>
+              <div className="border-t border-brand-border pt-6">
+                <h3 className="text-sm font-black text-brand-dark mb-2">内容页 - 六大应用领域图</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {user && <ImageUploadButton assetKey="market_inner_automotive" label="汽车工业" user={user} />}
+                  {user && <ImageUploadButton assetKey="market_inner_electronics" label="消费电子" user={user} />}
+                  {user && <ImageUploadButton assetKey="market_inner_packaging" label="包装印刷" user={user} />}
+                  {user && <ImageUploadButton assetKey="market_inner_home" label="建筑家居" user={user} />}
+                  {user && <ImageUploadButton assetKey="market_inner_leather" label="皮革涂饰" user={user} />}
+                  {user && <ImageUploadButton assetKey="market_inner_sports" label="运动器材" user={user} />}
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
-            <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">🔬 研发创新 (Innovation)</h2>
-            <div>
-              <h3 className="text-sm font-black text-brand-dark mb-2">研发创新页横幅</h3>
-              {user && <ImageUploadButton assetKey="innovation_hero_bg" label="上传横幅图" user={user} />}
+            <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">🔬 革新 (Innovation)</h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-black text-brand-dark mb-2">革新页顶部横幅图</h3>
+                {user && <ImageUploadButton assetKey="innovation_hero_bg" label="上传横幅图" user={user} />}
+              </div>
+              <div className="border-t border-brand-border pt-6">
+                <h3 className="text-sm font-black text-brand-dark mb-2">研发理念 - 实验室实景图</h3>
+                {user && <ImageUploadButton assetKey="innovation_lab_img" label="上传实验室图" user={user} />}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
+            <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">🧪 研发创新 (R&D)</h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-black text-brand-dark mb-2">研发创新页顶部横幅图</h3>
+                {user && <ImageUploadButton assetKey="rd_hero_bg" label="上传横幅图" user={user} />}
+              </div>
+              <div className="border-t border-brand-border pt-6">
+                <h3 className="text-sm font-black text-brand-dark mb-2">研发基础设施 - 实验场景配图</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {user && <ImageUploadButton assetKey="rd_lab_img1" label="场景图一" user={user} />}
+                  {user && <ImageUploadButton assetKey="rd_lab_img2" label="场景图二" user={user} />}
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
             <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">🌱 可持续发展 (Sustainability)</h2>
-            <div>
-              <h3 className="text-sm font-black text-brand-dark mb-2">可持续发展页横幅</h3>
-              {user && <ImageUploadButton assetKey="sustainability_hero_bg" label="上传横幅图" user={user} />}
-            </div>
-          </div>
-
-          <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
-            <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">⬇️ 下载中心 (Downloads)</h2>
-            <div>
-              <h3 className="text-sm font-black text-brand-dark mb-2">下载中心页横幅</h3>
-              {user && <ImageUploadButton assetKey="downloads_hero_bg" label="上传横幅图" user={user} />}
-            </div>
-          </div>
-
-          <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
-            <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">📰 新闻中心 (News)</h2>
-            <div>
-              <h3 className="text-sm font-black text-brand-dark mb-2">新闻中心页横幅</h3>
-              {user && <ImageUploadButton assetKey="news_hero_bg" label="上传横幅图" user={user} />}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-black text-brand-dark mb-2">可持续发展页顶部横幅图</h3>
+                {user && <ImageUploadButton assetKey="sustainability_hero_bg" label="上传横幅图" user={user} />}
+              </div>
             </div>
           </div>
 
           <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
             <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">📞 联系我们 (Contact)</h2>
-            <div>
-              <h3 className="text-sm font-black text-brand-dark mb-2">联系我们页横幅</h3>
-              {user && <ImageUploadButton assetKey="contact_hero_bg" label="上传横幅图" user={user} />}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-black text-brand-dark mb-2">联系我们页顶部横幅图</h3>
+                {user && <ImageUploadButton assetKey="contact_hero_bg" label="上传横幅图" user={user} />}
+              </div>
             </div>
           </div>
         </div>

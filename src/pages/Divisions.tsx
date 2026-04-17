@@ -2,9 +2,18 @@ import { motion } from "motion/react";
 import { Layers, Palette, Zap, Scissors, Car, Battery, ArrowRight, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useCMSAsset } from "../hooks/useCMSAsset";
 
 export default function Divisions() {
   const { t } = useTranslation();
+
+  const { value: divisionsHeroBg } = useCMSAsset('divisions_hero_bg', '');
+  const { value: divLeather } = useCMSAsset('division_inner_leather', 'https://images.unsplash.com/photo-1524292332709-b33366a7f145?auto=format&fit=crop&q=80&w=800');
+  const { value: divResin } = useCMSAsset('division_inner_resin', 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=800');
+  const { value: divAuto } = useCMSAsset('division_inner_auto', 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=800');
+  const { value: divUv } = useCMSAsset('division_inner_uv', 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800');
+  const { value: divBattery } = useCMSAsset('division_inner_battery', 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=800');
+  const { value: divCustom } = useCMSAsset('division_inner_custom', 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800');
 
   const divisions = [
     {
@@ -13,7 +22,7 @@ export default function Divisions() {
       desc: t("divisions_page.items.leather.desc"),
       icon: <Scissors size={32} />,
       division: "leather",
-      image: "https://images.unsplash.com/photo-1524292332709-b33366a7f145?auto=format&fit=crop&q=80&w=800"
+      image: divLeather
     },
     {
       title: t("divisions_page.items.resin.title"),
@@ -21,7 +30,7 @@ export default function Divisions() {
       desc: t("divisions_page.items.resin.desc"),
       icon: <Palette size={32} />,
       division: "plastic",
-      image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=800"
+      image: divResin
     },
     {
       title: t("divisions_page.items.automotive.title"),
@@ -29,7 +38,7 @@ export default function Divisions() {
       desc: t("divisions_page.items.automotive.desc"),
       icon: <Car size={32} />,
       division: "plastic",
-      image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=800"
+      image: divAuto
     },
     {
       title: t("divisions_page.items.uv.title"),
@@ -37,7 +46,7 @@ export default function Divisions() {
       desc: t("divisions_page.items.uv.desc"),
       icon: <Zap size={32} />,
       division: "plastic",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800"
+      image: divUv
     },
     {
       title: t("divisions_page.items.battery.title"),
@@ -45,7 +54,7 @@ export default function Divisions() {
       desc: t("divisions_page.items.battery.desc"),
       icon: <Battery size={32} />,
       division: "plastic",
-      image: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=800"
+      image: divBattery
     },
     {
       title: t("divisions_page.items.custom.title"),
@@ -53,7 +62,7 @@ export default function Divisions() {
       desc: t("divisions_page.items.custom.desc"),
       icon: <Layers size={32} />,
       division: "all",
-      image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800"
+      image: divCustom
     }
   ];
 
@@ -61,7 +70,14 @@ export default function Divisions() {
     <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
-        <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        {divisionsHeroBg ? (
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+            <img src={divisionsHeroBg} alt="Divisions Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          </div>
+        ) : (
+          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        )}
         
         <motion.div 
           initial={{ opacity: 0, y: 40 }}

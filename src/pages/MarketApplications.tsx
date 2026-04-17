@@ -9,6 +9,13 @@ export default function MarketApplications() {
   const { t } = useTranslation();
 
   const { value: marketHeroBg } = useCMSAsset('market_hero_bg', '');
+  
+  const { value: imgAutomotive } = useCMSAsset('market_inner_automotive', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800');
+  const { value: imgElectronics } = useCMSAsset('market_inner_electronics', 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800');
+  const { value: imgPackaging } = useCMSAsset('market_inner_packaging', 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800');
+  const { value: imgHome } = useCMSAsset('market_inner_home', 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80&w=800');
+  const { value: imgLeather } = useCMSAsset('market_inner_leather', 'https://images.unsplash.com/photo-1524290263334-92f5374171a6?auto=format&fit=crop&q=80&w=800');
+  const { value: imgSports } = useCMSAsset('market_inner_sports', 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800');
 
   const applications = [
     {
@@ -17,7 +24,7 @@ export default function MarketApplications() {
       en: "Automotive Industry",
       desc: t("market_apps.items.automotive.desc"),
       icon: <Car size={40} />,
-      image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800",
+      image: imgAutomotive,
       features: t("market_apps.items.automotive.features", { returnObjects: true }) as string[]
     },
     {
@@ -26,7 +33,7 @@ export default function MarketApplications() {
       en: "Electronics & Appliances",
       desc: t("market_apps.items.electronics.desc"),
       icon: <Smartphone size={40} />,
-      image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800",
+      image: imgElectronics,
       features: t("market_apps.items.electronics.features", { returnObjects: true }) as string[]
     },
     {
@@ -35,7 +42,7 @@ export default function MarketApplications() {
       en: "Packaging & Print",
       desc: t("market_apps.items.packaging.desc"),
       icon: <Package size={40} />,
-      image: "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800",
+      image: imgPackaging,
       features: t("market_apps.items.packaging.features", { returnObjects: true }) as string[]
     },
     {
@@ -44,7 +51,7 @@ export default function MarketApplications() {
       en: "Home & Architecture",
       desc: t("market_apps.items.home.desc"),
       icon: <Home size={40} />,
-      image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80&w=800",
+      image: imgHome,
       features: t("market_apps.items.home.features", { returnObjects: true }) as string[]
     },
     {
@@ -53,7 +60,7 @@ export default function MarketApplications() {
       en: "Leather & Fashion",
       desc: t("market_apps.items.leather.desc"),
       icon: <Scissors size={40} />,
-      image: "https://images.unsplash.com/photo-1524290263334-92f5374171a6?auto=format&fit=crop&q=80&w=800",
+      image: imgLeather,
       features: t("market_apps.items.leather.features", { returnObjects: true }) as string[]
     },
     {
@@ -62,7 +69,7 @@ export default function MarketApplications() {
       en: "Industrial & Sports",
       desc: t("market_apps.items.sports.desc"),
       icon: <Trophy size={40} />,
-      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800",
+      image: imgSports,
       features: t("market_apps.items.sports.features", { returnObjects: true }) as string[]
     }
   ];
