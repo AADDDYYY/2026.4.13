@@ -69,13 +69,13 @@ const Hero = () => {
             </span>
           </div>
 
-          <h1 className="text-7xl md:text-[12rem] font-black tracking-tighter text-brand-dark mb-16 leading-[0.85]">
-            {t("hero.title_part1", "微观结构")}<br />
-            <span className="text-brand-blue">{t("hero.title_part2", "定义未来")}</span>
+          <h1 className="text-7xl md:text-[10rem] xl:text-[12rem] font-black tracking-tighter text-brand-dark mb-16 leading-[0.95]">
+            {t("hero.title_part1", "边界之外，")}<br />
+            <span className="text-brand-blue">{t("hero.title_part2", "起点所在")}</span>
           </h1>
           
-          <p className="text-2xl md:text-4xl text-brand-dark/60 leading-relaxed mb-24 max-w-4xl font-light">
-            {t("home.hero.desc", "西顿新材料致力于通过先进的聚合物合成技术，为全球工业提供高性能、可持续的表面处理解决方案。")}
+          <p className="text-2xl md:text-3xl text-brand-dark/60 leading-relaxed mb-24 max-w-5xl font-light">
+            {t("home.hero.desc", "当传统材料的性能达到极限，真正的创新才刚刚开始。在西顿新材料，我们不仅在拓展物理与化学的边界，更把每一次突破作为全新的起点。从纳米级的基材重构到宏观工业的绿色转型，我们跨越已知，以聚合物合成技术为您开启无限可能的未来。")}
           </p>
           
           <div className="flex flex-wrap gap-10">
