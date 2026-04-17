@@ -20,6 +20,7 @@ import MarketApplications from "./pages/MarketApplications";
 import ApplicationDetail from "./pages/ApplicationDetail";
 import BusinessDetail from "./pages/BusinessDetail";
 import Downloads from "./pages/Downloads";
+import Admin from "./pages/Admin";
 
 import SelfMattingResin from "./pages/SelfMattingResin";
 
@@ -67,6 +68,7 @@ export default function App() {
           <Route path="/news" element={<News />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/downloads" element={<Downloads />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </Layout>
     </Router>

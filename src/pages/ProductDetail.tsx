@@ -139,8 +139,8 @@ const ProductDetail = () => {
                     <Radar
                       name={product.name}
                       dataKey="A"
-                      stroke="#0066cc"
-                      fill="#0066cc"
+                      stroke="#0055a2"
+                      fill="#0055a2"
                       fillOpacity={0.1}
                     />
                   </RadarChart>

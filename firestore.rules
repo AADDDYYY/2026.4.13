@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - role: string (required) - 'admin' or 'user'
+    //   - email: string (required)
+    //   - createdAt: timestamp (optional)
+    //
+    // Collection: cms_assets
+    // Document ID: {docId}
+    // Fields:
+    //   - key: string (required)
+    //   - type: string (required)
+    //   - value: string (required)
+    //   - updatedAt: string (optional)
+    //   - updatedBy: string (optional)
+    //
+    // ===============================================================
+
+    function isAuthenticated() {
+       return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+       return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function hasOnlyAllowedFields(fields) {
+       return request.resource.data.keys().hasOnly(fields);
+    }
+    
+    function validStringLength(field, minLen, maxLen) {
+       return request.resource.data[field] is string &&
+         request.resource.data[field].size() >= minLen &&
+         request.resource.data[field].size() <= maxLen;
+    }
+    
+    function isValidEmail(email) {
+       return email is string &&
+         email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') ||
+         // Default bootstrapped admin
+        (request.auth.token.email == "a.d.d.y.25433@gmail.com" && request.auth.token.email_verified == true)
+      );
+    }
+
+    function isValidUser() {
+      return hasOnlyAllowedFields(['role', 'email', 'createdAt']) &&
+             request.resource.data.role in ['admin', 'user'] &&
+             isValidEmail(request.resource.data.email);
+    }
+
+    function isValidCMSAsset() {
+      let data = request.resource.data;
+      return hasOnlyAllowedFields(['key', 'type', 'value', 'updatedAt', 'updatedBy']) &&
+             validStringLength('key', 1, 100) &&
+             data.type in ['image', 'text', 'html'] &&
+             validStringLength('value', 0, 1000000);
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isAuthenticated() && isValidUser() && (
+        isAdmin() || (isOwner(userId) && request.resource.data.role == 'user')
+      );
+      allow update: if isAuthenticated() && isValidUser() && (
+        isAdmin() || (isOwner(userId) && request.resource.data.role == resource.data.role)
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /cms_assets/{docId} {
+      // Allow public read since these are assets for the public website
+      allow read: if true; 
+      allow create, update: if isAdmin() && isValidCMSAsset();
+      allow delete: if isAdmin();
+    }
+  }
+}

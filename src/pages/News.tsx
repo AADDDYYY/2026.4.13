@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, Search, Clock, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useCMSAsset } from "../hooks/useCMSAsset";
 
 const newsData = [
   {
@@ -76,6 +77,8 @@ export default function News() {
   const [activeType, setActiveType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { value: newsHeroBg } = useCMSAsset('news_hero_bg', '');
+
   const categories = ["all", "corporate", "leather", "packaging", "coatings", "sustainability"];
   const types = ["all", "press_release", "article"];
 
@@ -91,7 +94,14 @@ export default function News() {
     <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
-        <div className="absolute top-0 left-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        {newsHeroBg ? (
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+            <img src={newsHeroBg} alt="News Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          </div>
+        ) : (
+          <div className="absolute top-0 left-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        )}
         
         <motion.div 
           initial={{ opacity: 0, y: 40 }}

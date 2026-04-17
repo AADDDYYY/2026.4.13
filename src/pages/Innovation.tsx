@@ -63,8 +63,12 @@ const RDPhilosophy = () => {
   );
 };
 
+import { useCMSAsset } from "../hooks/useCMSAsset";
+
 export default function Innovation() {
   const { t } = useTranslation();
+
+  const { value: innovationHeroBg } = useCMSAsset('innovation_hero_bg', '');
 
   const innovations = [
     {
@@ -108,7 +112,14 @@ export default function Innovation() {
     <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
-        <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        {innovationHeroBg ? (
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+            <img src={innovationHeroBg} alt="Innovation Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          </div>
+        ) : (
+          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        )}
         
         <motion.div 
           initial={{ opacity: 0, y: 40 }}

@@ -3,6 +3,7 @@ import { Phone, Mail, MapPin, ArrowRight, FileText, Beaker, MessageSquare, Check
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useCMSAsset } from "../hooks/useCMSAsset";
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -14,6 +15,8 @@ export default function Contact() {
   const [requestType, setRequestType] = useState(initialType);
   const [productName, setProductName] = useState(initialProduct);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const { value: contactHeroBg } = useCMSAsset('contact_hero_bg', '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,14 +34,21 @@ export default function Contact() {
 
   return (
     <div className="pt-48 pb-32 bg-white text-brand-dark min-h-screen overflow-hidden">
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 relative">
+        {contactHeroBg ? (
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+            <img src={contactHeroBg} alt="Contact Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          </div>
+        ) : (
+          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        )}
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-56 relative"
         >
-          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
           <div className="flex items-center justify-center gap-6 mb-16">
             <div className="h-px w-16 bg-brand-blue"></div>
             <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">

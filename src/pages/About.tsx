@@ -2,8 +2,13 @@ import { motion } from "motion/react";
 import { Globe, Award, Users, Sparkles, Shield, Leaf, Handshake, Microscope, Factory, ShieldCheck, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { useCMSAsset } from "../hooks/useCMSAsset";
+
 export default function About() {
   const { t } = useTranslation();
+
+  const { value: aboutHeroBg } = useCMSAsset('about_hero_bg', '');
+  const { value: aboutStrengthImg } = useCMSAsset('about_strength_img', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000');
 
   const stats = [
     { label: t("about.stats.base"), value: "37,200", unit: t("about.stats.unit_m2") },
@@ -43,7 +48,14 @@ export default function About() {
     <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
-        <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        {aboutHeroBg ? (
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+            <img src={aboutHeroBg} alt="About Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          </div>
+        ) : (
+          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        )}
         
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
@@ -128,7 +140,7 @@ export default function About() {
           <div className="lg:col-span-6 relative">
             <div className="aspect-square rounded-[60px] overflow-hidden shadow-2xl">
               <img 
-                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000" 
+                src={aboutStrengthImg} 
                 alt="Seaton Production Base" 
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"

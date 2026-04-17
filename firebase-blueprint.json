@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user roles and information for RBAC access control.",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "email": { "type": "string", "format": "email" },
+        "createdAt": { "type": "string", "format": "timestamp" }
+      },
+      "required": ["role", "email"]
+    },
+    "CMSAsset": {
+      "title": "CMS Asset",
+      "description": "Stores image URLs and simple text data for dynamic website rendering.",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string", "description": "The unique identifier for the asset, e.g., 'home_hero_bg'." },
+        "type": { "type": "string", "enum": ["image", "text", "html"] },
+        "value": { "type": "string", "description": "The string value or URL of the asset." },
+        "updatedAt": { "type": "string", "format": "timestamp" },
+        "updatedBy": { "type": "string", "description": "UID of the admin who updated this." }
+      },
+      "required": ["key", "type", "value"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles for role-based access control."
+    },
+    "/cms_assets/{docId}": {
+      "schema": { "$ref": "#/entities/CMSAsset" },
+      "description": "Dynamic CMS assets for the public website. (Readable by all, writable by admins)"
+    }
+  }
+}

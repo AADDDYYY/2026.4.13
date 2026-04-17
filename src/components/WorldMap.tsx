@@ -38,7 +38,7 @@ export const WorldMap = () => {
           <motion.div 
             animate={{ scale: [1, 1.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-4 h-4 bg-brand-blue rounded-full shadow-[0_0_20px_rgba(0,102,255,0.8)]"
+            className="w-4 h-4 bg-brand-blue rounded-full shadow-[0_0_20px_rgba(0,85,162,0.8)]"
           ></motion.div>
           
           <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-4 bg-brand-dark text-white p-6 rounded-2xl whitespace-nowrap transition-all duration-500 z-30 ${hovered === spot.id ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}>

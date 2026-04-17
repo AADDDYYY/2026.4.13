@@ -1,14 +1,40 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Layers, Globe, Mail, X, Menu, ChevronDown, ArrowLeft, Activity, Shield, Search } from "lucide-react";
+import { Layers, Globe, Mail, X, Menu, ChevronDown, ArrowLeft, Activity, Shield, Search, Megaphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useTranslation } from "react-i18next";
 import { AIAssistant } from "./AIAssistant";
+import { useCMSAsset } from "../hooks/useCMSAsset";
 
 interface LayoutProps {
   children: ReactNode;
 }
+
+export const TopBanner = () => {
+  const { value: bannerEnabled } = useCMSAsset('site_announcement_enabled', 'false');
+  const { value: bannerText } = useCMSAsset('site_announcement_text', '欢迎访问西顿新材料！我们将于近期参加展会，敬请期待。');
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (bannerEnabled !== 'true' || !isVisible) return null;
+
+  return (
+    <div className="bg-brand-blue/10 border-b border-brand-blue/20 text-brand-dark py-2 px-6 relative z-[60] flex items-center justify-center">
+      <div className="max-w-[1800px] w-full flex items-center justify-between">
+        <div className="flex-1 flex justify-center items-center gap-3">
+          <Megaphone size={14} className="text-brand-blue shrink-0 animate-pulse" />
+          <p className="text-xs font-bold">{bannerText}</p>
+        </div>
+        <button 
+          onClick={() => setIsVisible(false)}
+          className="text-brand-dark/40 hover:text-brand-dark p-1 transition-colors shrink-0"
+        >
+          <X size={14} />
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
@@ -97,7 +123,7 @@ export const Header = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled || !isHome || isMenuOpen ? "bg-white/90 backdrop-blur-xl shadow-sm py-6" : "bg-transparent py-10"}`}>
+    <header className={`w-full transition-all duration-500 ${isScrolled || !isHome || isMenuOpen ? "bg-white/90 backdrop-blur-xl shadow-sm py-6 fixed top-0 left-0 z-50" : "bg-transparent py-10"}`}>
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 shrink-0" onClick={() => setIsMenuOpen(false)}>
           <img 
@@ -441,7 +467,11 @@ export const Footer = () => {
 
         <div className="pt-12 border-t border-brand-border flex flex-col md:flex-row justify-between items-center gap-8 text-brand-dark/20 text-[11px] uppercase tracking-wider font-black">
           <p>{t("footer.rights")}</p>
-          <div className="flex gap-12">
+          <div className="flex gap-12 items-center">
+            <Link to="/admin" className="text-brand-blue/50 hover:text-brand-blue transition-colors relative group">
+              ADMIN PORTAL
+              <span className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-brand-blue rounded-full animate-ping group-hover:animate-none"></span>
+            </Link>
             <a href="#" className="hover:text-brand-dark transition-colors">{t("footer.privacy")}</a>
             <a href="#" className="hover:text-brand-dark transition-colors">{t("footer.terms")}</a>
             <a href="#" className="hover:text-brand-dark transition-colors">粤ICP备2022033233号</a>
@@ -454,12 +484,19 @@ export const Footer = () => {
 
 export default function Layout({ children }: LayoutProps) {
   const { t } = useTranslation();
+  const { value: bannerEnabled } = useCMSAsset('site_announcement_enabled', 'false');
 
   return (
     <div className="min-h-screen flex flex-col relative">
       <div className="bg-noise"></div>
       
-      <Header />
+      <div className="flex flex-col w-full absolute top-0 left-0 z-50">
+        <TopBanner />
+        <div className="relative w-full">
+          <Header />
+        </div>
+      </div>
+      
       <main className="flex-grow">
         {children}
       </main>

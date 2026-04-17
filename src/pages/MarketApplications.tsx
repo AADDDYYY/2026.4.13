@@ -3,8 +3,12 @@ import { Car, Smartphone, Package, Home, Scissors, Trophy, ArrowRight } from "lu
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import { useCMSAsset } from "../hooks/useCMSAsset";
+
 export default function MarketApplications() {
   const { t } = useTranslation();
+
+  const { value: marketHeroBg } = useCMSAsset('market_hero_bg', '');
 
   const applications = [
     {
@@ -65,29 +69,40 @@ export default function MarketApplications() {
 
   return (
     <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20">
+      {/* Hero Section */}
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+        {marketHeroBg ? (
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+            <img src={marketHeroBg} alt="Market Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          </div>
+        ) : (
+          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>
+        )}
+        
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-56"
+          className="max-w-7xl"
         >
-          <div className="flex items-center justify-center gap-6 mb-16">
+          <div className="flex items-center gap-6 mb-16">
             <div className="h-px w-16 bg-brand-blue"></div>
             <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
               Market Applications
             </span>
-            <div className="h-px w-16 bg-brand-blue"></div>
           </div>
           <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
             {t("market_apps.hero.title")}<br />
-            <span className="text-brand-blue">Market Applications & Solutions</span>
+            <span className="text-brand-blue">Market Applications</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
+          <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl font-light leading-relaxed">
             {t("market_apps.hero.desc")}
           </p>
         </motion.div>
+      </div>
 
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-56">
           {applications.map((app, index) => (
             <motion.div

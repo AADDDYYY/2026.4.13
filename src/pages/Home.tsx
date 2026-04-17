@@ -3,12 +3,15 @@ import { ArrowRight, Globe, Leaf, Zap, Microscope, Shield, Beaker, Users, Play }
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { WorldMap } from "../components/WorldMap";
+import { useCMSAsset } from "../hooks/useCMSAsset";
 
 const Hero = () => {
   const { t } = useTranslation();
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 600], [1, 0]);
   const scale = useTransform(scrollY, [0, 800], [1, 1.05]);
+  
+  const { value: heroBgImage } = useCMSAsset('home_hero_bg', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden flex items-center bg-white pb-32 pt-48">
@@ -18,7 +21,7 @@ const Hero = () => {
           {/* High-end Abstract Material Image */}
           <div className="absolute inset-0 z-0">
             <img 
-              src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
+              src={heroBgImage}
               alt="Advanced Materials" 
               className="w-full h-full object-cover opacity-[0.15]"
             />
@@ -70,7 +73,7 @@ const Hero = () => {
           </div>
 
           <h1 className="text-7xl md:text-[10rem] xl:text-[12rem] font-black tracking-tighter text-brand-dark mb-16 leading-[0.95]">
-            {t("hero.title_part1", "边界之外，")}<br />
+            {t("hero.title_part1", "边界之外")}<br />
             <span className="text-brand-blue">{t("hero.title_part2", "起点所在")}</span>
           </h1>
           
@@ -144,6 +147,11 @@ const ValuePillars = () => {
 
 const FeaturedTechnologies = () => {
   const { t } = useTranslation();
+  
+  const { value: techBgMain } = useCMSAsset('home_tech_bg_main', 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1200');
+  const { value: techBgSub1 } = useCMSAsset('home_tech_bg_sub1', 'https://images.unsplash.com/photo-1532187875605-2fe35851142b?auto=format&fit=crop&q=80&w=800');
+  const { value: techBgSub2 } = useCMSAsset('home_tech_bg_sub2', 'https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&q=80&w=800');
+
   return (
     <section className="py-56 bg-brand-gray px-6 md:px-20 overflow-hidden border-y border-brand-border">
       <div className="max-w-[1800px] mx-auto">
@@ -169,7 +177,7 @@ const FeaturedTechnologies = () => {
             className="lg:col-span-7 group relative h-[700px] rounded-[60px] overflow-hidden shadow-2xl"
           >
             <img 
-              src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1200" 
+              src={techBgMain} 
               alt="Self-Matting" 
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
               referrerPolicy="no-referrer"
@@ -189,8 +197,8 @@ const FeaturedTechnologies = () => {
 
           <div className="lg:col-span-5 flex flex-col gap-12">
             {[
-              { title: "高性能PUD分散体", desc: "卓越的耐化学性与物理机械性能，广泛应用于皮革与工业涂料。", img: "https://images.unsplash.com/photo-1532187875605-2fe35851142b?auto=format&fit=crop&q=80&w=800" },
-              { title: "水性丙烯酸乳液", desc: "优异的附着力与耐候性，助力建筑与包装行业绿色升级。", img: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&q=80&w=800" }
+              { title: "高性能PUD分散体", desc: "卓越的耐化学性与物理机械性能，广泛应用于皮革与工业涂料。", img: techBgSub1 },
+              { title: "水性丙烯酸乳液", desc: "优异的附着力与耐候性，助力建筑与包装行业绿色升级。", img: techBgSub2 }
             ].map((tech, i) => (
               <motion.div 
                 key={i}
@@ -220,11 +228,17 @@ const FeaturedTechnologies = () => {
 
 const MarketSectors = () => {
   const { t } = useTranslation();
+  
+  const { value: sector1 } = useCMSAsset('home_sector_leather', 'https://images.unsplash.com/photo-1524292332709-b33366a7f141?auto=format&fit=crop&q=80&w=800');
+  const { value: sector2 } = useCMSAsset('home_sector_electronics', 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800');
+  const { value: sector3 } = useCMSAsset('home_sector_industrial', 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800');
+  const { value: sector4 } = useCMSAsset('home_sector_wood', 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800');
+
   const sectors = [
-    { title: "皮革涂饰", en: "Leather Finishing", img: "https://images.unsplash.com/photo-1524292332709-b33366a7f141?auto=format&fit=crop&q=80&w=800" },
-    { title: "消费电子", en: "Consumer Electronics", img: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800" },
-    { title: "工业涂料", en: "Industrial Coatings", img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800" },
-    { title: "木器家具", en: "Wood & Furniture", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800" }
+    { title: "皮革涂饰", en: "Leather Finishing", img: sector1 },
+    { title: "消费电子", en: "Consumer Electronics", img: sector2 },
+    { title: "工业涂料", en: "Industrial Coatings", img: sector3 },
+    { title: "木器家具", en: "Wood & Furniture", img: sector4 }
   ];
 
   return (

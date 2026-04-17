@@ -2,9 +2,12 @@ import { motion } from "motion/react";
 import { Leaf, Wind, Droplets, Sun, Globe, ShieldCheck, Recycle, Zap, ArrowRight, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useCMSAsset } from "../hooks/useCMSAsset";
 
 export default function Sustainability() {
   const { t } = useTranslation();
+
+  const { value: sustainabilityHeroBg } = useCMSAsset('sustainability_hero_bg', '');
 
   const esgGoals = [
     {
@@ -41,7 +44,14 @@ export default function Sustainability() {
     <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
-        <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-emerald-500/5 rounded-full blur-[250px] -z-10"></div>
+        {sustainabilityHeroBg ? (
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+            <img src={sustainabilityHeroBg} alt="Sustainability Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          </div>
+        ) : (
+          <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-emerald-500/5 rounded-full blur-[250px] -z-10"></div>
+        )}
         
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
