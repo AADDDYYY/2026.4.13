@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Layers, Globe, Mail, X, Menu, ChevronDown, ArrowLeft, Activity, Shield, Search, Megaphone } from "lucide-react";
+import { Layers, Globe, Mail, X, Menu, ChevronDown, ArrowLeft, Activity, Shield, Search, Megaphone, Smartphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useTranslation } from "react-i18next";
@@ -239,92 +239,117 @@ export const Header = () => {
         </nav>
 
         <button 
-          className="md:hidden z-50 p-2 transition-colors text-brand-dark"
+          className="md:hidden z-50 p-2 transition-all active:scale-95 text-brand-dark"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label={isMenuOpen ? "关闭菜单" : "打开菜单"}
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 bg-black z-40 flex flex-col pt-40 px-12 md:hidden"
-          >
-            <nav className="flex flex-col gap-10 overflow-y-auto pb-20">
-              {/* Mobile Language Switcher */}
-              <div className="flex flex-wrap gap-3 mb-8 p-6 bg-white/[0.03] rounded-[32px] border border-white/5">
-                {[
-                  { id: 'zh', label: '简体' },
-                  { id: 'zh-HK', label: '繁体' },
-                  { id: 'en', label: 'EN' },
-                  { id: 'ja', label: '日本語' },
-                  { id: 'ko', label: '한국어' },
-                  { id: 'ru', label: 'Русский' }
-                ].map((lang) => (
-                  <button
-                    key={lang.id}
-                    onClick={() => i18n.changeLanguage(lang.id)}
-                    className={`px-4 py-2 rounded-full text-[10px] font-mono uppercase tracking-widest transition-all ${i18n.language === lang.id ? "bg-brand-blue text-white" : "bg-white/[0.05] text-white/40 border border-white/5"}`}
-                  >
-                    {lang.label}
-                  </button>
-                ))}
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-brand-dark/40 backdrop-blur-md z-40 md:hidden"
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-white z-50 flex flex-col shadow-2xl md:hidden"
+            >
+              <div className="flex items-center justify-between p-8 border-b border-brand-border">
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-dark/30">Navigation</span>
+                <button onClick={() => setIsMenuOpen(false)} className="p-2 text-brand-dark hover:text-brand-blue transition-colors">
+                  <X size={24} />
+                </button>
               </div>
 
-              {navLinks.map((link, index) => (
-                <motion.div
-                  key={link.to}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link 
-                    to={link.to} 
-                    className="text-4xl font-light text-white hover:text-brand-blue transition-colors flex items-center justify-between font-serif"
-                    onClick={() => !link.hasMega && setIsMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                  
-                  {link.hasMega && (
-                    <div className="mt-6 ml-6 flex flex-col gap-4 border-l border-white/5 pl-6">
-                      {productMegaMenu[0].items.map((item) => (
-                        <Link 
-                          key={item.to}
-                          to={item.to}
-                          className="text-lg text-white/40 hover:text-brand-blue transition-colors font-serif"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </motion.div>
-              ))}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navLinks.length * 0.05 }}
-                className="pt-8"
-              >
-                <Link 
-                  to="/contact" 
-                  className="inline-block px-12 py-4 rounded-full bg-brand-blue text-white font-mono text-[10px] uppercase tracking-wider hover:bg-brand-blue/90 transition-all"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {t("nav.contact")}
-                </Link>
-              </motion.div>
-            </nav>
-          </motion.div>
+              <nav className="flex-1 overflow-y-auto pt-8 px-8 pb-32">
+                <div className="flex flex-wrap gap-2 mb-12">
+                  {[
+                    { id: 'zh', label: '简' },
+                    { id: 'zh-HK', label: '繁' },
+                    { id: 'en', label: 'EN' },
+                    { id: 'ja', label: 'JP' },
+                    { id: 'ko', label: 'KR' },
+                    { id: 'ru', label: 'RU' }
+                  ].map((lang) => (
+                    <button
+                      key={lang.id}
+                      onClick={() => i18n.changeLanguage(lang.id)}
+                      className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all border ${i18n.language === lang.id ? "bg-brand-blue text-white border-brand-blue" : "bg-brand-gray text-brand-dark/40 border-brand-border"}`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-col gap-6">
+                  {navLinks.map((link, index) => (
+                    <motion.div
+                      key={link.to}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + index * 0.05 }}
+                      className="border-b border-brand-border last:border-0 pb-6 last:pb-0"
+                    >
+                      <Link 
+                        to={link.to} 
+                        className={`text-2xl font-black transition-colors flex items-center justify-between ${location.pathname === link.to ? "text-brand-blue" : "text-brand-dark"}`}
+                        onClick={() => !link.hasMega && setIsMenuOpen(false)}
+                      >
+                        {link.label}
+                        <ArrowLeft size={18} className={`rotate-180 ${location.pathname === link.to ? "text-brand-blue" : "text-brand-dark/20"}`} />
+                      </Link>
+                      
+                      {link.hasMega && (
+                        <div className="mt-6 flex flex-col gap-4 bg-brand-gray/50 rounded-2xl p-6">
+                          {productMegaMenu.map((group, groupIdx) => (
+                            <div key={groupIdx} className="space-y-3">
+                              <div className="text-[9px] font-black uppercase tracking-[0.2em] text-brand-dark/30">{group.title}</div>
+                              <div className="flex flex-col gap-3">
+                                {group.items.map((item) => (
+                                  <Link 
+                                    key={item.to}
+                                    to={item.to}
+                                    className="text-sm font-bold text-brand-dark/60 hover:text-brand-blue transition-colors flex items-center gap-2"
+                                    onClick={() => setIsMenuOpen(false)}
+                                  >
+                                    <div className="w-1 h-1 rounded-full bg-brand-blue/30" />
+                                    {item.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="mt-16 pt-16 border-t border-brand-border">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-dark/30 mb-6">Contact</h4>
+                  <div className="space-y-4">
+                    <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-4 text-brand-dark group">
+                      <div className="w-10 h-10 rounded-full bg-brand-blue flex items-center justify-center text-white shadow-lg shadow-brand-blue/20">
+                        <Activity size={16} />
+                      </div>
+                      <span className="font-bold">{t("nav.contact")}</span>
+                    </Link>
+                  </div>
+                </div>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
@@ -388,6 +413,11 @@ export const Header = () => {
 
 export const Footer = () => {
   const { t } = useTranslation();
+  const { value: companyPhone } = useCMSAsset('company_phone', '400 0069 655');
+  const { value: companyEmail } = useCMSAsset('company_email', 'info@seatonchem.com');
+  const { value: companyAddress } = useCMSAsset('company_address', '广东省东莞市松山湖高新技术产业开发区');
+  const { value: companyLinkedin } = useCMSAsset('company_linkedin', '#');
+  const { value: companyWechatQR } = useCMSAsset('company_wechat_qr', '');
   
   return (
     <footer className="bg-white py-32 px-6 md:px-20 border-t border-brand-border relative overflow-hidden">
@@ -401,12 +431,24 @@ export const Footer = () => {
               {t("footer.description")}
             </p>
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-full border border-brand-border flex items-center justify-center hover:bg-brand-blue hover:text-white transition-all cursor-pointer group shadow-sm">
-                <Globe size={20} className="text-brand-dark/30 group-hover:text-white" />
-              </div>
-              <div className="w-12 h-12 rounded-full border border-brand-border flex items-center justify-center hover:bg-brand-blue hover:text-white transition-all cursor-pointer group shadow-sm">
+              {companyLinkedin && companyLinkedin !== '#' && (
+                <a href={companyLinkedin} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-brand-border flex items-center justify-center hover:bg-brand-blue hover:text-white transition-all cursor-pointer group shadow-sm">
+                  <Globe size={20} className="text-brand-dark/30 group-hover:text-white" />
+                </a>
+              )}
+              {companyWechatQR && (
+                <div className="group relative">
+                  <div className="w-12 h-12 rounded-full border border-brand-border flex items-center justify-center hover:bg-brand-blue hover:text-white transition-all cursor-pointer shadow-sm">
+                    <Smartphone size={20} className="text-brand-dark/30 group-hover:text-white" />
+                  </div>
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 p-4 bg-white rounded-2xl shadow-2xl border border-brand-border opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                    <img src={companyWechatQR} alt="WeChat QR" className="w-32 h-32 object-contain" />
+                  </div>
+                </div>
+              )}
+              <a href={`mailto:${companyEmail}`} className="w-12 h-12 rounded-full border border-brand-border flex items-center justify-center hover:bg-brand-blue hover:text-white transition-all cursor-pointer group shadow-sm">
                 <Mail size={20} className="text-brand-dark/30 group-hover:text-white" />
-              </div>
+              </a>
             </div>
           </div>
 
@@ -438,15 +480,15 @@ export const Footer = () => {
             <ul className="space-y-5 text-brand-dark/70 text-[13px] font-bold">
               <li className="flex items-center gap-3">
                 <Activity size={16} className="text-brand-blue" />
-                <a href="tel:0751-3822233" className="hover:text-brand-blue transition-colors">0751-3822233</a>
+                <a href={`tel:${companyPhone}`} className="hover:text-brand-blue transition-colors">{companyPhone}</a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="text-brand-blue" />
-                <a href="mailto:sales@seaton.com.cn" className="hover:text-brand-blue transition-colors">sales@seaton.com.cn</a>
+                <a href={`mailto:${companyEmail}`} className="hover:text-brand-blue transition-colors">{companyEmail}</a>
               </li>
               <li className="flex items-start gap-3">
                 <Globe size={16} className="text-brand-blue mt-1 shrink-0" />
-                <span className="leading-relaxed">{t("contact.info.address_val")}</span>
+                <span className="leading-relaxed">{companyAddress}</span>
               </li>
             </ul>
           </div>

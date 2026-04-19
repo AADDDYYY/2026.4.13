@@ -25,6 +25,38 @@ import Admin from "./pages/Admin";
 import SelfMattingResin from "./pages/SelfMattingResin";
 
 import { useTranslation } from "react-i18next";
+import { useCMSAsset } from "./hooks/useCMSAsset";
+
+// SEO Manager component
+const SEOManager = () => {
+  const { value: seoTitle } = useCMSAsset('seo_title', '西顿新材料 SEATON - 全球领先的水性树脂专家');
+  const { value: seoKeywords } = useCMSAsset('seo_keywords', '水性树脂,PUD,丙烯酸树脂,环保材料,西顿新材料');
+  const { value: seoDescription } = useCMSAsset('seo_description', '西顿新材料专注于环保高性能水性树脂的研发与生产，为全球客户提供先进的涂料、印花、胶粘剂解决方案。');
+
+  useEffect(() => {
+    if (seoTitle) document.title = seoTitle;
+    
+    // Keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+    if (seoKeywords) metaKeywords.setAttribute('content', seoKeywords);
+
+    // Description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    if (seoDescription) metaDescription.setAttribute('content', seoDescription);
+  }, [seoTitle, seoKeywords, seoDescription]);
+
+  return null;
+};
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -46,31 +78,36 @@ const LanguageHandler = () => {
   return null;
 };
 
+import { ErrorBoundary } from "./components/ErrorBoundary";
+
 export default function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <LanguageHandler />
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/products/self-matting" element={<SelfMattingResin />} />
-          <Route path="/innovation" element={<Innovation />} />
-          <Route path="/market-applications" element={<MarketApplications />} />
-          <Route path="/market-applications/:id" element={<ApplicationDetail />} />
-          <Route path="/business/:id" element={<BusinessDetail />} />
-          <Route path="/rd" element={<RD />} />
-          <Route path="/sustainability" element={<Sustainability />} />
-          <Route path="/divisions" element={<Divisions />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/downloads" element={<Downloads />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <ScrollToTop />
+        <LanguageHandler />
+        <SEOManager />
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/products/self-matting" element={<SelfMattingResin />} />
+            <Route path="/innovation" element={<Innovation />} />
+            <Route path="/market-applications" element={<MarketApplications />} />
+            <Route path="/market-applications/:id" element={<ApplicationDetail />} />
+            <Route path="/business/:id" element={<BusinessDetail />} />
+            <Route path="/rd" element={<RD />} />
+            <Route path="/sustainability" element={<Sustainability />} />
+            <Route path="/divisions" element={<Divisions />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/downloads" element={<Downloads />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ErrorBoundary>
   );
 }

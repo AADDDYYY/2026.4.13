@@ -66,8 +66,6 @@ const RDPhilosophy = () => {
   );
 };
 
-import { useCMSAsset } from "../hooks/useCMSAsset";
-
 export default function Innovation() {
   const { t } = useTranslation();
 
@@ -112,9 +110,9 @@ export default function Innovation() {
   ];
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {innovationHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
             <img src={innovationHeroBg} alt="Innovation Hero" className="w-full h-full object-cover" />
@@ -130,18 +128,18 @@ export default function Innovation() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-center"
         >
-          <div className="flex items-center justify-center gap-6 mb-16">
-            <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
+          <div className="flex items-center justify-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
               Innovation & Technology
             </span>
-            <div className="h-px w-16 bg-brand-blue"></div>
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("innovation_page.hero.title")}<br />
-            <span className="text-brand-blue">Innovation & Technology</span>
+            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">Innovation & Technology</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
             {t("innovation_page.hero.desc")}
           </p>
         </motion.div>

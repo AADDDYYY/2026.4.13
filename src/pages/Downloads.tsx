@@ -36,7 +36,7 @@ export default function Downloads() {
   const { value: downloadsHeroBg } = useCMSAsset('downloads_hero_bg', '');
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
         {downloadsHeroBg ? (
@@ -60,9 +60,9 @@ export default function Downloads() {
               Resource Center
             </span>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
+          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tight leading-[0.85]">
             下载中心<br />
-            <span className="text-brand-blue">Download Center</span>
+            <span className="text-brand-blue tracking-normal">Download Center</span>
           </h1>
           <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             获取最新的产品技术参数表、安全说明书以及企业宣传画册，为您的项目提供专业的数据支持。

@@ -23,6 +23,39 @@
         "updatedBy": { "type": "string", "description": "UID of the admin who updated this." }
       },
       "required": ["key", "type", "value"]
+    },
+    "SystemLog": {
+      "title": "System Diagnostic Log",
+      "description": "Records runtime errors and system health events caught by the Watchdog system.",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["error", "warning", "info"] },
+        "message": { "type": "string" },
+        "stack": { "type": "string" },
+        "url": { "type": "string" },
+        "timestamp": { "type": "string", "format": "timestamp" },
+        "userAgent": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["type", "message", "timestamp"]
+    },
+    "SampleRequest": {
+      "title": "Sample Request",
+      "description": "Captured leads from users requesting product samples.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "productName": { "type": "string" },
+        "userName": { "type": "string" },
+        "companyName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "applicationArea": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string", "enum": ["new", "processing", "completed", "cancelled"] },
+        "createdAt": { "type": "string", "format": "timestamp" }
+      },
+      "required": ["productId", "productName", "userName", "email", "phone", "status", "createdAt"]
     }
   },
   "firestore": {
@@ -33,6 +66,14 @@
     "/cms_assets/{docId}": {
       "schema": { "$ref": "#/entities/CMSAsset" },
       "description": "Dynamic CMS assets for the public website. (Readable by all, writable by admins)"
+    },
+    "/system_logs/{logId}": {
+      "schema": { "$ref": "#/entities/SystemLog" },
+      "description": "Diagnostic logs for system monitoring. (Writable by all users for reporting, readable only by admins)"
+    },
+    "/sample_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/SampleRequest" },
+      "description": "Customer leads and sample requests. (Writable by all, manageable by admins)"
     }
   }
 }

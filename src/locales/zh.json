@@ -67,6 +67,8 @@
   },
   "products": {
     "title": "产品中心",
+    "english_title": "Product Center",
+    "english_subtitle": "Product Intelligence Center",
     "subtitle": "基于深厚的材料科学积淀，西顿为您提供从基础树脂到特种功能聚合物的全方位水性解决方案。",
     "catalog": "技术产品目录",
     "tds": "技术参数 / TDS 检索",
@@ -87,6 +89,19 @@
       "title": "定制化开发服务",
       "desc": "西顿应用研发中心（Guangzhou Technology R&D Center）致力于根据您的具体应用场景，提供“量身定制”的树脂开发与技术支持。",
       "btn": "联系技术专家"
+    }
+  },
+  "product_detail": {
+    "specs": {
+      "hardness": "硬度",
+      "flexibility": "柔韧性",
+      "adhesion": "附着力",
+      "chemicalResistance": "耐化学性",
+      "gloss": "光泽度",
+      "dryingSpeed": "干燥速度",
+      "hydroxyl": "羟值",
+      "tg": "玻璃化温度 (°C)",
+      "mfft": "最低成膜温度 (°C)"
     }
   },
   "home": {
@@ -288,6 +303,10 @@
       "company_placeholder": "某某化工有限公司",
       "product": "产品型号",
       "product_placeholder": "例如: SEACRYL 11P22",
+      "industry": "应用行业",
+      "industry_placeholder": "请选择应用行业",
+      "substrate": "应用基材",
+      "substrate_placeholder": "请选择应用基材",
       "desc": "需求描述",
       "desc_placeholder": "请简要描述您的需求...",
       "submit": "提交申请",

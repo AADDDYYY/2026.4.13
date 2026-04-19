@@ -70,11 +70,11 @@ export default function Products() {
   }, [searchQuery, categoryFilter, activeDivision, activeIndustry]);
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {productHeroBg ? (
-          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+          <div className="absolute inset-0 -z-10 rounded-b-[60px] md:rounded-b-[100px] overflow-hidden opacity-20">
             <img src={productHeroBg} alt="Product Hero" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
           </div>
@@ -88,32 +88,66 @@ export default function Products() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-7xl"
         >
-          <div className="flex items-center gap-6 mb-16">
-            <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-wider text-[11px]">
-              Product Intelligence Center
+          <div className="flex items-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
+               {t("products.english_subtitle") || "Product Intelligence Center"}
             </span>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("products.title")}<br />
-            <span className="text-brand-blue">Intelligence & Innovation</span>
+            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">{t("products.english_title") || "Product Intelligence Center"}</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("products.subtitle")}
           </p>
         </motion.div>
       </div>
 
       {/* Filters Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-48">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24">
-          {/* Division Filter */}
-          <div className="lg:col-span-7">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-48">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24">
+          {/* Industry Filter Categories */}
+          <div className="lg:col-span-12 mb-16">
             <div className="flex items-center gap-6 mb-12">
               <div className="w-1.5 h-6 bg-brand-blue"></div>
-              <span className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40">{t("mega.by_division")}</span>
+              <span className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40">行业应用领域 / Industry Applications</span>
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              {industryApplications.map((ind) => {
+                const isActive = activeIndustry === (ind.value || "all");
+                return (
+                  <motion.button
+                    key={ind.id}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setActiveIndustry(ind.value || "all")}
+                    className={`flex flex-col items-center justify-center p-8 rounded-[32px] border transition-all duration-700 aspect-square group ${
+                      isActive 
+                        ? "bg-brand-blue border-brand-blue text-white shadow-2xl shadow-brand-blue/30" 
+                        : "bg-brand-gray border-brand-border text-brand-dark/40 hover:bg-white hover:border-brand-blue/30 hover:text-brand-blue shadow-sm"
+                    }`}
+                  >
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-700 ${
+                      isActive ? "bg-white/20" : "bg-white group-hover:bg-brand-blue/10"
+                    }`}>
+                      {ind.icon && <div className={isActive ? "text-white scale-150" : "text-brand-blue scale-150"}>{ind.icon}</div>}
+                    </div>
+                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-center px-2">{ind.title}</span>
+                    <div className={`mt-4 w-1.5 h-1.5 rounded-full transition-all duration-700 ${isActive ? "bg-white scale-150" : "bg-transparent"}`}></div>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Division Filter */}
+          <div className="lg:col-span-12">
+            <div className="flex items-center gap-6 mb-8 md:mb-12">
+              <div className="w-1.5 h-6 bg-brand-blue"></div>
+              <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40">{t("mega.by_division")}</span>
+            </div>
+            <div className="flex flex-wrap gap-3 md:gap-4">
               {productDivisions.map((div) => {
                 const isActive = activeDivision === div.value;
                 return (
@@ -122,7 +156,7 @@ export default function Products() {
                     whileHover={{ y: -4 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setActiveDivision(div.value)}
-                    className={`px-8 py-4 rounded-2xl text-[11px] font-black tracking-[0.2em] uppercase transition-all duration-500 border ${
+                    className={`px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-black tracking-[0.1em] md:tracking-[0.2em] uppercase transition-all duration-500 border ${
                       isActive 
                         ? "bg-brand-blue border-brand-blue text-white shadow-2xl shadow-brand-blue/20" 
                         : "bg-brand-gray border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"
@@ -135,52 +169,24 @@ export default function Products() {
             </div>
           </div>
 
-          {/* Industry Filter */}
-          <div className="lg:col-span-5">
-            <div className="flex items-center gap-6 mb-12">
-              <div className="w-1.5 h-6 bg-brand-blue"></div>
-              <span className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40">{t("mega.by_industry")}</span>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              {industryApplications.map((ind) => {
-                const isActive = activeIndustry === (ind.value || "all");
-                return (
-                  <motion.button
-                    key={ind.id}
-                    whileHover={{ y: -4 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setActiveIndustry(ind.value || "all")}
-                    className={`px-8 py-4 rounded-2xl text-[11px] font-black tracking-wider uppercase transition-all duration-500 border flex items-center gap-3 ${
-                      isActive 
-                        ? "bg-brand-blue/10 border-brand-blue text-brand-blue shadow-sm" 
-                        : "bg-brand-gray border-brand-border text-brand-dark/40 hover:border-brand-blue/30 hover:text-brand-blue"
-                    }`}
-                  >
-                    {ind.icon}
-                    {ind.title}
-                  </motion.button>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </div>
 
       {/* Technical Product List */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-12">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 gap-8 md:gap-12">
           <div>
-            <h2 className="text-5xl md:text-8xl font-black text-brand-dark mb-8 tracking-tighter leading-[0.9]">{t("products.catalog")}</h2>
-            <p className="text-brand-blue text-[11px] font-black uppercase tracking-[0.3em]">{t("products.tds")}</p>
+            <h2 className="text-4xl sm:text-5xl md:text-8xl font-black text-brand-dark mb-4 md:mb-8 tracking-tighter leading-[0.9]">{t("products.catalog")}</h2>
+            <p className="text-brand-blue text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em]">{t("products.tds")}</p>
           </div>
-          <div className="flex items-center gap-6 p-6 bg-brand-gray border border-brand-border rounded-[32px] w-full md:w-[500px] group focus-within:border-brand-blue/30 transition-all duration-500 shadow-sm">
-            <Search size={24} className="text-brand-dark/20 group-focus-within:text-brand-blue transition-colors" />
+          <div className="flex items-center gap-4 md:gap-6 p-4 md:p-6 bg-brand-gray border border-brand-border rounded-2xl md:rounded-[32px] w-full md:w-[500px] group focus-within:border-brand-blue focus-within:bg-white transition-all duration-500 shadow-sm">
+            <Search size={20} className="text-brand-dark/20 group-focus-within:text-brand-blue transition-colors" />
             <input 
               type="text" 
               placeholder={t("products.search_placeholder")} 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none outline-none text-lg text-brand-dark w-full placeholder:text-brand-dark/20 font-medium"
+              className="bg-transparent border-none outline-none text-base md:text-lg text-brand-dark w-full placeholder:text-brand-dark/20 font-medium"
             />
           </div>
         </div>
@@ -207,7 +213,7 @@ export default function Products() {
                   >
                     <div className="col-span-2">
                       <div className="text-2xl font-black tracking-tight text-brand-dark group-hover:text-brand-blue transition-colors">{product.name}</div>
-                      <div className="text-[10px] text-brand-dark/30 font-black uppercase tracking-[0.3em] mt-3">{product.type}</div>
+                      <div className="text-[10px] text-brand-dark/30 font-black uppercase tracking-widest mt-3">{product.type}</div>
                     </div>
                     <div className="col-span-1">
                       <span className="text-base text-brand-dark/40 font-medium">{product.appearance}</span>

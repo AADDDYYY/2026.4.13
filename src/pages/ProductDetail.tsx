@@ -1,8 +1,10 @@
 import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
 import { motion } from "motion/react";
 import { products } from "../data/products";
-import { ArrowLeft, CheckCircle2, FlaskConical, Activity, Thermometer, Droplets, ShieldCheck, BarChart3 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, FlaskConical, Activity, Thermometer, Droplets, ShieldCheck, BarChart3, FlaskRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { SampleRequestModal } from "../components/SampleRequestModal";
 import { 
   Radar, 
   RadarChart, 
@@ -14,6 +16,7 @@ import {
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
   const product = products.find((p) => p.id === id);
 
   if (!product) {
@@ -29,33 +32,33 @@ const ProductDetail = () => {
 
   // Default performance data if not provided
   const performanceData = product.performance ? [
-    { subject: '硬度', A: product.performance.hardness, fullMark: 100 },
-    { subject: '柔韧性', A: product.performance.flexibility, fullMark: 100 },
-    { subject: '附着力', A: product.performance.adhesion, fullMark: 100 },
-    { subject: '耐化学性', A: product.performance.chemicalResistance, fullMark: 100 },
-    { subject: '光泽度', A: product.performance.gloss, fullMark: 100 },
-    { subject: '干燥速度', A: product.performance.dryingSpeed, fullMark: 100 },
+    { subject: t("product_detail.specs.hardness", "硬度"), A: product.performance.hardness, fullMark: 100 },
+    { subject: t("product_detail.specs.flexibility", "柔韧性"), A: product.performance.flexibility, fullMark: 100 },
+    { subject: t("product_detail.specs.adhesion", "附着力"), A: product.performance.adhesion, fullMark: 100 },
+    { subject: t("product_detail.specs.chemicalResistance", "耐化学性"), A: product.performance.chemicalResistance, fullMark: 100 },
+    { subject: t("product_detail.specs.gloss", "光泽度"), A: product.performance.gloss, fullMark: 100 },
+    { subject: t("product_detail.specs.dryingSpeed", "干燥速度"), A: product.performance.dryingSpeed, fullMark: 100 },
   ] : [
-    { subject: '硬度', A: 80, fullMark: 100 },
-    { subject: '柔韧性', A: 70, fullMark: 100 },
-    { subject: '附着力', A: 90, fullMark: 100 },
-    { subject: '耐化学性', A: 65, fullMark: 100 },
-    { subject: '光泽度', A: 85, fullMark: 100 },
-    { subject: '干燥速度', A: 75, fullMark: 100 },
+    { subject: t("product_detail.specs.hardness", "硬度"), A: 80, fullMark: 100 },
+    { subject: t("product_detail.specs.flexibility", "柔韧性"), A: 70, fullMark: 100 },
+    { subject: t("product_detail.specs.adhesion", "附着力"), A: 90, fullMark: 100 },
+    { subject: t("product_detail.specs.chemicalResistance", "耐化学性"), A: 65, fullMark: 100 },
+    { subject: t("product_detail.specs.gloss", "光泽度"), A: 85, fullMark: 100 },
+    { subject: t("product_detail.specs.dryingSpeed", "干燥速度"), A: 75, fullMark: 100 },
   ];
 
   const technicalSpecs = [
-    { label: "外观", value: product.appearance, icon: <Droplets size={18} /> },
-    { label: "固含量", value: product.solidContent, icon: <Activity size={18} /> },
-    { label: "pH 值", value: product.pH, icon: <FlaskConical size={18} /> },
-    { label: "粘度", value: product.viscosity, icon: <Activity size={18} /> },
-    { label: "羟值", value: product.hydroxylValue, icon: <FlaskConical size={18} /> },
-    { label: "玻璃化温度 (°C)", value: product.tg, icon: <Thermometer size={18} /> },
-    { label: "最低成膜温度 (°C)", value: product.mfft, icon: <Thermometer size={18} /> },
+    { label: t("products.table.appearance", "外观"), value: product.appearance, icon: <Droplets size={18} /> },
+    { label: t("products.table.solid", "固含量"), value: product.solidContent, icon: <Activity size={18} /> },
+    { label: t("products.table.ph", "pH 值"), value: product.pH, icon: <FlaskConical size={18} /> },
+    { label: t("products.table.viscosity", "粘度"), value: product.viscosity, icon: <Activity size={18} /> },
+    { label: t("product_detail.specs.hydroxyl", "羟值"), value: product.hydroxylValue, icon: <FlaskConical size={18} /> },
+    { label: t("product_detail.specs.tg", "玻璃化温度 (°C)"), value: product.tg, icon: <Thermometer size={18} /> },
+    { label: t("product_detail.specs.mfft", "最低成膜温度 (°C)"), value: product.mfft, icon: <Thermometer size={18} /> },
   ];
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       <div className="max-w-[1800px] mx-auto px-6 md:px-20">
         {/* Breadcrumb */}
         <Link to="/products" className="inline-flex items-center gap-6 text-brand-dark/40 hover:text-brand-blue transition-colors mb-24 group">
@@ -76,13 +79,13 @@ const ProductDetail = () => {
               </span>
             </div>
 
-            <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">{product.name}</h1>
+            <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tight leading-[0.85]">{product.name}</h1>
             <div className="flex flex-wrap items-center gap-10 mb-16">
-              <p className="text-brand-blue text-[11px] font-black uppercase tracking-[0.3em]">{product.type}</p>
+              <p className="text-brand-blue text-[11px] font-black uppercase tracking-widest">{product.type}</p>
               <span className="w-2 h-2 rounded-full bg-brand-border"></span>
               <div className="flex flex-wrap gap-6">
                 {product.divisions.map(d => (
-                  <p key={d} className="text-brand-dark/40 text-[11px] font-black uppercase tracking-[0.3em]">{d}</p>
+                  <p key={d} className="text-brand-dark/40 text-[11px] font-black uppercase tracking-widest">{d}</p>
                 ))}
               </div>
             </div>
@@ -94,7 +97,7 @@ const ProductDetail = () => {
             </div>
 
             <div className="mb-24">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40 mb-10">适用基材 / Substrates</h3>
+              <h3 className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-10">适用基材 / Substrates</h3>
               <div className="flex flex-wrap gap-4">
                 {Object.entries(product.substrates).filter(([_, v]) => v).map(([k]) => {
                   const labelMap: any = { metal: "金属", plastic: "塑胶", ink: "油墨", wood: "木器", leather: "皮革/纺织" };
@@ -206,10 +209,18 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="mt-32 pt-16 border-t border-brand-border">
+            <div className="mt-32 pt-16 border-t border-brand-border space-y-6">
+              <button 
+                onClick={() => setIsSampleModalOpen(true)}
+                className="w-full py-10 bg-brand-dark text-white rounded-3xl font-black hover:bg-brand-blue transition-all shadow-2xl shadow-brand-dark/20 flex items-center justify-center gap-6 group uppercase tracking-[0.3em] text-[12px]"
+              >
+                索取样品 (Request Sample)
+                <FlaskRound size={24} className="group-hover:scale-110 transition-transform" />
+              </button>
+              
               <Link 
                 to={`/contact?type=tds&product=${encodeURIComponent(product.name)}`}
-                className="w-full py-10 bg-brand-blue text-white rounded-3xl font-black hover:bg-brand-dark transition-all shadow-2xl shadow-brand-blue/30 flex items-center justify-center gap-6 group uppercase tracking-[0.3em] text-[12px]"
+                className="w-full py-10 border-2 border-brand-border text-brand-dark rounded-3xl font-black hover:bg-brand-gray transition-all flex items-center justify-center gap-6 group uppercase tracking-[0.3em] text-[12px]"
               >
                 索取技术说明书 (TDS)
                 <ArrowLeft size={24} className="rotate-180 group-hover:translate-x-4 transition-transform" />
@@ -218,6 +229,13 @@ const ProductDetail = () => {
           </motion.div>
         </div>
       </div>
+
+      <SampleRequestModal 
+        isOpen={isSampleModalOpen} 
+        onClose={() => setIsSampleModalOpen(false)} 
+        productName={product.name}
+        productId={product.id}
+      />
     </div>
   );
 };

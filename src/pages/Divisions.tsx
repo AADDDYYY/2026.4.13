@@ -67,9 +67,9 @@ export default function Divisions() {
   ];
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {divisionsHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
             <img src={divisionsHeroBg} alt="Divisions Hero" className="w-full h-full object-cover" />
@@ -85,17 +85,17 @@ export default function Divisions() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-7xl"
         >
-          <div className="flex items-center gap-6 mb-16">
-            <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
+          <div className="flex items-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
               Business Structure
             </span>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("divisions_page.hero.title")}<br />
-            <span className="text-brand-blue">Business Structure & Divisions</span>
+            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">Business Structure & Divisions</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("divisions_page.hero.desc")}
           </p>
         </motion.div>
@@ -130,7 +130,7 @@ export default function Divisions() {
                   {division.icon}
                 </div>
                 <h3 className="text-4xl font-black text-brand-dark mb-6 tracking-tight group-hover:text-brand-blue transition-colors">{division.title}</h3>
-                <div className="text-brand-blue text-[11px] font-black uppercase tracking-[0.3em] mb-8">{division.en}</div>
+                <div className="text-brand-blue text-[11px] font-black uppercase tracking-widest mb-8">{division.en}</div>
                 <p className="text-brand-dark/40 text-xl font-medium leading-relaxed mb-12 line-clamp-3">
                   {division.desc}
                 </p>

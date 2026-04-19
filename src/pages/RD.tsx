@@ -10,17 +10,22 @@ export default function RD() {
   const { value: rdLabImg1 } = useCMSAsset('rd_lab_img1', 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=600');
   const { value: rdLabImg2 } = useCMSAsset('rd_lab_img2', 'https://images.unsplash.com/photo-1581093588401-22d3c9f5b9c5?auto=format&fit=crop&q=80&w=600');
 
+  const { value: rdStatInvestment } = useCMSAsset('rd_stat_investment', '15');
+  const { value: rdStatPatents } = useCMSAsset('rd_stat_patents', '50');
+  const { value: rdStatStaff } = useCMSAsset('rd_stat_staff', '50');
+  const { value: rdStatPartners } = useCMSAsset('rd_stat_partners', '10');
+
   const rdStats = [
-    { label: t("rd.stats.investment"), value: "15", unit: "%" },
-    { label: t("rd.stats.patents"), value: "50", unit: "+" },
-    { label: t("rd.stats.staff"), value: "50", unit: "+" },
-    { label: t("rd.stats.partners"), value: "10", unit: "+" }
+    { label: t("rd.stats.investment"), value: rdStatInvestment, unit: "%" },
+    { label: t("rd.stats.patents"), value: rdStatPatents, unit: "+" },
+    { label: t("rd.stats.staff"), value: rdStatStaff, unit: "+" },
+    { label: t("rd.stats.partners"), value: rdStatPartners, unit: "+" }
   ];
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {rdHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
             <img src={rdHeroBg} alt="R&D Hero" className="w-full h-full object-cover" />
@@ -36,26 +41,26 @@ export default function RD() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-center"
         >
-          <div className="flex items-center justify-center gap-6 mb-16">
-            <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
+          <div className="flex items-center justify-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
               R&D Innovation Center
             </span>
-            <div className="h-px w-16 bg-brand-blue"></div>
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("rd.hero.title")}<br />
-            <span className="text-brand-blue">R&D Innovation Center</span>
+            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">R&D Innovation Center</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
             {t("rd.hero.desc")}
           </p>
         </motion.div>
       </div>
 
       {/* Stats Grid */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-brand-border border border-brand-border rounded-[60px] overflow-hidden shadow-2xl">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-brand-border border border-brand-border rounded-[40px] md:rounded-[60px] overflow-hidden shadow-2xl">
           {rdStats.map((stat, idx) => (
             <div key={idx} className="bg-brand-gray p-12 lg:p-20 text-center hover:bg-white transition-all duration-700 group">
               <div className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter group-hover:text-brand-blue transition-colors text-brand-dark flex items-baseline justify-center gap-2">
@@ -68,8 +73,8 @@ export default function RD() {
       </section>
 
       {/* Lab Section */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-32 items-center">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-32 items-center">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -77,12 +82,12 @@ export default function RD() {
             transition={{ duration: 1.2 }}
             className="lg:col-span-6"
           >
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-12 block">Research Infrastructure</span>
-            <h2 className="text-5xl md:text-8xl font-black text-brand-dark mb-16 tracking-tighter leading-[0.9]">
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px] mb-8 md:mb-12 block">Research Infrastructure</span>
+            <h2 className="text-4xl sm:text-5xl md:text-8xl font-black text-brand-dark mb-8 md:mb-16 tracking-tighter leading-[0.9]">
               {t("rd.lab.title")}<br />
               <span className="text-brand-dark/30">{t("rd.lab.subtitle")}</span>
             </h2>
-            <p className="text-brand-dark/40 text-2xl mb-16 font-light leading-relaxed max-w-2xl">
+            <p className="text-brand-dark/40 text-lg md:text-2xl mb-12 md:mb-16 font-light leading-relaxed max-w-2xl">
               {t("rd.lab.desc")}
             </p>
             

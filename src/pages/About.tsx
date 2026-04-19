@@ -45,9 +45,9 @@ export default function About() {
   ];
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {aboutHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
             <img src={aboutHeroBg} alt="About Hero" className="w-full h-full object-cover" />
@@ -63,26 +63,26 @@ export default function About() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-7xl"
         >
-          <div className="flex items-center gap-6 mb-16">
-            <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
+          <div className="flex items-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
               Corporate Profile
             </span>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("about.hero.title")}<br />
-            <span className="text-brand-blue">Corporate Profile & History</span>
+            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">Corporate Profile & History</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("about.hero.desc")}
           </p>
         </motion.div>
       </div>
 
       {/* Stats Grid */}
-      <section className="py-48 border-y border-brand-border bg-brand-gray mb-56">
+      <section className="py-24 md:py-48 border-y border-brand-border bg-brand-gray mb-24 md:mb-56">
         <div className="max-w-[1800px] mx-auto px-6 md:px-20">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24 text-center sm:text-left">
             {stats.map((stat, idx) => (
               <motion.div
                 key={idx}
@@ -244,7 +244,7 @@ export default function About() {
                   </div>
                   <div className="px-4">
                     <span className="text-brand-blue text-[10px] font-bold uppercase tracking-widest mb-2 block">{item.type}</span>
-                    <h4 className="text-white font-bold text-lg tracking-tight">{item.title}</h4>
+                    <h4 className="text-brand-dark font-black text-lg tracking-tight">{item.title}</h4>
                   </div>
                 </motion.div>
               ))}

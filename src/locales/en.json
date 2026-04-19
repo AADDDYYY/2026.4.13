@@ -67,6 +67,8 @@
   },
   "products": {
     "title": "Product Center",
+    "english_title": "Product Center",
+    "english_subtitle": "Product Intelligence Center",
     "subtitle": "Based on deep material science accumulation, Seaton provides you with comprehensive water-based solutions from basic resins to specialty functional polymers.",
     "catalog": "Technical Product Catalog",
     "tds": "Technical Parameters / TDS Retrieval",
@@ -87,6 +89,19 @@
       "title": "Custom Development Services",
       "desc": "Seaton Application R&D Center (Guangzhou Technology R&D Center) is dedicated to providing 'tailor-made' resin development and technical support based on your specific application scenarios.",
       "btn": "Contact Technical Expert"
+    }
+  },
+  "product_detail": {
+    "specs": {
+      "hardness": "Hardness",
+      "flexibility": "Flexibility",
+      "adhesion": "Adhesion",
+      "chemicalResistance": "Chemical Resistance",
+      "gloss": "Gloss",
+      "dryingSpeed": "Drying Speed",
+      "hydroxyl": "Hydroxyl Value",
+      "tg": "TG (°C)",
+      "mfft": "MFFT (°C)"
     }
   },
   "home": {
@@ -288,6 +303,10 @@
       "company_placeholder": "Chemical Co., Ltd.",
       "product": "Product Model",
       "product_placeholder": "e.g., SEACRYL 11P22",
+      "industry": "Industry",
+      "industry_placeholder": "Select Industry",
+      "substrate": "Substrate",
+      "substrate_placeholder": "Select Substrate",
       "desc": "Description",
       "desc_placeholder": "Please briefly describe your needs...",
       "submit": "Submit Request",

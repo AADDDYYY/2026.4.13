@@ -33,17 +33,22 @@ export default function Sustainability() {
     }
   ];
 
+  const { value: sustStatVoc } = useCMSAsset('sust_stat_voc', '30,000+');
+  const { value: sustStatEnergy } = useCMSAsset('sust_stat_energy', '40');
+  const { value: sustStatInvestment } = useCMSAsset('sust_stat_investment', '15');
+  const { value: sustStatBase } = useCMSAsset('sust_stat_base', '100');
+
   const sustainabilityStats = [
-    { label: t("sustainability_page.stats.voc"), value: "30,000+", unit: t("sustainability_page.stats.unit_tons") },
-    { label: t("sustainability_page.stats.energy"), value: "40", unit: "%" },
-    { label: t("sustainability_page.stats.investment"), value: "15", unit: "%" },
-    { label: t("sustainability_page.stats.base"), value: "100", unit: "%" }
+    { label: t("sustainability_page.stats.voc"), value: sustStatVoc, unit: t("sustainability_page.stats.unit_tons") },
+    { label: t("sustainability_page.stats.energy"), value: sustStatEnergy, unit: "%" },
+    { label: t("sustainability_page.stats.investment"), value: sustStatInvestment, unit: "%" },
+    { label: t("sustainability_page.stats.base"), value: sustStatBase, unit: "%" }
   ];
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {sustainabilityHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
             <img src={sustainabilityHeroBg} alt="Sustainability Hero" className="w-full h-full object-cover" />
@@ -59,26 +64,26 @@ export default function Sustainability() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-7xl"
         >
-          <div className="flex items-center gap-6 mb-16">
-            <div className="h-px w-16 bg-emerald-500"></div>
-            <span className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[11px]">
+          <div className="flex items-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-emerald-500"></div>
+            <span className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
               Sustainability & ESG
             </span>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-10 md:mb-16 tracking-tight leading-[0.85]">
             {t("sustainability_page.hero.title")}<br />
-            <span className="text-emerald-500">Sustainability & ESG</span>
+            <span className="text-emerald-500 sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">Sustainability & ESG</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("sustainability_page.hero.desc")}
           </p>
         </motion.div>
       </div>
 
       {/* Stats Grid */}
-      <section className="py-48 border-y border-brand-border bg-brand-gray mb-56">
+      <section className="py-24 md:py-48 border-y border-brand-border bg-brand-gray mb-24 md:mb-56">
         <div className="max-w-[1800px] mx-auto px-6 md:px-20">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24 text-center sm:text-left">
             {sustainabilityStats.map((stat, idx) => (
               <motion.div
                 key={idx}

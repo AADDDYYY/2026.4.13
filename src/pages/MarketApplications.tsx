@@ -75,9 +75,9 @@ export default function MarketApplications() {
   ];
 
   return (
-    <div className="pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {marketHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
             <img src={marketHeroBg} alt="Market Hero" className="w-full h-full object-cover" />
@@ -93,17 +93,17 @@ export default function MarketApplications() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-7xl"
         >
-          <div className="flex items-center gap-6 mb-16">
-            <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
+          <div className="flex items-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
               Market Applications
             </span>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tighter leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("market_apps.hero.title")}<br />
-            <span className="text-brand-blue">Market Applications</span>
+            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">Market Applications</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl font-light leading-relaxed">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl max-w-5xl font-light leading-relaxed">
             {t("market_apps.hero.desc")}
           </p>
         </motion.div>
@@ -137,7 +137,7 @@ export default function MarketApplications() {
                 <div className="flex justify-between items-start mb-12">
                   <div>
                     <h3 className="text-4xl font-black mb-6 tracking-tight group-hover:text-brand-blue transition-colors text-brand-dark">{app.title}</h3>
-                    <p className="text-brand-blue text-[11px] font-black uppercase tracking-[0.3em]">{app.en}</p>
+                    <p className="text-brand-blue text-[11px] font-black uppercase tracking-widest">{app.en}</p>
                   </div>
                 </div>
                 

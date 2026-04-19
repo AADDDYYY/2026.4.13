@@ -9,7 +9,7 @@ export default function BusinessDetail() {
 
   if (!data) {
     return (
-      <div className="pt-32 pb-24 bg-white min-h-screen text-brand-dark flex items-center justify-center">
+      <div className="pt-24 md:pt-48 pb-24 bg-white min-h-screen text-brand-dark flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-black mb-8 tracking-tight">未找到该业务领域</h1>
           <Link to="/" className="text-brand-blue hover:underline font-bold text-[11px] uppercase tracking-widest">返回首页</Link>
@@ -51,8 +51,8 @@ export default function BusinessDetail() {
                   <Icon size={48} />
                 </div>
                 <div>
-                  <h1 className="text-6xl md:text-[10rem] font-black tracking-tighter leading-[0.85]">{data.title}</h1>
-                  <p className="text-brand-blue font-black uppercase tracking-[0.3em] text-[12px] mt-8">{data.en}</p>
+                  <h1 className="text-6xl md:text-[10rem] font-black tracking-tight leading-[0.85]">{data.title}</h1>
+                  <p className="text-brand-blue font-black uppercase tracking-widest text-[12px] mt-8">{data.en}</p>
                 </div>
               </div>
             </motion.div>
@@ -60,7 +60,7 @@ export default function BusinessDetail() {
         </div>
       </div>
 
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 py-48">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 py-24 md:py-48">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-32">
           {/* Main Content */}
           <div className="lg:col-span-2">
