@@ -32,28 +32,47 @@ const SEOManager = () => {
   const { value: seoTitle } = useCMSAsset('seo_title', '西顿新材料 SEATON - 全球领先的水性树脂专家');
   const { value: seoKeywords } = useCMSAsset('seo_keywords', '水性树脂,PUD,丙烯酸树脂,环保材料,西顿新材料');
   const { value: seoDescription } = useCMSAsset('seo_description', '西顿新材料专注于环保高性能水性树脂的研发与生产，为全球客户提供先进的涂料、印花、胶粘剂解决方案。');
+  const { value: ogImage } = useCMSAsset('og_image', 'https://images.unsplash.com/photo-1618044733300-9472054094ee?q=80&w=1200&auto=format&fit=crop');
 
   useEffect(() => {
-    if (seoTitle) document.title = seoTitle;
+    if (seoTitle) {
+      document.title = seoTitle;
+      updateMetaTag('property', 'og:title', seoTitle);
+      updateMetaTag('name', 'twitter:title', seoTitle);
+    }
     
     // Keywords
-    let metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (!metaKeywords) {
-      metaKeywords = document.createElement('meta');
-      metaKeywords.setAttribute('name', 'keywords');
-      document.head.appendChild(metaKeywords);
-    }
-    if (seoKeywords) metaKeywords.setAttribute('content', seoKeywords);
+    updateMetaTag('name', 'keywords', seoKeywords || '');
 
     // Description
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.setAttribute('name', 'description');
-      document.head.appendChild(metaDescription);
+    if (seoDescription) {
+      updateMetaTag('name', 'description', seoDescription);
+      updateMetaTag('property', 'og:description', seoDescription);
+      updateMetaTag('name', 'twitter:description', seoDescription);
     }
-    if (seoDescription) metaDescription.setAttribute('content', seoDescription);
-  }, [seoTitle, seoKeywords, seoDescription]);
+    
+    // Default OG Tags
+    updateMetaTag('property', 'og:type', 'website');
+    updateMetaTag('property', 'og:url', window.location.href);
+    updateMetaTag('name', 'twitter:card', 'summary_large_image');
+    
+    // OG Image
+    if (ogImage) {
+      updateMetaTag('property', 'og:image', ogImage);
+      updateMetaTag('name', 'twitter:image', ogImage);
+    }
+  }, [seoTitle, seoKeywords, seoDescription, ogImage]);
+
+  // Helper to update or create meta tags
+  const updateMetaTag = (attributeName: string, attributeValue: string, content: string) => {
+    let tag = document.querySelector(`meta[${attributeName}="${attributeValue}"]`);
+    if (!tag) {
+      tag = document.createElement('meta');
+      tag.setAttribute(attributeName, attributeValue);
+      document.head.appendChild(tag);
+    }
+    tag.setAttribute('content', content);
+  };
 
   return null;
 };

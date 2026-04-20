@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "motion/react";
-import { products } from "../data/products";
+import { useProducts } from "../hooks/useProducts";
 import { ArrowLeft, CheckCircle2, FlaskConical, Activity, Thermometer, Droplets, ShieldCheck, BarChart3, FlaskRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { SampleRequestModal } from "../components/SampleRequestModal";
@@ -17,7 +17,19 @@ const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+  const { products, loading } = useProducts();
   const product = products.find((p) => p.id === id);
+
+  if (loading && !product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white text-brand-dark">
+        <div className="text-center">
+          <Activity size={32} className="mx-auto text-brand-blue animate-spin mb-8" />
+          <h1 className="text-2xl font-black mb-4 tracking-tight">Loading Product...</h1>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (

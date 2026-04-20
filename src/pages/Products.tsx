@@ -1,10 +1,10 @@
 import { motion } from "motion/react";
 import { Shield, Zap, Droplets, FlaskConical, ArrowRight, Sparkles, Search, Car, Smartphone, Package, Home, Scissors, Trophy } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { products } from "../data/products";
 import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useCMSAsset } from "../hooks/useCMSAsset";
+import { useProducts } from "../hooks/useProducts";
 
 export default function Products() {
   const { t } = useTranslation();
@@ -44,6 +44,8 @@ export default function Products() {
     { id: "leather", title: t("industries.leather"), value: "leather", icon: <Scissors size={14} /> }
   ];
 
+  const { products, loading } = useProducts();
+
   // Update filters when URL changes
   useEffect(() => {
     if (divisionFilter) setActiveDivision(getDivisionValue(divisionFilter));
@@ -67,7 +69,7 @@ export default function Products() {
 
       return matchesSearch && matchesCategory && matchesDivision && matchesIndustry;
     });
-  }, [searchQuery, categoryFilter, activeDivision, activeIndustry]);
+  }, [searchQuery, categoryFilter, activeDivision, activeIndustry, products]);
 
   return (
     <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">

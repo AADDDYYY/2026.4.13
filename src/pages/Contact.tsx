@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useCMSAsset } from "../hooks/useCMSAsset";
-import { products } from "../data/products";
+import { useProducts } from "../hooks/useProducts";
 import { db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "../firebase";
@@ -15,6 +15,8 @@ export default function Contact() {
   const queryParams = new URLSearchParams(location.search);
   const initialType = queryParams.get("type") || "general";
   const initialProduct = queryParams.get("product") || "";
+
+  const { products } = useProducts();
 
   const [requestType, setRequestType] = useState(initialType);
   const [productName, setProductName] = useState(initialProduct);

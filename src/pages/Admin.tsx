@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { auth, db, handleFirestoreError, OperationType } from '../firebase';
-import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, User } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { collection, onSnapshot, doc, setDoc, deleteDoc, query, limit, orderBy, updateDoc, getDocs, serverTimestamp, addDoc } from 'firebase/firestore';
-import { Upload, Save, CheckCircle, Smartphone, Mail, MapPin, Globe, Search as SearchIcon, ShieldAlert, Activity, LayoutGrid, RotateCcw, Bug, FlaskRound, Trash2, Clock, CheckCircle2 } from 'lucide-react';
+import { Upload, Save, CheckCircle, Smartphone, Mail, MapPin, Globe, Search as SearchIcon, ShieldAlert, Activity, LayoutGrid, RotateCcw, Bug, FlaskRound, Trash2, Clock, CheckCircle2, FileSpreadsheet, Lock, Key, Bell, Package, FileEdit } from 'lucide-react';
 import { runDiagnostics, DashboardStat, fetchCloudHealth, fetchNetworkStatus } from '../services/diagnosticService';
+import ProductManagement from '../components/admin/ProductManagement';
 
 interface SampleRequest {
   id: string;
@@ -198,6 +199,58 @@ export default function Admin() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [rawSampleCount, setRawSampleCount] = useState<number | null>(null);
 
+  const playNotificationSound = () => {
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5 note
+      gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      osc.start();
+      gainNode.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
+      osc.stop(ctx.currentTime + 0.5);
+    } catch (e) {
+      console.error('Audio play failed', e);
+    }
+  };
+
+  const handleExportCSV = () => {
+    const headers = ['提交时间', '来源/类型', '客户姓名', '公司名称', '邮箱', '电话', '应用领域', '基材', '需求描述/留言', '处理状态'];
+    
+    // Map data to rows
+    const rows = sampleRequests.map(r => [
+      r.createdAt?.toDate?.()?.toLocaleString() || '',
+      r.type || 'direct',
+      r.userName || '',
+      r.companyName || '',
+      r.email || '',
+      r.phone || '',
+      r.applicationArea || '',
+      r.substrate || '',
+      (r.message || '').replace(/"/g, '""').replace(/\n/g, ' '), // sanitize for CSV
+      r.status || 'new'
+    ]);
+
+    // Construct CSV
+    const csvContent = "\uFEFF" + [
+      headers.join(','),
+      ...rows.map(e => e.map(f => `"${f}"`).join(','))
+    ].join('\n'); // Add BOM for Excel UTF-8 support
+
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Seaton_Leads_Export_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const fetchSamplesFallback = async () => {
     setIsRefreshing(true);
     try {
@@ -264,6 +317,9 @@ export default function Admin() {
           ? query(collection(db, 'sample_requests'), orderBy('createdAt', 'desc'))
           : collection(db, 'sample_requests');
 
+        let isInitialLoad = true;
+        let previousSamplesCount = 0;
+
         unsubscribeSamples = onSnapshot(q, (snapshot) => {
           const samples = snapshot.docs.map(d => ({
             id: d.id,
@@ -271,6 +327,12 @@ export default function Admin() {
           } as SampleRequest));
           
           setRawSampleCount(snapshot.size);
+          
+          if (!isInitialLoad && snapshot.size > previousSamplesCount) {
+             playNotificationSound();
+          }
+          previousSamplesCount = snapshot.size;
+          isInitialLoad = false;
           
           if (!withOrder) {
             // Manual sort if index is missing
@@ -336,12 +398,25 @@ export default function Admin() {
     }
   }, [isAuthReady, user]);
 
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
   const handleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error('Login error:', error);
+    }
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginEmail || !loginPassword) return;
+    try {
+      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+    } catch (error) {
+      alert("密码登录失败: " + (error as Error).message);
     }
   };
 
@@ -389,18 +464,53 @@ export default function Admin() {
   if (!user) {
     return (
       <div className="min-h-screen bg-brand-gray flex items-center justify-center px-6">
-        <div className="bg-white p-16 rounded-[40px] shadow-2xl border border-brand-border text-center max-w-md w-full">
-          <div className="w-20 h-20 bg-brand-blue/10 rounded-full flex items-center justify-center text-brand-blue mx-auto mb-8">
+        <div className="bg-white p-12 md:p-16 rounded-[40px] shadow-2xl border border-brand-border text-center max-w-md w-full">
+          <div className="w-20 h-20 bg-brand-blue/10 rounded-full flex items-center justify-center text-brand-blue mx-auto mb-8 relative">
             <span className="text-3xl">🛡️</span>
+            <div className="absolute top-0 right-0 w-6 h-6 bg-brand-blue rounded-full flex items-center justify-center text-white border-2 border-white">
+              <Lock size={10} />
+            </div>
           </div>
-          <h1 className="text-3xl font-black text-brand-dark mb-4 tracking-tight">管理后台登入</h1>
-          <p className="text-brand-dark/50 mb-10 text-sm">请输入授权的管理员账号以进入后台管理系统</p>
+          <h1 className="text-3xl font-black text-brand-dark mb-4 tracking-tight">管理后台系统</h1>
+          <p className="text-brand-dark/50 mb-10 text-sm">选择授权方式登入 Seaton CMS</p>
+          
           <button 
             onClick={handleLogin}
-            className="w-full bg-brand-blue text-white py-4 rounded-full font-black uppercase tracking-widest text-[12px] hover:bg-brand-dark transition-all shadow-lg shadow-brand-blue/20"
+            className="w-full bg-brand-dark text-white py-4 rounded-xl font-black uppercase tracking-widest text-[12px] hover:bg-black transition-all flex items-center justify-center gap-3 mb-8"
           >
-            Sign in with Google
+            <Globe size={16} /> SignIn with Google (Overseas)
           </button>
+
+          <div className="relative mb-8">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-brand-border"></div></div>
+            <div className="relative flex justify-center"><span className="bg-white px-4 text-[10px] uppercase font-black tracking-widest text-brand-dark/40">或者使用密码登录</span></div>
+          </div>
+
+          <form onSubmit={handleEmailLogin} className="space-y-4">
+            <div className="text-left space-y-1">
+               <label className="text-[10px] font-black uppercase tracking-widest text-brand-dark/60 ml-2">管理员邮箱</label>
+               <div className="relative">
+                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-brand-dark/30"><Mail size={16}/></div>
+                 <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} className="w-full pl-11 pr-4 py-4 rounded-xl border border-brand-border bg-brand-gray focus:bg-white focus:border-brand-blue outline-none transition-all text-sm font-medium" placeholder="admin@example.com" />
+               </div>
+            </div>
+            <div className="text-left space-y-1">
+               <label className="text-[10px] font-black uppercase tracking-widest text-brand-dark/60 ml-2">密码</label>
+               <div className="relative">
+                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-brand-dark/30"><Key size={16}/></div>
+                 <input type="password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} className="w-full pl-11 pr-4 py-4 rounded-xl border border-brand-border bg-brand-gray focus:bg-white focus:border-brand-blue outline-none transition-all text-sm font-medium" placeholder="••••••••" />
+               </div>
+            </div>
+            <button 
+              type="submit"
+              className="w-full bg-brand-blue text-white py-4 rounded-xl font-black uppercase tracking-widest text-[12px] hover:bg-brand-blue/90 transition-all shadow-lg mt-4"
+            >
+              密码登录系统
+            </button>
+            <p className="text-[10px] text-brand-dark/30 mt-4 leading-relaxed">
+              * 如需使用密码登录，请确保 Firebase Authentication 的 Email/Password 服务已开启，且管理员账号已添加。
+            </p>
+          </form>
         </div>
       </div>
     );
@@ -571,10 +681,17 @@ export default function Admin() {
                <button 
                  onClick={fetchSamplesFallback}
                  disabled={isRefreshing}
-                 className="px-6 py-2 bg-brand-dark text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-brand-blue transition-all flex items-center gap-2 disabled:opacity-50"
+                 className="px-6 py-2 bg-brand-gray text-brand-dark border border-brand-border text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50"
                >
                  <Activity size={12} className={isRefreshing ? 'animate-spin' : ''} />
-                 {isRefreshing ? 'REFRESHING...' : 'FORCE REFRESH'}
+                 RELOAD
+               </button>
+               <button
+                 onClick={handleExportCSV}
+                 className="px-6 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-emerald-700 transition-all flex items-center gap-2 shadow-sm"
+               >
+                 <FileSpreadsheet size={12} />
+                 EXPORT EXCEL (.CSV)
                </button>
                <button 
                  onClick={async () => {
@@ -795,6 +912,8 @@ export default function Admin() {
           </div>
         </div>
 
+        <ProductManagement />
+
         <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border mb-12">
           <div className="flex items-center gap-4 mb-12">
             <div className="w-2 h-8 bg-brand-blue rounded-full"></div>
@@ -804,12 +923,16 @@ export default function Admin() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div className="space-y-8">
               <h3 className="text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
-                <SearchIcon size={20} className="text-brand-blue" /> 搜索引擎优化 (SEO)
+                <SearchIcon size={20} className="text-brand-blue" /> 搜索引擎优化 (SEO & Social)
               </h3>
               <div className="bg-brand-gray/50 p-8 rounded-3xl border border-brand-border">
                 {user && <TextUpdateField assetKey="seo_title" label="网站标题 (Browser Title)" user={user} placeholder="例如：西顿新材料 - 全球领先的水性树脂专家" />}
                 {user && <TextUpdateField assetKey="seo_keywords" label="搜索关键词 (Keywords)" user={user} placeholder="关键词用逗号隔开，如：水性树脂, PUD, 环保涂料" />}
                 {user && <TextUpdateField assetKey="seo_description" label="页面描述 (Description)" user={user} type="textarea" placeholder="简短的公司介绍，会出现在搜索结果下方" />}
+                <div className="mt-6 pt-6 border-t border-brand-border">
+                  <h4 className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">社交媒体分享图 (Open Graph Image)</h4>
+                  {user && <ImageUploadButton assetKey="og_image" label="上传分享预览图 (建议比例 1200x630)" user={user} />}
+                </div>
               </div>
             </div>
 
