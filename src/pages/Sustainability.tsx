@@ -51,7 +51,7 @@ export default function Sustainability() {
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {sustainabilityHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
-            <img src={sustainabilityHeroBg} alt="Sustainability Hero" className="w-full h-full object-cover" />
+            <img src={sustainabilityHeroBg} alt="Sustainability Hero" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
           </div>
         ) : (

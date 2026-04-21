@@ -21,6 +21,9 @@ export interface Product {
   };
   description: string;
   image: string;
+  tdsUrl?: string;
+  sdsUrl?: string;
+  status?: 'published' | 'draft';
   performance?: {
     hardness: number;
     flexibility: number;

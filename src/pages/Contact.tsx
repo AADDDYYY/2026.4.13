@@ -35,7 +35,8 @@ export default function Contact() {
   const { value: contactHeroBg } = useCMSAsset('contact_hero_bg', '');
   const { value: companyPhone } = useCMSAsset('company_phone', '400 0069 655');
   const { value: companyEmail } = useCMSAsset('company_email', 'info@seatonchem.com');
-  const { value: companyAddress } = useCMSAsset('company_address', '广东省东莞市松山湖高新技术产业开发区');
+  const { value: companyFactoryAddress } = useCMSAsset('company_factory_address', '广东省韶关市南雄高新区平安三路西1号');
+  const { value: companyRDAddress } = useCMSAsset('company_rd_address', '广州市番禺石楼镇国康大道岳溪路段罗岗工业区3号');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -152,7 +153,16 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-black text-3xl mb-4 text-brand-dark tracking-tight">{t("contact.info.address")}</h4>
-                  <p className="text-brand-dark/40 text-xl font-medium leading-relaxed max-w-md">{companyAddress}</p>
+                  <div className="space-y-8">
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-blue mb-2">工厂地址 / Factory</p>
+                      <p className="text-brand-dark/40 text-xl font-medium leading-relaxed max-w-md">{companyFactoryAddress}</p>
+                    </div>
+                    <div className="pt-8 border-t border-brand-border/30">
+                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-blue mb-2">研发应用中心 / R&D Center</p>
+                      <p className="text-brand-dark/40 text-xl font-medium leading-relaxed max-w-md">{companyRDAddress}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

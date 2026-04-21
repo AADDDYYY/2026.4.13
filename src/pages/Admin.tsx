@@ -1,10 +1,31 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { auth, db, handleFirestoreError, OperationType } from '../firebase';
 import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, onAuthStateChanged, signOut, User } from 'firebase/auth';
-import { collection, onSnapshot, doc, setDoc, deleteDoc, query, limit, orderBy, updateDoc, getDocs, serverTimestamp, addDoc } from 'firebase/firestore';
-import { Upload, Save, CheckCircle, Smartphone, Mail, MapPin, Globe, Search as SearchIcon, ShieldAlert, Activity, LayoutGrid, RotateCcw, Bug, FlaskRound, Trash2, Clock, CheckCircle2, FileSpreadsheet, Lock, Key, Bell, Package, FileEdit } from 'lucide-react';
+import { collection, onSnapshot, doc, setDoc, deleteDoc, query, limit, orderBy, updateDoc, getDocs, serverTimestamp, addDoc, getDoc } from 'firebase/firestore';
+import { Upload, Save, CheckCircle, Smartphone, Mail, MapPin, Globe, Search as SearchIcon, ShieldAlert, Activity, LayoutGrid, RotateCcw, Bug, FlaskRound, Trash2, Clock, CheckCircle2, FileSpreadsheet, Lock, Key, Bell, Package, FileEdit, History, RefreshCw, Award, Factory, Users, Newspaper, Settings } from 'lucide-react';
 import { runDiagnostics, DashboardStat, fetchCloudHealth, fetchNetworkStatus } from '../services/diagnosticService';
+import { motion, AnimatePresence } from 'motion/react';
+import { compressImage } from '../utils/compressImage';
 import ProductManagement from '../components/admin/ProductManagement';
+import InquiryDashboard from '../components/admin/InquiryDashboard';
+import NewsManagement from '../components/admin/NewsManagement';
+import LeadDetailsModal from '../components/admin/LeadDetailsModal';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  PieChart, 
+  Pie, 
+  Cell,
+  LineChart,
+  Line,
+  AreaChart,
+  Area
+} from 'recharts';
 
 interface SampleRequest {
   id: string;
@@ -37,42 +58,8 @@ interface CMSAsset {
   value: string;
   updatedAt?: string;
   updatedBy?: string;
+  history?: string[];
 }
-
-const compressImage = (file: File, maxWidth: number = 1920): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target?.result as string;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width);
-          width = maxWidth;
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          reject(new Error('Canvas ctx null'));
-          return;
-        }
-        ctx.drawImage(img, 0, 0, width, height);
-        // Compress as WebP or JPEG
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        resolve(compressedDataUrl);
-      };
-      img.onerror = (error) => reject(error);
-    };
-    reader.onerror = (error) => reject(error);
-  });
-};
 
 const TextUpdateField = ({ assetKey, label, user, placeholder, type = 'text' }: { assetKey: string, label: string, user: User, placeholder?: string, type?: 'text' | 'textarea' }) => {
   const [value, setValue] = useState('');
@@ -145,42 +132,148 @@ const TextUpdateField = ({ assetKey, label, user, placeholder, type = 'text' }: 
 
 const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label: string, user: User }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
+  const [currentValue, setCurrentValue] = useState<string | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Listen for history updates for this specific asset
+    const unsubscribe = onSnapshot(doc(db, 'cms_assets', assetKey), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        setHistory(data.history || []);
+        setCurrentValue(data.value || null);
+      }
+    });
+    return () => unsubscribe();
+  }, [assetKey]);
 
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if(!file || !user) return;
+    
     setIsUploading(true);
     try {
       const base64Data = await compressImage(file, 1920);
-      await setDoc(doc(db, 'cms_assets', assetKey), {
+      const assetRef = doc(db, 'cms_assets', assetKey);
+      const snap = await getDoc(assetRef);
+      
+      let newHistory = [];
+      if (snap.exists()) {
+        const currentData = snap.data();
+        const prevValue = currentData.value;
+        const oldHistory = currentData.history || [];
+        if (prevValue && !prevValue.startsWith('http')) { // Only backup local uploads to save space/complexity if needed
+          newHistory = [prevValue, ...oldHistory].slice(0, 5);
+        } else if (prevValue) {
+          newHistory = [prevValue, ...oldHistory].slice(0, 5);
+        }
+      }
+
+      await setDoc(assetRef, {
         key: assetKey,
         type: 'image',
         value: base64Data,
+        history: newHistory,
         updatedAt: new Date().toISOString(),
         updatedBy: user.uid
       });
-      alert(`成功！[${label}] 已更换为您上传的图片。`);
+      alert(`成功！[${label}] 已上传。上一张图片已存入历史记录。`);
     } catch(err) {
       console.error(err);
-      alert('上传失败，图片可能过大或格式不支持。');
+      alert('上传失败');
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
+  const rollback = async (historicalValue: string) => {
+    if (!user || !historicalValue) return;
+    try {
+      const assetRef = doc(db, 'cms_assets', assetKey);
+      const snap = await getDoc(assetRef);
+      const currentData = snap.data();
+      const currentValue = currentData?.value;
+      const currentHistory = currentData?.history || [];
+
+      // Logic: Move current to history, set chosen as current
+      const filteredHistory = currentHistory.filter((h: string) => h !== historicalValue);
+      const nextHistory = [currentValue, ...filteredHistory].filter(Boolean).slice(0, 5);
+
+      await setDoc(assetRef, {
+        ...currentData,
+        value: historicalValue,
+        history: nextHistory,
+        updatedAt: new Date().toISOString(),
+        updatedBy: user.uid
+      });
+      alert('已成功退回至该版本。');
+      setShowHistory(false);
+    } catch(e) {
+      console.error(e);
+      alert('还原失败');
+    }
+  };
+
   return (
-    <div className="mt-6 w-full">
+    <div className="mt-6 w-full space-y-4">
       <input type="file" accept="image/*" ref={fileInputRef} onChange={handleUpload} className="hidden" />
-      <button 
-        onClick={() => fileInputRef.current?.click()}
-        disabled={isUploading}
-        className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-brand-blue text-white rounded-xl font-black text-[12px] uppercase tracking-widest hover:bg-brand-dark transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
-      >
-        <Upload size={16} className={isUploading ? 'animate-bounce' : ''} />
-        {isUploading ? '正在压缩并上传...' : `本地上传图片：${label}`}
-      </button>
+      <div className="flex items-center gap-4">
+        {currentValue && (
+          <div className="w-14 h-14 rounded-lg overflow-hidden border border-brand-border shrink-0 bg-brand-gray group/preview relative">
+             <img src={currentValue} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/preview:opacity-100 flex items-center justify-center transition-opacity">
+                <LayoutGrid size={12} className="text-white" />
+             </div>
+          </div>
+        )}
+        <div className="flex-1 flex gap-2">
+          <button 
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading}
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-brand-blue text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-brand-dark transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
+          >
+            <Upload size={16} className={isUploading ? 'animate-bounce' : ''} />
+            {isUploading ? '正在上传...' : `${label}`}
+          </button>
+          {history.length > 0 && (
+            <button 
+              onClick={() => setShowHistory(!showHistory)}
+              className={`p-4 rounded-xl border border-brand-border transition-all ${showHistory ? 'bg-brand-dark text-white' : 'bg-white text-brand-dark hover:bg-brand-gray'}`}
+              title="历史版本 / Rollback"
+            >
+              <History size={18} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {showHistory && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden bg-brand-gray/30 rounded-2xl border border-dashed border-brand-border"
+          >
+            <div className="p-4 space-y-4">
+              <div className="text-[10px] font-black uppercase tracking-widest text-brand-dark/30 mb-2">历史记录 (保留近5次)</div>
+              <div className="grid grid-cols-5 gap-2">
+                {history.map((url, i) => (
+                  <div key={i} className="group relative aspect-square rounded-lg overflow-hidden border border-brand-border bg-white cursor-pointer" onClick={() => rollback(url)}>
+                    <img src={url} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-brand-blue/20 transition-opacity">
+                      <RefreshCw size={14} className="text-brand-blue" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -198,6 +291,7 @@ export default function Admin() {
   const [syncError, setSyncError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [rawSampleCount, setRawSampleCount] = useState<number | null>(null);
+  const [selectedLead, setSelectedLead] = useState<SampleRequest | null>(null);
 
   const playNotificationSound = () => {
     try {
@@ -537,10 +631,45 @@ export default function Admin() {
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-6 mt-16 flex flex-col gap-10">
-        
+      <div className="max-w-[1600px] mx-auto px-6 mt-16 flex flex-col lg:flex-row gap-12">
+        {/* Sticky Sidebar Navigation */}
+        <div className="lg:w-64 shrink-0">
+          <div className="sticky top-32 space-y-2">
+            {[
+              { id: 'leads', icon: <Users size={16} />, label: '客户线索' },
+              { id: 'news', icon: <Newspaper size={16} />, label: '资讯发布' },
+              { id: 'diagnostics', icon: <Activity size={16} />, label: '系统监控' },
+              { id: 'products', icon: <Package size={16} />, label: '产品中心' },
+              { id: 'global', icon: <Settings size={16} />, label: '全局配置' },
+              { id: 'about-us', icon: <Factory size={16} />, label: '关于与工厂' },
+              { id: 'market-assets', icon: <Globe size={16} />, label: '页面图集' },
+              { id: 'logs', icon: <Clock size={16} />, label: '全量资产' },
+            ].map((nav) => (
+              <button
+                key={nav.id}
+                onClick={() => document.getElementById(nav.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                className="w-full flex items-center gap-3 px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-brand-dark/40 hover:text-brand-blue hover:bg-brand-blue/5 transition-all text-left group"
+              >
+                <span className="group-hover:scale-110 transition-transform">{nav.icon}</span>
+                {nav.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="flex-1 space-y-24 min-w-0">
+          
+          <div id="leads">
+            <InquiryDashboard requests={sampleRequests} />
+          </div>
+
+          <div id="news">
+            <NewsManagement />
+          </div>
+
         {/* ---- AI Health & Diagnostics Section ---- */}
-        <div className="bg-brand-dark p-10 rounded-[40px] shadow-2xl relative overflow-hidden group">
+          <div id="diagnostics" className="bg-brand-dark p-10 rounded-[40px] shadow-2xl relative overflow-hidden group">
           {/* Animated Background Effect */}
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/20 rounded-full blur-[120px] -z-0 opacity-50 group-hover:scale-110 transition-transform duration-[3s]"></div>
           
@@ -864,6 +993,12 @@ export default function Admin() {
                          </td>
                          <td className="px-8 py-6 text-right">
                             <div className="flex items-center justify-end gap-3">
+                               <button 
+                                 onClick={() => setSelectedLead(req)}
+                                 className="px-4 py-2 bg-brand-blue/5 text-brand-blue text-[10px] font-black uppercase tracking-widest rounded-xl border border-brand-blue/10 hover:bg-brand-blue hover:text-white transition-all shadow-sm"
+                               >
+                                 查看详情
+                               </button>
                                <select 
                                  value={req.status}
                                  onChange={async (e) => {
@@ -912,7 +1047,9 @@ export default function Admin() {
           </div>
         </div>
 
-        <ProductManagement />
+        <div id="products">
+          <ProductManagement />
+        </div>
 
         <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border mb-12">
           <div className="flex items-center gap-4 mb-12">
@@ -945,8 +1082,13 @@ export default function Admin() {
                   {user && <TextUpdateField assetKey="company_phone" label="公司热线" user={user} placeholder="400-XXX-XXXX" />}
                   {user && <TextUpdateField assetKey="company_email" label="联系邮箱" user={user} placeholder="info@example.com" />}
                 </div>
-                {user && <TextUpdateField assetKey="company_address" label="总部地址" user={user} placeholder="公司详细地理位置" />}
-                {user && <TextUpdateField assetKey="company_linkedin" label="LinkedIn 链接" user={user} placeholder="LinkedIn URL" />}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-brand-border">
+                  {user && <TextUpdateField assetKey="company_factory_address" label="工厂地址" user={user} placeholder="工厂详细地理位置" />}
+                  {user && <TextUpdateField assetKey="company_rd_address" label="研发中心地址" user={user} placeholder="研发中心详细地理位置" />}
+                </div>
+                <div className="mt-6 pt-6 border-t border-brand-border">
+                  {user && <TextUpdateField assetKey="company_linkedin" label="LinkedIn 链接" user={user} placeholder="LinkedIn URL" />}
+                </div>
                 <div className="mt-8 border-t border-brand-border pt-8">
                   <h4 className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">微信公众号二维码</h4>
                   {user && <ImageUploadButton assetKey="company_wechat_qr" label="上传微信二维码" user={user} />}
@@ -1047,8 +1189,11 @@ export default function Admin() {
           <div className="space-y-12">
             {/* Home Hero */}
             <div>
-              <h3 className="text-lg font-black text-brand-dark mb-4">1. 首页顶部巨幅背景图</h3>
-              {user && <ImageUploadButton assetKey="home_hero_bg" label="上传首页背景 (建议横图 1920x1080)" user={user} />}
+              <h3 className="text-lg font-black text-brand-dark mb-4">1. 首页顶部巨幅背景图与企业宣传片</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                {user && <ImageUploadButton assetKey="home_hero_bg" label="上传首页背景 (建议横图 1920x1080)" user={user} />}
+                {user && <TextUpdateField assetKey="home_promo_video" label="企业片直链或B站/腾讯/YouTube嵌入代码" user={user} placeholder="//player.bilibili.com/..." />}
+              </div>
               
               <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
@@ -1100,47 +1245,68 @@ export default function Admin() {
         </div>
 
         {/* ---- About, Products & Divisions Actions ---- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div id="about-us" className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
           <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
             <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🏢 关于我们 (About Us)</h2>
-            <div className="space-y-8">
+            <div className="space-y-12">
               <div>
-                <h3 className="text-sm font-black text-brand-dark mb-2">关于页面顶部横幅图</h3>
-                {user && <ImageUploadButton assetKey="about_hero_bg" label="上传关于页背景图" user={user} />}
+                <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
+                   通用背景 / Backgrounds
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {user && <ImageUploadButton assetKey="about_hero_bg" label="关于页顶部 Banner" user={user} />}
+                  {user && <ImageUploadButton assetKey="rd_hero_bg" label="研发页顶部 Banner" user={user} />}
+                </div>
               </div>
-              <div className="border-t border-brand-border pt-6">
-                <h3 className="text-sm font-black text-brand-dark mb-2">智能制造生产基地配图</h3>
-                {user && <ImageUploadButton assetKey="about_strength_img" label="上传工厂实景图" user={user} />}
+
+              <div className="border-t border-brand-border pt-8">
+                <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
+                  <Factory size={16} className="text-brand-blue" /> 智能制造基地 (Manufacturing Base)
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {user && <ImageUploadButton assetKey="about_strength_img" label="主工厂背景 (大)" user={user} />}
+                  {user && <ImageUploadButton assetKey="mfg_gallery_1" label="实况画廊 1" user={user} />}
+                  {user && <ImageUploadButton assetKey="mfg_gallery_2" label="实况画廊 2" user={user} />}
+                  {user && <ImageUploadButton assetKey="mfg_gallery_3" label="实况画廊 3" user={user} />}
+                  {user && <ImageUploadButton assetKey="mfg_gallery_4" label="实况画廊 4" user={user} />}
+                </div>
+              </div>
+
+              <div className="border-t border-brand-border pt-8">
+                <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
+                  <Award size={16} className="text-brand-blue" /> 权威背书与知识产权 (Endorsement)
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {user && <ImageUploadButton assetKey="honor_img_1" label="证书/专利 1" user={user} />}
+                  {user && <ImageUploadButton assetKey="honor_img_2" label="证书/专利 2" user={user} />}
+                  {user && <ImageUploadButton assetKey="honor_img_3" label="证书/专利 3" user={user} />}
+                  {user && <ImageUploadButton assetKey="honor_img_4" label="证书/专利 4" user={user} />}
+                  {user && <ImageUploadButton assetKey="honor_img_5" label="证书/专利 5" user={user} />}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
-            <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🧪 产品中心 (Products)</h2>
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-sm font-black text-brand-dark mb-2">产品页面顶部横幅图</h3>
-                {user && <ImageUploadButton assetKey="product_hero_bg" label="上传产品页背景图" user={user} />}
+          <div className="space-y-10">
+            <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
+              <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🧪 产品中心 (Products)</h2>
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-sm font-black text-brand-dark mb-2">产品页面顶部横幅图</h3>
+                  {user && <ImageUploadButton assetKey="product_hero_bg" label="上传产品页背景图" user={user} />}
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
-            <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🏭 事业部 (Divisions)</h2>
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-sm font-black text-brand-dark mb-2">事业部页顶部横幅图</h3>
-                {user && <ImageUploadButton assetKey="divisions_hero_bg" label="上传顶部大图" user={user} />}
-              </div>
-              <div className="border-t border-brand-border pt-6">
-                <h3 className="text-sm font-black text-brand-dark mb-2">内容页 - 六大事业部图</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {user && <ImageUploadButton assetKey="division_inner_leather" label="皮革纺织" user={user} />}
-                  {user && <ImageUploadButton assetKey="division_inner_resin" label="水性树脂" user={user} />}
-                  {user && <ImageUploadButton assetKey="division_inner_auto" label="汽车内饰" user={user} />}
-                  {user && <ImageUploadButton assetKey="division_inner_uv" label="水性UV" user={user} />}
-                  {user && <ImageUploadButton assetKey="division_inner_battery" label="动力电池" user={user} />}
-                  {user && <ImageUploadButton assetKey="division_inner_custom" label="定制服务" user={user} />}
+            
+            <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
+              <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🏭 事业部 (Divisions)</h2>
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-sm font-black text-brand-dark mb-2">各个事业部视觉背景</h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    {user && <ImageUploadButton assetKey="div_plastic_bg" label="塑胶事业部背景" user={user} />}
+                    {user && <ImageUploadButton assetKey="div_ink_bg" label="油墨事业部背景" user={user} />}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1148,7 +1314,7 @@ export default function Admin() {
         </div>
 
         {/* ---- Other Inner Pages Actions ---- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div id="market-assets" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
             <h2 className="text-xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-3">🌍 市场应用 (Market App)</h2>
             <div className="space-y-6">
@@ -1223,7 +1389,7 @@ export default function Admin() {
         </div>
 
         {/* List Column (Bottom now instead of side by side) */}
-        <div className="mt-12">
+        <div id="logs" className="mt-12">
           <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border min-h-[500px]">
              <h2 className="text-xl font-black text-brand-dark mb-8 uppercase tracking-widest text-brand-dark/40">开发者高级调试: 资产列表 ({assets.length})</h2>
              
@@ -1282,6 +1448,28 @@ export default function Admin() {
           </div>
         </div>
       </div>
+      
+      <AnimatePresence>
+        {selectedLead && (
+          <LeadDetailsModal 
+            lead={selectedLead} 
+            onClose={() => setSelectedLead(null)} 
+            onUpdateStatus={async (id, status) => {
+              try {
+                await updateDoc(doc(db, 'sample_requests', id), { status });
+                setSelectedLead(prev => prev ? { ...prev, status: status as any } : null);
+              } catch (err) { console.error(err); }
+            }}
+            onDelete={async (id) => {
+              try {
+                await deleteDoc(doc(db, 'sample_requests', id));
+                setSelectedLead(null);
+              } catch (err) { console.error(err); }
+            }}
+          />
+        )}
+      </AnimatePresence>
+    </div>
     </div>
   );
 }

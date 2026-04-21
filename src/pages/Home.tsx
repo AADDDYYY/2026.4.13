@@ -24,6 +24,7 @@ const Hero = () => {
               src={heroBgImage}
               alt="Advanced Materials" 
               className="w-full h-full object-cover opacity-[0.15]"
+              referrerPolicy="no-referrer"
             />
           </div>
           
@@ -139,6 +140,56 @@ const ValuePillars = () => {
               </div>
             </motion.div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CorporateVideo = () => {
+  const { t } = useTranslation();
+  const { value: rawPromoVideoUrl } = useCMSAsset('home_promo_video', 'https://14342357.s21v.faiusr.com/58/9/ABUIABA6GAAg1fuzzgYo0KbyTw.mp4');
+
+  let promoVideoUrl = rawPromoVideoUrl;
+  if (promoVideoUrl === '/promo.mp4' || !promoVideoUrl || promoVideoUrl.trim() === '') {
+    promoVideoUrl = 'https://14342357.s21v.faiusr.com/58/9/ABUIABA6GAAg1fuzzgYo0KbyTw.mp4';
+  }
+
+  if (!promoVideoUrl) return null;
+
+  return (
+    <section className="py-24 bg-white px-6 md:px-20 border-t border-brand-border">
+      <div className="max-w-[1800px] mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
+          <div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-6 block">Corporate Video</span>
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-brand-dark tracking-tighter">
+              感知西顿<br />
+              <span className="text-brand-blue">Vision & Reality</span>
+            </h2>
+          </div>
+        </div>
+        
+        <div className="relative w-full aspect-video rounded-[40px] md:rounded-[60px] overflow-hidden bg-brand-dark shadow-2xl border border-brand-border group">
+          {promoVideoUrl.includes('bilibili.com') || promoVideoUrl.includes('youtube.com') || promoVideoUrl.includes('v.qq.com') || promoVideoUrl.includes('<iframe') ? (
+            <iframe 
+              src={promoVideoUrl.replace(/<iframe.*?src="(.*?)".*?><\/iframe>/, '$1')} 
+              className="w-full h-full object-cover"
+              allowFullScreen
+              allow="autoplay; fullscreen"
+            ></iframe>
+          ) : (
+            <video 
+              src={promoVideoUrl} 
+              controls 
+              playsInline
+              preload="metadata"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover"
+            >
+              您的浏览器不支持视频播放。
+            </video>
+          )}
         </div>
       </div>
     </section>
@@ -334,6 +385,7 @@ export default function Home() {
       <MarketSectors />
       <GlobalPresence />
       <ValuePillars />
+      <CorporateVideo />
       
       {/* Final CTA */}
       <section className="py-64 bg-white px-6 md:px-20 text-center border-t border-brand-border">

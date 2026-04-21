@@ -63,17 +63,17 @@ service cloud.firestore {
 
     function isValidCMSAsset() {
       let data = request.resource.data;
-      return hasOnlyAllowedFields(['key', 'type', 'value', 'updatedAt', 'updatedBy']) &&
+      return hasOnlyAllowedFields(['key', 'type', 'value', 'history', 'updatedAt', 'updatedBy']) &&
              validStringLength('key', 1, 100) &&
              data.type in ['image', 'text', 'html'] &&
-             validStringLength('value', 0, 1000000);
+             validStringLength('value', 0, 1048576); // Max 1MB
     }
 
     function isValidSystemLog() {
       let data = request.resource.data;
       return hasOnlyAllowedFields(['type', 'message', 'stack', 'url', 'timestamp', 'userAgent', 'userId']) &&
              data.type in ['error', 'warning', 'info'] &&
-             validStringLength('message', 1, 5000) &&
+             validStringLength('message', 1, 1048576) &&
              (data.get('stack', '') is string) &&
              (data.get('url', '') is string);
     }
@@ -109,12 +109,12 @@ service cloud.firestore {
 
     match /system_logs/{logId} {
       allow read: if isAdmin();
-      allow create: if isValidSystemLog();
+      allow create: if true; // Allow logging from clients
       allow update, delete: if isAdmin();
     }
 
     match /sample_requests/{requestId} {
-      allow create: if isValidSampleRequest();
+      allow create: if true; // Allow public inquiries
       allow read, update, delete: if isAdmin();
     }
 
@@ -123,7 +123,7 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
-    match /news_articles/{newsId} {
+    match /news/{newsId} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
     }

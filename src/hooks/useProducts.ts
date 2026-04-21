@@ -44,5 +44,9 @@ export function useProducts() {
     return Array.from(productMap.values()).sort((a, b) => a.name.localeCompare(b.name));
   }, [cloudProducts]);
 
-  return { products: allProducts, cloudProducts, loading, error };
+  const publishedProducts = useMemo(() => {
+    return allProducts.filter(p => p.status !== 'draft');
+  }, [allProducts]);
+
+  return { products: allProducts, publishedProducts, cloudProducts, loading, error };
 }

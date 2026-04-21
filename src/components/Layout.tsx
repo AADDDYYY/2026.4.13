@@ -415,7 +415,8 @@ export const Footer = () => {
   const { t } = useTranslation();
   const { value: companyPhone } = useCMSAsset('company_phone', '400 0069 655');
   const { value: companyEmail } = useCMSAsset('company_email', 'info@seatonchem.com');
-  const { value: companyAddress } = useCMSAsset('company_address', '广东省东莞市松山湖高新技术产业开发区');
+  const { value: companyFactoryAddress } = useCMSAsset('company_factory_address', '广东省韶关市南雄高新区平安三路西1号');
+  const { value: companyRDAddress } = useCMSAsset('company_rd_address', '广州市番禺石楼镇国康大道岳溪路段罗岗工业区3号');
   const { value: companyLinkedin } = useCMSAsset('company_linkedin', '#');
   const { value: companyWechatQR } = useCMSAsset('company_wechat_qr', '');
   
@@ -462,6 +463,7 @@ export const Footer = () => {
               <li><Link to="/innovation" className="hover:text-brand-blue transition-colors">{t("nav.innovation")}</Link></li>
               <li><Link to="/rd" className="hover:text-brand-blue transition-colors">{t("nav.rd")}</Link></li>
               <li><Link to="/sustainability" className="hover:text-brand-blue transition-colors">{t("nav.sustainability")}</Link></li>
+              <li><Link to="/contact" className="hover:text-brand-blue transition-colors">{t("nav.contact")}</Link></li>
             </ul>
           </div>
 
@@ -477,7 +479,7 @@ export const Footer = () => {
 
           <div>
             <h4 className="text-[11px] font-black mb-10 text-brand-dark/30 tracking-wider uppercase">{t("nav.contact")}</h4>
-            <ul className="space-y-5 text-brand-dark/70 text-[13px] font-bold">
+            <ul className="space-y-6 text-brand-dark/70 text-[13px] font-bold">
               <li className="flex items-center gap-3">
                 <Activity size={16} className="text-brand-blue" />
                 <a href={`tel:${companyPhone}`} className="hover:text-brand-blue transition-colors">{companyPhone}</a>
@@ -488,7 +490,16 @@ export const Footer = () => {
               </li>
               <li className="flex items-start gap-3">
                 <Globe size={16} className="text-brand-blue mt-1 shrink-0" />
-                <span className="leading-relaxed">{companyAddress}</span>
+                <div className="flex flex-col gap-5">
+                  <div className="flex flex-col">
+                    <span className="text-[9px] uppercase font-black tracking-widest text-brand-dark/30 mb-1">工厂地址 / Factory</span>
+                    <span className="leading-relaxed">{companyFactoryAddress}</span>
+                  </div>
+                  <div className="flex flex-col pt-4 border-t border-brand-border/50">
+                    <span className="text-[9px] uppercase font-black tracking-widest text-brand-dark/30 mb-1">研发应用中心 / R&D Center</span>
+                    <span className="leading-relaxed">{companyRDAddress}</span>
+                  </div>
+                </div>
               </li>
             </ul>
           </div>

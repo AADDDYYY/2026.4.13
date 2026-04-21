@@ -44,7 +44,7 @@ export default function Products() {
     { id: "leather", title: t("industries.leather"), value: "leather", icon: <Scissors size={14} /> }
   ];
 
-  const { products, loading } = useProducts();
+  const { publishedProducts: products, loading } = useProducts();
 
   // Update filters when URL changes
   useEffect(() => {

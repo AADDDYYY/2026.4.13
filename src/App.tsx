@@ -14,6 +14,7 @@ import Sustainability from "./pages/Sustainability";
 import Divisions from "./pages/Divisions";
 import Contact from "./pages/Contact";
 import News from "./pages/News";
+import NewsDetail from "./pages/NewsDetail";
 import ProductDetail from "./pages/ProductDetail";
 import Innovation from "./pages/Innovation";
 import MarketApplications from "./pages/MarketApplications";
@@ -121,6 +122,7 @@ export default function App() {
             <Route path="/sustainability" element={<Sustainability />} />
             <Route path="/divisions" element={<Divisions />} />
             <Route path="/news" element={<News />} />
+            <Route path="/news/:id" element={<NewsDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/admin" element={<Admin />} />

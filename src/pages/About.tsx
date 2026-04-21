@@ -10,6 +10,19 @@ export default function About() {
   const { value: aboutHeroBg } = useCMSAsset('about_hero_bg', '');
   const { value: aboutStrengthImg } = useCMSAsset('about_strength_img', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000');
 
+  // Honors & Patents CMS Assets
+  const { value: honorImg1 } = useCMSAsset('honor_img_1', 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?auto=format&fit=crop&q=80&w=400');
+  const { value: honorImg2 } = useCMSAsset('honor_img_2', 'https://images.unsplash.com/photo-1606326666490-45757474e788?auto=format&fit=crop&q=80&w=400');
+  const { value: honorImg3 } = useCMSAsset('honor_img_3', 'https://images.unsplash.com/photo-1635350736475-c8cef4b21906?auto=format&fit=crop&q=80&w=400');
+  const { value: honorImg4 } = useCMSAsset('honor_img_4', 'https://images.unsplash.com/photo-1582733775062-eb92170f5394?auto=format&fit=crop&q=80&w=400');
+  const { value: honorImg5 } = useCMSAsset('honor_img_5', 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=400');
+
+  // Manufacturing Gallery CMS Assets
+  const { value: mfgGallery1 } = useCMSAsset('mfg_gallery_1', 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200');
+  const { value: mfgGallery2 } = useCMSAsset('mfg_gallery_2', 'https://images.unsplash.com/photo-1565608438257-fac3c27beb36?auto=format&fit=crop&q=80&w=800');
+  const { value: mfgGallery3 } = useCMSAsset('mfg_gallery_3', 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800');
+  const { value: mfgGallery4 } = useCMSAsset('mfg_gallery_4', 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=1200');
+
   const stats = [
     { label: t("about.stats.base"), value: "37,200", unit: t("about.stats.unit_m2") },
     { label: t("about.stats.capacity"), value: "60,000", unit: t("about.stats.unit_tons") },
@@ -50,7 +63,7 @@ export default function About() {
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {aboutHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
-            <img src={aboutHeroBg} alt="About Hero" className="w-full h-full object-cover" />
+            <img src={aboutHeroBg} alt="About Hero" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
           </div>
         ) : (
@@ -220,26 +233,25 @@ export default function About() {
           <div className="relative">
             <div className="flex gap-8 overflow-x-auto pb-12 custom-scrollbar snap-x">
               {[
-                { title: t("about.honors.giant"), type: "荣誉证书", img: "https://images.unsplash.com/photo-1589330694653-ded6df03f754?auto=format&fit=crop&q=80&w=400" },
-                { title: t("about.honors.phd"), type: "政府挂牌", img: "https://images.unsplash.com/photo-1606326666490-45757474e788?auto=format&fit=crop&q=80&w=400" },
-                { title: "高新技术企业证书", type: "资质认定", img: "https://images.unsplash.com/photo-1635350736475-c8cef4b21906?auto=format&fit=crop&q=80&w=400" },
-                { title: "发明专利：一种水性树脂合成工艺", type: "专利授权", img: "https://images.unsplash.com/photo-1582733775062-eb92170f5394?auto=format&fit=crop&q=80&w=400" },
-                { title: "发明专利：高性能聚氨酯分散体", type: "专利授权", img: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=400" },
+                { title: t("about.honors.giant"), type: "荣誉证书", img: honorImg1 },
+                { title: t("about.honors.phd"), type: "政府挂牌", img: honorImg2 },
+                { title: "高新技术企业证书", type: "资质认定", img: honorImg3 },
+                { title: "发明专利：一种水性树脂合成工艺", type: "专利授权", img: honorImg4 },
+                { title: "发明专利：高性能聚氨酯分散体", type: "专利授权", img: honorImg5 },
               ].map((item, idx) => (
                 <motion.div 
                   key={idx}
                   whileHover={{ y: -10 }}
                   className="min-w-[300px] md:min-w-[400px] snap-start"
                 >
-                  <div className="aspect-[3/4] rounded-[30px] overflow-hidden border border-white/5 bg-white/[0.02] p-4 mb-6 group">
+                  <div className="aspect-[3/4] rounded-[30px] overflow-hidden border border-brand-border bg-white p-4 mb-6 group relative shadow-md">
                     <div className="w-full h-full rounded-[20px] overflow-hidden relative">
                       <img 
                         src={item.img} 
                         alt={item.title} 
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100"
+                        className="w-full h-full object-contain transition-all duration-700 scale-100 group-hover:scale-110"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-60"></div>
                     </div>
                   </div>
                   <div className="px-4">
@@ -276,7 +288,7 @@ export default function About() {
           <div className="md:col-span-8">
             <div className="aspect-[16/9] rounded-[60px] overflow-hidden shadow-2xl group">
               <img 
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200" 
+                src={mfgGallery1} 
                 alt="Automated Production Line" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
                 referrerPolicy="no-referrer"
@@ -286,7 +298,7 @@ export default function About() {
           <div className="md:col-span-4">
             <div className="aspect-square rounded-[60px] overflow-hidden shadow-2xl group">
               <img 
-                src="https://images.unsplash.com/photo-1565608438257-fac3c27beb36?auto=format&fit=crop&q=80&w=800" 
+                src={mfgGallery2} 
                 alt="Quality Control" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
                 referrerPolicy="no-referrer"
@@ -296,7 +308,7 @@ export default function About() {
           <div className="md:col-span-4">
             <div className="aspect-square rounded-[60px] overflow-hidden shadow-2xl group">
               <img 
-                src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800" 
+                src={mfgGallery3} 
                 alt="R&D Lab" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
                 referrerPolicy="no-referrer"
@@ -306,7 +318,7 @@ export default function About() {
           <div className="md:col-span-8">
             <div className="aspect-[16/9] rounded-[60px] overflow-hidden shadow-2xl group">
               <img 
-                src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=1200" 
+                src={mfgGallery4} 
                 alt="Warehouse & Logistics" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
                 referrerPolicy="no-referrer"

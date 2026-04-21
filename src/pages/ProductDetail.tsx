@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "motion/react";
 import { useProducts } from "../hooks/useProducts";
-import { ArrowLeft, CheckCircle2, FlaskConical, Activity, Thermometer, Droplets, ShieldCheck, BarChart3, FlaskRound } from "lucide-react";
+import { ArrowLeft, CheckCircle2, FlaskConical, Activity, Thermometer, Droplets, ShieldCheck, BarChart3, FlaskRound, FileText } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { SampleRequestModal } from "../components/SampleRequestModal";
 import { 
@@ -230,13 +230,37 @@ const ProductDetail = () => {
                 <FlaskRound size={24} className="group-hover:scale-110 transition-transform" />
               </button>
               
-              <Link 
-                to={`/contact?type=tds&product=${encodeURIComponent(product.name)}`}
-                className="w-full py-10 border-2 border-brand-border text-brand-dark rounded-3xl font-black hover:bg-brand-gray transition-all flex items-center justify-center gap-6 group uppercase tracking-[0.3em] text-[12px]"
-              >
-                索取技术说明书 (TDS)
-                <ArrowLeft size={24} className="rotate-180 group-hover:translate-x-4 transition-transform" />
-              </Link>
+              {product.tdsUrl ? (
+                <a 
+                  href={product.tdsUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full py-10 border-2 border-brand-blue text-brand-blue rounded-3xl font-black hover:bg-brand-blue hover:text-white transition-all flex items-center justify-center gap-6 group uppercase tracking-[0.3em] text-[12px]"
+                >
+                  下载技术说明书 (TDS)
+                  <FileText size={24} className="group-hover:scale-110 transition-transform" />
+                </a>
+              ) : (
+                <Link 
+                  to={`/contact?type=tds&product=${encodeURIComponent(product.name)}`}
+                  className="w-full py-10 border-2 border-brand-border text-brand-dark rounded-3xl font-black hover:bg-brand-gray transition-all flex items-center justify-center gap-6 group uppercase tracking-[0.3em] text-[12px]"
+                >
+                  索取技术说明书 (TDS)
+                  <ArrowLeft size={24} className="rotate-180 group-hover:translate-x-4 transition-transform" />
+                </Link>
+              )}
+
+              {product.sdsUrl && (
+                <a 
+                  href={product.sdsUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full py-10 border-2 border-brand-border text-brand-dark rounded-3xl font-black hover:bg-brand-gray transition-all flex items-center justify-center gap-6 group uppercase tracking-[0.3em] text-[12px]"
+                >
+                  下载安全说明书 (SDS)
+                  <ShieldCheck size={24} />
+                </a>
+              )}
             </div>
           </motion.div>
         </div>

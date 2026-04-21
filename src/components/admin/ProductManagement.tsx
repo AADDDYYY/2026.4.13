@@ -1,42 +1,83 @@
 import { useState } from 'react';
 import { db } from '../../firebase';
-import { collection, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { useProducts } from '../../hooks/useProducts';
-import { Trash2, Edit2, Plus, Database, FlaskConical, LayoutGrid, Layers, RefreshCw } from 'lucide-react';
+import { Trash2, Edit2, Plus, Database, FlaskConical, LayoutGrid, Layers, RefreshCw, AlertCircle, Eye, EyeOff, Globe } from 'lucide-react';
 import { products as staticProducts, Product } from '../../data/products';
+import ProductFormModal from './ProductFormModal';
 
 export default function ProductManagement() {
   const { products, cloudProducts, loading } = useProducts();
   const [isSyncing, setIsSyncing] = useState(false);
+  const [showSyncConfirm, setShowSyncConfirm] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  const handleSyncStaticToCloud = async () => {
-    if (!confirm('这将会把系统中所有内置的静态产品转移到云端数据库中进行管理。如果云端已经存在同ID产品，将被覆盖。确定继续吗？')) {
+  const toggleStatus = async (product: Product) => {
+    if (!cloudProducts.some(p => p.id === product.id)) {
+      alert('内置产品无法直接切换状态，请先“同步至云端”进行接管。');
       return;
     }
-    
+    const newStatus = product.status === 'published' ? 'draft' : 'published';
+    try {
+      await updateDoc(doc(db, 'products', product.id), {
+        status: newStatus,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (e) {
+      console.error(e);
+      alert('切换状态失败');
+    }
+  };
+
+  const handleSyncStaticToCloud = async () => {
     setIsSyncing(true);
+    setShowSyncConfirm(false);
     try {
       let count = 0;
       for (const p of staticProducts) {
-        await setDoc(doc(db, 'products', p.id), p);
+        // Use setDoc to copy static to cloud
+        await setDoc(doc(db, 'products', p.id), {
+          ...p,
+          managedBy: 'cloud',
+          updatedAt: new Date().toISOString()
+        });
         count++;
       }
-      alert(`成功同步 ${count} 款产品到云端数据库！您现在可以不改代码直接管理所有产品了。`);
+      alert(`成功同步 ${count} 款产品！`);
     } catch (e) {
       console.error(e);
-      alert('同步失败: ' + (e as Error).message);
+      alert('同步失败 (核对权限): ' + (e as Error).message);
     } finally {
       setIsSyncing(false);
     }
   };
 
+  const handleSaveProduct = async (productData: Product) => {
+    try {
+      await setDoc(doc(db, 'products', productData.id), {
+        ...productData,
+        managedBy: 'cloud',
+        updatedAt: new Date().toISOString()
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product);
+    setIsModalOpen(true);
+  };
+
   const handleDelete = async (id: string) => {
-    if (confirm(`警告：这将永久删除该产品 (ID: ${id})。确定吗？`)) {
-      try {
-        await deleteDoc(doc(db, 'products', id));
-      } catch (e) {
-        alert('删除失败: ' + (e as Error).message);
-      }
+    // We already use states for modal, let's just make deletion simple for now 
+    // or add a 'confirmingDeleteId' state if we want to be safe.
+    try {
+      await deleteDoc(doc(db, 'products', id));
+    } catch (e) {
+      alert('删除失败: ' + (e as Error).message);
     }
   };
 
@@ -46,7 +87,7 @@ export default function ProductManagement() {
   };
 
   return (
-    <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border mb-12">
+    <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border mb-12 relative">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-8">
         <div className="flex items-center gap-4">
           <div className="w-2 h-8 bg-brand-blue rounded-full"></div>
@@ -57,22 +98,49 @@ export default function ProductManagement() {
         </div>
         
         <div className="flex items-center gap-4">
+          {!showSyncConfirm ? (
+            <button 
+              onClick={() => setShowSyncConfirm(true)}
+              disabled={isSyncing}
+              className="px-6 py-3 border-2 border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white text-[10px] font-black uppercase tracking-widest rounded-full transition-all flex items-center gap-2"
+            >
+              <RefreshCw size={14} className={isSyncing ? "animate-spin" : ""} />
+              {isSyncing ? '同步中...' : '同步至云端'}
+            </button>
+          ) : (
+            <div className="flex items-center gap-2 bg-brand-blue/10 p-1 rounded-full border border-brand-blue/20">
+               <button 
+                onClick={handleSyncStaticToCloud}
+                className="px-4 py-2 bg-brand-blue text-white text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-brand-dark transition-all"
+              >
+                确认导入
+              </button>
+              <button 
+                onClick={() => setShowSyncConfirm(false)}
+                className="px-4 py-2 text-brand-dark/40 text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-white transition-all"
+              >
+                取消
+              </button>
+            </div>
+          )}
           <button 
-            onClick={handleSyncStaticToCloud}
-            disabled={isSyncing}
-            className="px-6 py-3 border-2 border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white text-[10px] font-black uppercase tracking-widest rounded-full transition-all flex items-center gap-2"
-          >
-            <RefreshCw size={14} className={isSyncing ? "animate-spin" : ""} />
-            {isSyncing ? '同步中...' : '一键将内置产品导入云端库'}
-          </button>
-          <button 
-            onClick={() => alert("完整表单开发中，可以直接使用现有的云端覆盖功能测试。")}
+            onClick={() => {
+              setEditingProduct(null);
+              setIsModalOpen(true);
+            }}
             className="px-6 py-3 bg-brand-blue text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-brand-dark transition-all flex items-center gap-2 shadow-lg shadow-brand-blue/20"
           >
             <Plus size={14} /> 新增产品
           </button>
         </div>
       </div>
+
+      <ProductFormModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveProduct}
+        initialProduct={editingProduct}
+      />
 
       {loading ? (
         <div className="text-center py-20 text-brand-dark/40">Loading products...</div>
@@ -82,62 +150,86 @@ export default function ProductManagement() {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-white border-b border-brand-border text-brand-dark/30 text-[9px] font-black uppercase tracking-widest">
-                  <th className="px-6 py-5 pl-8">数据源</th>
-                  <th className="px-6 py-5">产品型号 / ID</th>
-                  <th className="px-6 py-5">类别 (Category)</th>
-                  <th className="px-6 py-5">事业部</th>
-                  <th className="px-6 py-5 text-right pr-8">操作</th>
+                  <th className="px-6 py-5 pl-8">产品信息 (Product Info)</th>
+                  <th className="px-6 py-5">类别与应用</th>
+                  <th className="px-6 py-5">事业部覆盖</th>
+                  <th className="px-6 py-5">上架状态</th>
+                  <th className="px-6 py-5 text-right pr-8">快捷操作</th>
                 </tr>
               </thead>
               <tbody className="text-brand-dark text-[13px] font-medium divide-y divide-brand-border/50">
                 {products.map(product => {
                   const isCloud = isCloudProduct(product.id);
+                  const isPublished = product.status !== 'draft';
+                  
                   return (
-                    <tr key={product.id} className="hover:bg-white transition-colors group">
+                    <tr key={product.id} className={`hover:bg-white transition-colors group ${!isPublished ? 'opacity-60 bg-brand-gray/20' : ''}`}>
                       <td className="px-6 py-4 pl-8">
-                        {isCloud ? (
-                          <div className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md w-fit border border-emerald-100">
-                            <Database size={10} />
-                            <span className="text-[9px] font-black tracking-widest uppercase">云端 (Cloud)</span>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl overflow-hidden border border-brand-border bg-white shrink-0">
+                            <img src={product.image} alt="" className="w-full h-full object-cover" />
                           </div>
-                        ) : (
-                          <div className="flex items-center gap-1.5 text-brand-dark/40 bg-brand-dark/5 px-2.5 py-1 rounded-md w-fit">
-                            <Layers size={10} />
-                            <span className="text-[9px] font-black tracking-widest uppercase">内置代码</span>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-black text-brand-dark leading-none">{product.name}</span>
+                              {isCloud ? (
+                                <Database size={10} className="text-emerald-500" />
+                              ) : (
+                                <Layers size={10} className="text-brand-dark/20" />
+                              )}
+                            </div>
+                            <div className="text-[10px] text-brand-dark/30 font-mono mt-1 uppercase tracking-tighter">{product.id}</div>
                           </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="font-black text-brand-dark">{product.name}</div>
-                        <div className="text-[10px] text-brand-dark/40 font-mono mt-0.5">{product.id}</div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <FlaskConical size={14} className="text-brand-dark/20" />
-                          <span>{product.type}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex flex-wrap gap-2">
-                          {product.divisions.map(d => (
-                            <span key={d} className="text-[9px] bg-brand-blue/5 text-brand-blue border border-brand-blue/10 px-2 py-0.5 rounded font-black tracking-widest uppercase truncate max-w-[150px]" title={d}>
-                              {d}
-                            </span>
-                          ))}
+                        <div className="flex flex-col">
+                          <span className="text-[11px] font-bold text-brand-dark/80">{product.type}</span>
+                          <span className="text-[9px] text-brand-dark/30 uppercase font-black">{product.category}</span>
                         </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] bg-brand-blue/5 text-brand-blue border border-brand-blue/10 px-2 py-0.5 rounded font-black truncate max-w-[120px]">
+                            {product.divisions[0]?.replace('树脂事业部', '')}
+                          </span>
+                          {product.divisions.length > 1 && (
+                            <span className="text-[9px] text-brand-dark/30 font-black">+{product.divisions.length - 1}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => toggleStatus(product)}
+                          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all ${
+                            isPublished 
+                              ? 'bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100' 
+                              : 'bg-brand-dark text-white hover:bg-black'
+                          }`}
+                          title={isPublished ? '点击下架' : '点击上架'}
+                        >
+                          {isPublished ? <Eye size={12} /> : <EyeOff size={12} />}
+                          <span className="text-[9px] font-black uppercase tracking-tighter">
+                            {isPublished ? '上架' : '下架'}
+                          </span>
+                        </button>
                       </td>
                       <td className="px-6 py-4 pr-8 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          {/* <button className="w-8 h-8 flex items-center justify-center text-brand-dark/40 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-colors">
-                            <Edit2 size={14} />
-                          </button> */}
+                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button 
+                            onClick={() => handleEdit(product)}
+                            className="w-8 h-8 flex items-center justify-center text-brand-dark/40 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-colors"
+                            title="编辑"
+                          >
+                            <Edit2 size={12} />
+                          </button>
                           {isCloud && (
                             <button 
                               onClick={() => handleDelete(product.id)}
                               className="w-8 h-8 flex items-center justify-center text-brand-dark/40 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                              title="从云端删除"
+                              title="彻底删除"
                             >
-                              <Trash2 size={14} />
+                              <Trash2 size={12} />
                             </button>
                           )}
                         </div>
