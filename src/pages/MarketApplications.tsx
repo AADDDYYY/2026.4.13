@@ -8,7 +8,7 @@ import { useCMSAsset } from "../hooks/useCMSAsset";
 export default function MarketApplications() {
   const { t } = useTranslation();
 
-  const { value: marketHeroBg } = useCMSAsset('market_hero_bg', '');
+  const { value: marketHeroBg } = useCMSAsset('market_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
   
   const { value: imgAutomotive } = useCMSAsset('market_inner_automotive', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800');
   const { value: imgElectronics } = useCMSAsset('market_inner_electronics', 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800');
@@ -64,13 +64,13 @@ export default function MarketApplications() {
       features: t("market_apps.items.leather.features", { returnObjects: true }) as string[]
     },
     {
-      id: "sports",
-      title: t("market_apps.items.sports.title"),
-      en: "Industrial & Sports",
-      desc: t("market_apps.items.sports.desc"),
+      id: "metal",
+      title: t("market_apps.items.metal.title"),
+      en: "Metal & Industrial",
+      desc: t("market_apps.items.metal.desc"),
       icon: <Trophy size={40} />,
       image: imgSports,
-      features: t("market_apps.items.sports.features", { returnObjects: true }) as string[]
+      features: t("market_apps.items.metal.features", { returnObjects: true }) as string[]
     }
   ];
 
@@ -124,7 +124,7 @@ export default function MarketApplications() {
                 <img 
                   src={app.image} 
                   alt={app.title} 
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 img-enhance"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>

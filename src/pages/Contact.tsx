@@ -32,7 +32,7 @@ export default function Contact() {
     message: ""
   });
 
-  const { value: contactHeroBg } = useCMSAsset('contact_hero_bg', '');
+  const { value: contactHeroBg } = useCMSAsset('contact_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
   const { value: companyPhone } = useCMSAsset('company_phone', '400 0069 655');
   const { value: companyEmail } = useCMSAsset('company_email', 'info@seatonchem.com');
   const { value: companyFactoryAddress } = useCMSAsset('company_factory_address', '广东省韶关市南雄高新区平安三路西1号');

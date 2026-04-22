@@ -1,13 +1,27 @@
 import { motion } from "motion/react";
 import { Globe, Award, Users, Sparkles, Shield, Leaf, Handshake, Microscope, Factory, ShieldCheck, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
+import { useState, useEffect } from "react";
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
 import { useCMSAsset } from "../hooks/useCMSAsset";
+import type { CertificateItem } from "../components/admin/CertificateManagement";
 
 export default function About() {
   const { t } = useTranslation();
+  
+  const [dbCertificates, setDbCertificates] = useState<CertificateItem[]>([]);
 
-  const { value: aboutHeroBg } = useCMSAsset('about_hero_bg', '');
+  useEffect(() => {
+    const q = query(collection(db, 'certificates'), orderBy('order', 'asc'));
+    const unsub = onSnapshot(q, (snap) => {
+      const data = snap.docs.map(d => ({ id: d.id, ...d.data() } as CertificateItem));
+      setDbCertificates(data);
+    });
+    return () => unsub();
+  }, []);
+
+  const { value: aboutHeroBg } = useCMSAsset('about_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
   const { value: aboutStrengthImg } = useCMSAsset('about_strength_img', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000');
 
   // Honors & Patents CMS Assets
@@ -155,7 +169,7 @@ export default function About() {
               <img 
                 src={aboutStrengthImg} 
                 alt="Seaton Production Base" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover img-enhance"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -232,26 +246,30 @@ export default function About() {
           {/* Patent & Honor Gallery Window */}
           <div className="relative">
             <div className="flex gap-8 overflow-x-auto pb-12 custom-scrollbar snap-x">
-              {[
-                { title: t("about.honors.giant"), type: "荣誉证书", img: honorImg1 },
-                { title: t("about.honors.phd"), type: "政府挂牌", img: honorImg2 },
-                { title: "高新技术企业证书", type: "资质认定", img: honorImg3 },
-                { title: "发明专利：一种水性树脂合成工艺", type: "专利授权", img: honorImg4 },
-                { title: "发明专利：高性能聚氨酯分散体", type: "专利授权", img: honorImg5 },
-              ].map((item, idx) => (
+              {(dbCertificates.length > 0 ? dbCertificates : [
+                { title: t("about.honors.giant"), type: "荣誉证书", image: honorImg1 },
+                { title: t("about.honors.phd"), type: "政府挂牌", image: honorImg2 },
+                { title: "高新技术企业证书", type: "资质认定", image: honorImg3 },
+                { title: "发明专利：一种水性树脂合成工艺", type: "专利授权", image: honorImg4 },
+                { title: "发明专利：高性能聚氨酯分散体", type: "专利授权", image: honorImg5 },
+              ]).map((item, idx) => (
                 <motion.div 
                   key={idx}
                   whileHover={{ y: -10 }}
                   className="min-w-[300px] md:min-w-[400px] snap-start"
                 >
                   <div className="aspect-[3/4] rounded-[30px] overflow-hidden border border-brand-border bg-white p-4 mb-6 group relative shadow-md">
-                    <div className="w-full h-full rounded-[20px] overflow-hidden relative">
-                      <img 
-                        src={item.img} 
-                        alt={item.title} 
-                        className="w-full h-full object-contain transition-all duration-700 scale-100 group-hover:scale-110"
-                        referrerPolicy="no-referrer"
-                      />
+                    <div className="w-full h-full rounded-[20px] overflow-hidden relative flex items-center justify-center bg-gray-50">
+                      {item.image ? (
+                        <img 
+                          src={item.image} 
+                          alt={item.title} 
+                          className="w-full h-full object-contain transition-all duration-700 scale-100 group-hover:scale-110 img-cert"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <Award size={48} className="text-gray-300" />
+                      )}
                     </div>
                   </div>
                   <div className="px-4">

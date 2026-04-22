@@ -10,7 +10,7 @@ export default function Products() {
   const { t } = useTranslation();
   const location = useLocation();
 
-  const { value: productHeroBg } = useCMSAsset('product_hero_bg', '');
+  const { value: productHeroBg } = useCMSAsset('product_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
   const queryParams = new URLSearchParams(location.search);
   const categoryFilter = queryParams.get("category");
   const divisionFilter = queryParams.get("division");

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { db } from '../../firebase';
 import { collection, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { useProducts } from '../../hooks/useProducts';
-import { Trash2, Edit2, Plus, Database, FlaskConical, LayoutGrid, Layers, RefreshCw, AlertCircle, Eye, EyeOff, Globe } from 'lucide-react';
+import { Trash2, Edit2, Plus, Database, FlaskConical, LayoutGrid, Layers, RefreshCw, AlertCircle, Eye, EyeOff, Globe, Package } from 'lucide-react';
 import { products as staticProducts, Product } from '../../data/products';
 import ProductFormModal from './ProductFormModal';
 
@@ -166,8 +166,12 @@ export default function ProductManagement() {
                     <tr key={product.id} className={`hover:bg-white transition-colors group ${!isPublished ? 'opacity-60 bg-brand-gray/20' : ''}`}>
                       <td className="px-6 py-4 pl-8">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl overflow-hidden border border-brand-border bg-white shrink-0">
-                            <img src={product.image} alt="" className="w-full h-full object-cover" />
+                          <div className="w-10 h-10 rounded-xl overflow-hidden border border-brand-border bg-white shrink-0 flex items-center justify-center">
+                            {product.image ? (
+                              <img src={product.image} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <Package size={20} className="text-gray-300" />
+                            )}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">

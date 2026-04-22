@@ -21,7 +21,7 @@ export default function ApplicationDetail() {
   }
 
   const Icon = data.icon;
-  const tId = id === "sports" ? "industrial" : id; // Mapping sports to industrial in market_data
+  const tId = id;
 
   return (
     <div className="bg-white min-h-screen text-brand-dark pb-32 overflow-hidden">
@@ -30,7 +30,7 @@ export default function ApplicationDetail() {
         <img 
           src={data.heroImage} 
           alt={t(`market_apps.items.${id}.title`)} 
-          className="w-full h-full object-cover scale-105"
+          className="w-full h-full object-cover scale-105 img-enhance"
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent"></div>
@@ -157,7 +157,7 @@ export default function ApplicationDetail() {
                     <img 
                       src={img} 
                       alt="Gallery" 
-                      className="w-full h-full object-cover transition-all duration-1000 scale-105 group-hover:scale-100"
+                      className="w-full h-full object-cover transition-all duration-1000 scale-105 group-hover:scale-100 img-enhance"
                       referrerPolicy="no-referrer"
                     />
                   </div>

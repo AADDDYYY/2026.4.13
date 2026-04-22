@@ -2,13 +2,14 @@ import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { auth, db, handleFirestoreError, OperationType } from '../firebase';
 import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { collection, onSnapshot, doc, setDoc, deleteDoc, query, limit, orderBy, updateDoc, getDocs, serverTimestamp, addDoc, getDoc } from 'firebase/firestore';
-import { Upload, Save, CheckCircle, Smartphone, Mail, MapPin, Globe, Search as SearchIcon, ShieldAlert, Activity, LayoutGrid, RotateCcw, Bug, FlaskRound, Trash2, Clock, CheckCircle2, FileSpreadsheet, Lock, Key, Bell, Package, FileEdit, History, RefreshCw, Award, Factory, Users, Newspaper, Settings } from 'lucide-react';
+import { Upload, Save, CheckCircle, Smartphone, Mail, MapPin, Globe, Search as SearchIcon, ShieldAlert, Activity, LayoutGrid, RotateCcw, Bug, FlaskRound, Trash2, Clock, CheckCircle2, FileSpreadsheet, Lock, Key, Bell, Package, FileEdit, History, RefreshCw, Award, Factory, Users, Newspaper, Settings, Image as ImageIcon } from 'lucide-react';
 import { runDiagnostics, DashboardStat, fetchCloudHealth, fetchNetworkStatus } from '../services/diagnosticService';
 import { motion, AnimatePresence } from 'motion/react';
 import { compressImage } from '../utils/compressImage';
 import ProductManagement from '../components/admin/ProductManagement';
 import InquiryDashboard from '../components/admin/InquiryDashboard';
 import NewsManagement from '../components/admin/NewsManagement';
+import CertificateManagement from '../components/admin/CertificateManagement';
 import LeadDetailsModal from '../components/admin/LeadDetailsModal';
 import { 
   BarChart, 
@@ -263,7 +264,11 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
               <div className="grid grid-cols-5 gap-2">
                 {history.map((url, i) => (
                   <div key={i} className="group relative aspect-square rounded-lg overflow-hidden border border-brand-border bg-white cursor-pointer" onClick={() => rollback(url)}>
-                    <img src={url} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
+                    {url ? (
+                      <img src={url} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
+                    ) : (
+                      <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300">空</div>
+                    )}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-brand-blue/20 transition-opacity">
                       <RefreshCw size={14} className="text-brand-blue" />
                     </div>
@@ -1273,18 +1278,15 @@ export default function Admin() {
               </div>
 
               <div className="border-t border-brand-border pt-8">
-                <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
-                  <Award size={16} className="text-brand-blue" /> 权威背书与知识产权 (Endorsement)
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {user && <ImageUploadButton assetKey="honor_img_1" label="证书/专利 1" user={user} />}
-                  {user && <ImageUploadButton assetKey="honor_img_2" label="证书/专利 2" user={user} />}
-                  {user && <ImageUploadButton assetKey="honor_img_3" label="证书/专利 3" user={user} />}
-                  {user && <ImageUploadButton assetKey="honor_img_4" label="证书/专利 4" user={user} />}
-                  {user && <ImageUploadButton assetKey="honor_img_5" label="证书/专利 5" user={user} />}
-                </div>
+                <p className="text-brand-dark/40 text-sm">
+                  请在下方的“资质证书与知识产权管理”专属面板中维护相关图片。
+                </p>
               </div>
             </div>
+          </div>
+
+          <div id="certificates">
+            <CertificateManagement />
           </div>
 
           <div className="space-y-10">
@@ -1304,8 +1306,13 @@ export default function Admin() {
                 <div>
                   <h3 className="text-sm font-black text-brand-dark mb-2">各个事业部视觉背景</h3>
                   <div className="grid grid-cols-1 gap-4">
-                    {user && <ImageUploadButton assetKey="div_plastic_bg" label="塑胶事业部背景" user={user} />}
-                    {user && <ImageUploadButton assetKey="div_ink_bg" label="油墨事业部背景" user={user} />}
+                    {user && <ImageUploadButton assetKey="divisions_hero_bg" label="事业部顶部版图 (Hero)" user={user} />}
+                    {user && <ImageUploadButton assetKey="division_inner_leather" label="皮革制品配图" user={user} />}
+                    {user && <ImageUploadButton assetKey="division_inner_resin" label="水性树脂配图" user={user} />}
+                    {user && <ImageUploadButton assetKey="division_inner_auto" label="汽车内饰配图" user={user} />}
+                    {user && <ImageUploadButton assetKey="division_inner_uv" label="水性UV配图" user={user} />}
+                    {user && <ImageUploadButton assetKey="division_inner_battery" label="动力电池配图" user={user} />}
+                    {user && <ImageUploadButton assetKey="division_inner_custom" label="特种定制配图" user={user} />}
                   </div>
                 </div>
               </div>
@@ -1330,7 +1337,7 @@ export default function Admin() {
                   {user && <ImageUploadButton assetKey="market_inner_packaging" label="包装印刷" user={user} />}
                   {user && <ImageUploadButton assetKey="market_inner_home" label="建筑家居" user={user} />}
                   {user && <ImageUploadButton assetKey="market_inner_leather" label="皮革涂饰" user={user} />}
-                  {user && <ImageUploadButton assetKey="market_inner_sports" label="运动器材" user={user} />}
+                  {user && <ImageUploadButton assetKey="market_inner_sports" label="金属与工业配图" user={user} />}
                 </div>
               </div>
             </div>
@@ -1411,8 +1418,14 @@ export default function Admin() {
                        
                        {asset.type === 'image' && (
                          <div className="mt-4 flex items-center gap-4">
-                           <img src={asset.value} alt={asset.key} referrerPolicy="no-referrer" className="w-16 h-16 object-cover rounded-lg border border-brand-border" />
-                           <p className="text-xs text-brand-dark/50 truncate flex-1">{asset.value}</p>
+                           {asset.value ? (
+                             <img src={asset.value} alt={asset.key} referrerPolicy="no-referrer" className="w-16 h-16 object-cover rounded-lg border border-brand-border" />
+                           ) : (
+                             <div className="w-16 h-16 bg-gray-100 rounded-lg border border-brand-border flex items-center justify-center text-gray-300">
+                               <ImageIcon size={24} />
+                             </div>
+                           )}
+                           <p className="text-xs text-brand-dark/50 truncate flex-1">{asset.value || '空'}</p>
                          </div>
                        )}
                        

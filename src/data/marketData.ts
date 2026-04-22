@@ -227,15 +227,15 @@ export const marketApplicationsData: Record<string, MarketApplicationDetail> = {
       "https://images.unsplash.com/photo-1473187983305-f6150a1e7246?auto=format&fit=crop&q=80&w=800"
     ]
   },
-  industrial: {
-    id: "industrial",
-    title: "工业与运动",
-    en: "Industrial & Sports",
+  metal: {
+    id: "metal",
+    title: "金属与工业防护",
+    en: "Metal & Industrial Protection",
     heroImage: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1920",
     icon: Trophy,
-    overview: "在极端的工业环境与高强度的运动场景下，材料的防护性能至关重要。西顿提供的特种功能树脂，为工业设备与运动器材提供坚不可摧的保护。",
+    overview: "应用于卷材、金属防腐及特种工业领域。西顿提供的特种功能树脂，为金属五金及工业设备提供坚不可摧的保护。",
     challenges: [
-      "极高的抗冲击与抗疲劳性能要求",
+      "极高的金属附着力与防锈要求",
       "对金属基材的长效防腐蚀保护",
       "特殊功能性（如防滑、抗静电）的集成",
       "极端气候下的性能稳定性"

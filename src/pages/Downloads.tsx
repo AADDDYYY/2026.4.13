@@ -33,7 +33,7 @@ const downloads = [
 export default function Downloads() {
   const { t } = useTranslation();
 
-  const { value: downloadsHeroBg } = useCMSAsset('downloads_hero_bg', '');
+  const { value: downloadsHeroBg } = useCMSAsset('downloads_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
 
   return (
     <div className="pt-24 md:pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">

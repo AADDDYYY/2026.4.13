@@ -125,3 +125,22 @@
 .ease-expo {
   transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
 }
+
+/* Intelligent Global Image Enhancement System */
+/* Vibrant & Clean: Enhances natural colors, brightens, and sharpens for a positive, energetic corporate image */
+.img-enhance {
+  @apply saturate-[1.1] contrast-[1.05] brightness-[1.02] transition-all duration-700;
+}
+
+.img-enhance:hover {
+  @apply saturate-[1.15] contrast-[1.05] brightness-[1.05];
+}
+
+/* Specifically for certificates/patents to make documents look clean, bright, and authentic */
+.img-cert {
+  @apply contrast-[1.05] brightness-[1.02] transition-colors duration-500 bg-white;
+}
+
+.img-cert:hover {
+  @apply contrast-[1.08] brightness-[1.05];
+}

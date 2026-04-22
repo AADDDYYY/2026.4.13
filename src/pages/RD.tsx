@@ -6,7 +6,7 @@ import { useCMSAsset } from "../hooks/useCMSAsset";
 export default function RD() {
   const { t } = useTranslation();
 
-  const { value: rdHeroBg } = useCMSAsset('rd_hero_bg', '');
+  const { value: rdHeroBg } = useCMSAsset('rd_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
   const { value: rdLabImg1 } = useCMSAsset('rd_lab_img1', 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=600');
   const { value: rdLabImg2 } = useCMSAsset('rd_lab_img2', 'https://images.unsplash.com/photo-1581093588401-22d3c9f5b9c5?auto=format&fit=crop&q=80&w=600');
 

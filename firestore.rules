@@ -127,5 +127,10 @@ service cloud.firestore {
       allow read: if true;
       allow create, update, delete: if isAdmin();
     }
+
+    match /certificates/{certId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
   }
 }

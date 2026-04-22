@@ -7,7 +7,7 @@ import { useCMSAsset } from "../hooks/useCMSAsset";
 export default function Divisions() {
   const { t } = useTranslation();
 
-  const { value: divisionsHeroBg } = useCMSAsset('divisions_hero_bg', '');
+  const { value: divisionsHeroBg } = useCMSAsset('divisions_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
   const { value: divLeather } = useCMSAsset('division_inner_leather', 'https://images.unsplash.com/photo-1524292332709-b33366a7f145?auto=format&fit=crop&q=80&w=800');
   const { value: divResin } = useCMSAsset('division_inner_resin', 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=800');
   const { value: divAuto } = useCMSAsset('division_inner_auto', 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=800');

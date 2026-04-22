@@ -69,7 +69,7 @@ const RDPhilosophy = () => {
 export default function Innovation() {
   const { t } = useTranslation();
 
-  const { value: innovationHeroBg } = useCMSAsset('innovation_hero_bg', '');
+  const { value: innovationHeroBg } = useCMSAsset('innovation_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
 
   const innovations = [
     {

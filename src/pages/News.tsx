@@ -99,7 +99,7 @@ export default function News() {
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const { value: newsHeroBg } = useCMSAsset('news_hero_bg', '');
+  const { value: newsHeroBg } = useCMSAsset('news_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
 
   useEffect(() => {
     const q = query(

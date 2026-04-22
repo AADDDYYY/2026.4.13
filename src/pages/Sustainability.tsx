@@ -7,7 +7,7 @@ import { useCMSAsset } from "../hooks/useCMSAsset";
 export default function Sustainability() {
   const { t } = useTranslation();
 
-  const { value: sustainabilityHeroBg } = useCMSAsset('sustainability_hero_bg', '');
+  const { value: sustainabilityHeroBg } = useCMSAsset('sustainability_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
 
   const esgGoals = [
     {

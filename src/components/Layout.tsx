@@ -518,16 +518,30 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-12 border-t border-brand-border flex flex-col md:flex-row justify-between items-center gap-8 text-brand-dark/20 text-[11px] uppercase tracking-wider font-black">
-          <p>{t("footer.rights")}</p>
-          <div className="flex gap-12 items-center">
-            <Link to="/admin" className="text-brand-blue/50 hover:text-brand-blue transition-colors relative group">
-              ADMIN PORTAL
-              <span className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-brand-blue rounded-full animate-ping group-hover:animate-none"></span>
-            </Link>
-            <a href="#" className="hover:text-brand-dark transition-colors">{t("footer.privacy")}</a>
-            <a href="#" className="hover:text-brand-dark transition-colors">{t("footer.terms")}</a>
-            <a href="#" className="hover:text-brand-dark transition-colors">粤ICP备2022033233号</a>
+        <div className="pt-12 border-t border-brand-border flex flex-col items-center md:items-start gap-8">
+          <div className="w-full flex flex-col md:flex-row justify-between items-center gap-8 text-brand-dark/20 text-[11px] uppercase tracking-wider font-black">
+            <p>{t("footer.rights")}</p>
+            <div className="flex gap-8 items-center">
+              <Link to="/admin" className="text-brand-blue/50 hover:text-brand-blue transition-colors relative group">
+                ADMIN PORTAL
+                <span className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-brand-blue rounded-full animate-ping group-hover:animate-none"></span>
+              </Link>
+              <a href="#" className="hover:text-brand-dark transition-colors">{t("footer.privacy")}</a>
+              <a href="#" className="hover:text-brand-dark transition-colors">{t("footer.terms")}</a>
+            </div>
+          </div>
+          
+          <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 text-brand-dark/30 text-[10px] font-bold">
+             <div className="flex flex-col md:flex-row gap-4 items-center">
+               <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors flex items-center gap-2">
+                 粤ICP备2020138942号-1
+               </a>
+               <a href="http://www.beian.gov.cn/portal/registerSystemInfo" target="_blank" rel="noopener noreferrer" className="hover:text-brand-blue transition-colors flex items-center gap-2">
+                 <img src="https://img.alicdn.com/tfs/TB1..50QpXXXXX7XpXXXXXXXXXX-40-40.png" alt="公安备案" className="w-3 h-3 opacity-50" />
+                 粤公网安备 44023202000000号
+               </a>
+             </div>
+             <p>本网站支持 IPv6</p>
           </div>
         </div>
       </div>

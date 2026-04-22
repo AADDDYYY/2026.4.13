@@ -184,8 +184,8 @@ const CorporateVideo = () => {
               controls 
               playsInline
               preload="metadata"
-              referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
+              {...{ referrerPolicy: "no-referrer" } as any}
             >
               您的浏览器不支持视频播放。
             </video>

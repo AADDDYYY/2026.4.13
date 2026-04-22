@@ -92,8 +92,12 @@ export default function NewsManagement() {
                   {item.date}
                 </td>
                 <td className="px-8 py-6">
-                  <div className="w-16 h-10 rounded-lg overflow-hidden border border-brand-border bg-brand-gray">
-                    <img src={item.image} alt="" className="w-full h-full object-cover" />
+                  <div className="w-16 h-10 rounded-lg overflow-hidden border border-brand-border bg-brand-gray flex justify-center items-center">
+                    {item.image ? (
+                      <img src={item.image} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <Newspaper size={16} className="text-gray-300" />
+                    )}
                   </div>
                 </td>
                 <td className="px-8 py-6 max-w-md">
