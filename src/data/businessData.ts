@@ -76,7 +76,7 @@ export const businessData: Record<string, BusinessDetail> = {
       "皮革涂饰剂与加脂剂",
       "纺织涂层与印花胶浆",
       "水性木器漆连接料",
-      "金属与塑胶防护涂料"
+      "工业与塑胶防护涂料"
     ],
     technicalSpecs: [
       { label: "离子型", value: "阴离子 / 非离子" },
@@ -92,7 +92,7 @@ export const businessData: Record<string, BusinessDetail> = {
       },
       {
         name: "高耐磨工业 PUD",
-        desc: "针对工业地坪与金属防护，提供极高的表面硬度。",
+        desc: "针对工业地坪与特种防护，提供极高的表面硬度。",
         image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600"
       }
     ]
@@ -141,18 +141,18 @@ export const businessData: Record<string, BusinessDetail> = {
     en: "Waterborne Anti-fingerprint Resin",
     heroImage: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1920",
     icon: Shield,
-    description: "专为不锈钢、铝合金及电子产品表面设计。通过特殊的表面改性技术，有效降低表面能，使指纹残留不明显且极易擦拭，同时保持金属原有的质感。",
+    description: "专为工业表面及电子产品表面设计。通过特殊的表面改性技术，有效降低表面能，使指纹残留不明显且极易擦拭，同时保持基材原有的质感。",
     features: [
       "卓越的抗指纹与易清洁性能",
-      "保持金属基材的原始光泽与纹理",
+      "保持基材的原始光泽与纹理",
       "优异的耐盐雾与防腐蚀性能",
       "极薄的涂层厚度，不影响装配"
     ],
     applications: [
-      "不锈钢家电面板",
+      "高端家电面板",
       "电梯轿厢装饰板",
       "高端厨卫五金件",
-      "电子产品金属外壳"
+      "电子产品金属底壳"
     ],
     technicalSpecs: [
       { label: "水接触角", value: "≥ 100°" },

@@ -1,22 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, Search, Clock, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCMSAsset } from "../hooks/useCMSAsset";
-import { db } from "../firebase";
-import { collection, onSnapshot, query, orderBy, where } from "firebase/firestore";
-
-interface NewsItem {
-  id: string;
-  title: string;
-  category: string;
-  type: string;
-  date: string;
-  summary: string;
-  image: string;
-  status?: string;
-}
+import { useNews, NewsItem } from "../hooks/useNews";
 
 const staticNewsData: NewsItem[] = [
   {
@@ -96,42 +84,11 @@ export default function News() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeType, setActiveType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [newsList, setNewsList] = useState<NewsItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  
+  const { news: cloudNews, loading, error } = useNews();
+  const newsList = cloudNews.length > 0 ? cloudNews : (error ? staticNewsData : (loading ? [] : staticNewsData));
 
   const { value: newsHeroBg } = useCMSAsset('news_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
-
-  useEffect(() => {
-    const q = query(
-      collection(db, 'news'), 
-      where('status', '==', 'published'),
-      orderBy('date', 'desc')
-    );
-    
-    // Set initial static data if no cloud data yet, but track loading
-    setNewsList(staticNewsData);
-    
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setLoading(true);
-      if (!snapshot.empty) {
-        const cloudNews = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        } as NewsItem));
-        setNewsList(cloudNews);
-      } else {
-        // If clound is empty, keep static or clear? 
-        // For a real app, if cloud is empty but we have static, we might want to keep static as placeholders
-        setNewsList(staticNewsData);
-      }
-      setLoading(false);
-    }, (error) => {
-      console.error("News sync error:", error);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   const categories = ["all", "corporate", "leather", "packaging", "coatings", "sustainability"];
   const types = ["all", "press_release", "article"];

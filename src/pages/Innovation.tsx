@@ -114,9 +114,10 @@ export default function Innovation() {
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {innovationHeroBg ? (
-          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
-            <img src={innovationHeroBg} alt="Innovation Hero" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden">
+            <img src={innovationHeroBg} alt="Innovation Hero" className="w-full h-full object-cover img-enhance object-right" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
           </div>
         ) : (
           <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>

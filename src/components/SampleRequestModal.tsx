@@ -4,6 +4,7 @@ import { X, Send, CheckCircle2, Building2, User, Mail, Phone, MessageSquare, Bri
 import { db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "../firebase";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
 interface SampleRequestModalProps {
   isOpen: boolean;
@@ -29,22 +30,51 @@ export const SampleRequestModal = ({ isOpen, onClose, productName, productId }: 
     setIsSubmitting(true);
 
     try {
-      await addDoc(collection(db, "sample_requests"), {
-        ...formData,
-        productId,
-        productName,
+      const payload = {
+        name: formData.userName,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.companyName,
+        industry: formData.applicationArea,
+        message: formData.message,
+        product_id: productId,
+        product_name: productName,
         status: "new",
-        createdAt: serverTimestamp()
-      });
+        type: 'sample'
+      };
+
+      if (isSupabaseConfigured()) {
+        console.log("Supabase submission attempt with payload:", payload);
+        const { error } = await supabase.from('leads').insert([{
+          ...payload,
+          created_at: new Date().toISOString()
+        }]);
+        
+        if (error) {
+          console.error("Supabase write error details:", error);
+          // Check for missing columns error (PGRST204)
+          if (error.code === 'PGRST204' || (error.message && error.message.includes('column'))) {
+            alert(`提交失败：数据库表结构不完整。\n\n请在 Supabase SQL Editor 中运行以下代码：\n\nALTER TABLE leads \nADD COLUMN IF NOT EXISTS status text,\nADD COLUMN IF NOT EXISTS type text,\nADD COLUMN IF NOT EXISTS product_id text,\nADD COLUMN IF NOT EXISTS product_name text;\n\n错误详情: ${error.message}`);
+          } else {
+            alert("提交失败: " + error.message);
+          }
+          throw error;
+        }
+      } else {
+        await addDoc(collection(db, "sample_requests"), {
+          ...formData,
+          productId,
+          productName,
+          status: "new",
+          createdAt: serverTimestamp()
+        });
+      }
+      
       console.log("Sample request submitted successfully!");
       setIsSuccess(true);
     } catch (error) {
       console.error("Error submitting sample request:", error);
-      try {
-        handleFirestoreError(error, OperationType.CREATE, "sample_requests");
-      } catch (errInfo) {
-        alert("提交失败（安全审计拒绝）。详细信息: " + (errInfo as Error).message);
-      }
+      alert("提交失败，请稍后重试。");
     } finally {
       setIsSubmitting(false);
     }

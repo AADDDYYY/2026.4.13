@@ -25,7 +25,6 @@ export default function Products() {
     { id: "plastic", title: t("divisions.plastic"), value: "塑胶涂料树脂事业部" },
     { id: "ink", title: t("divisions.ink"), value: "印刷油墨树脂事业部" },
     { id: "wood", title: t("divisions.wood"), value: "木器涂料树脂事业部" },
-    { id: "metal", title: t("divisions.metal"), value: "金属 / 薄膜涂料树脂事业部" },
     { id: "leather", title: t("divisions.leather"), value: "皮革 / 纺织 / 胶粘剂树脂事业部" }
   ];
 
@@ -38,10 +37,11 @@ export default function Products() {
   const industryApplications = [
     { id: "all", title: t("mega.by_industry") === "按应用领域" ? "全部行业" : "All Industries", icon: <Sparkles size={14} /> },
     { id: "plastic", title: t("industries.plastic"), value: "plastic", icon: <Smartphone size={14} /> },
+    { id: "automotive", title: t("industries.automotive"), value: "automotive", icon: <Car size={14} /> },
     { id: "ink", title: t("industries.ink"), value: "ink", icon: <Package size={14} /> },
     { id: "wood", title: t("industries.wood"), value: "wood", icon: <Home size={14} /> },
-    { id: "metal", title: t("industries.metal"), value: "metal", icon: <Car size={14} /> },
-    { id: "leather", title: t("industries.leather"), value: "leather", icon: <Scissors size={14} /> }
+    { id: "leather", title: t("industries.leather"), value: "leather", icon: <Scissors size={14} /> },
+    { id: "industrial", title: t("industries.industrial"), value: "industrial", icon: <Zap size={14} /> }
   ];
 
   const { publishedProducts: products, loading } = useProducts();
@@ -61,7 +61,17 @@ export default function Products() {
                             product.category.toLowerCase().includes(searchLower);
       
       const matchesDivision = activeDivision === "all" || product.divisions.includes(activeDivision);
-      const matchesIndustry = activeIndustry === "all" || (product.substrates as any)[activeIndustry] === true;
+      
+      let matchesIndustry = activeIndustry === "all";
+      if (!matchesIndustry) {
+        if (activeIndustry === "industrial") {
+          matchesIndustry = product.substrates.metal === true;
+        } else if (activeIndustry === "automotive") {
+          matchesIndustry = product.divisions.some(d => d.includes("汽车"));
+        } else {
+          matchesIndustry = (product.substrates as any)[activeIndustry] === true;
+        }
+      }
 
       if (!categoryFilter) return matchesSearch && matchesDivision && matchesIndustry;
 

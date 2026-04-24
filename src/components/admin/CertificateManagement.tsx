@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { db, isFirestoreQuotaExceeded, markFirestoreQuotaExceeded } from '../../firebase';
 import { collection, onSnapshot, query, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, orderBy } from 'firebase/firestore';
-import { db } from '../../firebase';
 import { Plus, Trash2, Edit2, Image as ImageIcon, Save, X } from 'lucide-react';
 import { compressImage } from '../../utils/compressImage';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 
 export interface CertificateItem {
   id: string;
@@ -19,29 +20,72 @@ export default function CertificateManagement() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (isSupabaseConfigured()) {
+      const fetchCerts = async () => {
+        const { data, error } = await supabase
+          .from('certificates')
+          .select('*')
+          .order('order', { ascending: true });
+        if (!error && data) {
+          setCerts(data as CertificateItem[]);
+        }
+      };
+      fetchCerts();
+
+      const subscription = supabase
+        .channel(`certs_changes_${Math.random().toString(36).substring(7)}`)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'certificates' }, fetchCerts)
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(subscription);
+      };
+    }
+
+    if (isFirestoreQuotaExceeded()) return;
+
     const q = query(collection(db, 'certificates'), orderBy('order', 'asc'));
     const unsub = onSnapshot(q, (snap) => {
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() } as CertificateItem));
       setCerts(data);
+    }, (err) => {
+      console.error('CertificateManagement error:', err);
+      if (err.code === 'resource-exhausted' || err.message.includes('Quota exceeded')) {
+        markFirestoreQuotaExceeded();
+      }
     });
     return () => unsub();
   }, []);
 
   const handleCreate = async () => {
     try {
-      await addDoc(collection(db, 'certificates'), {
+      const payload = {
         title: '新证书/专利',
         type: '荣誉资质',
         image: '',
         order: certs.length,
-        createdAt: serverTimestamp()
-      });
+      };
+
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('certificates').insert([payload]);
+        if (error) throw error;
+      } else {
+        await addDoc(collection(db, 'certificates'), {
+          ...payload,
+          createdAt: serverTimestamp()
+        });
+      }
     } catch (err) { console.error(err); }
   };
 
   const handleUpdate = async (id: string, data: Partial<CertificateItem>) => {
     try {
-      await updateDoc(doc(db, 'certificates', id), data);
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('certificates').update(data).eq('id', id);
+        if (error) throw error;
+      } else {
+        await updateDoc(doc(db, 'certificates', id), data);
+      }
       setIsEditing(null);
     } catch (err) { console.error(err); }
   };
@@ -49,7 +93,12 @@ export default function CertificateManagement() {
   const handleDelete = async (id: string) => {
     if (!confirm('确定要删除该证书吗？')) return;
     try {
-      await deleteDoc(doc(db, 'certificates', id));
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('certificates').delete().eq('id', id);
+        if (error) throw error;
+      } else {
+        await deleteDoc(doc(db, 'certificates', id));
+      }
     } catch (err) { console.error(err); }
   };
 
@@ -59,7 +108,13 @@ export default function CertificateManagement() {
     try {
       setIsLoading(true);
       const base64 = await compressImage(file, 1000, 0.7);
-      await updateDoc(doc(db, 'certificates', id), { image: base64 });
+      
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('certificates').update({ image: base64 }).eq('id', id);
+        if (error) throw error;
+      } else {
+        await updateDoc(doc(db, 'certificates', id), { image: base64 });
+      }
     } catch (err) {
       console.error(err);
       alert("上传失败，图片可能过大");

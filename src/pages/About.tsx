@@ -1,25 +1,13 @@
 import { motion } from "motion/react";
 import { Globe, Award, Users, Sparkles, Shield, Leaf, Handshake, Microscope, Factory, ShieldCheck, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase';
+import { useState } from "react";
 import { useCMSAsset } from "../hooks/useCMSAsset";
-import type { CertificateItem } from "../components/admin/CertificateManagement";
+import { useCertificates } from "../hooks/useCertificates";
 
 export default function About() {
   const { t } = useTranslation();
-  
-  const [dbCertificates, setDbCertificates] = useState<CertificateItem[]>([]);
-
-  useEffect(() => {
-    const q = query(collection(db, 'certificates'), orderBy('order', 'asc'));
-    const unsub = onSnapshot(q, (snap) => {
-      const data = snap.docs.map(d => ({ id: d.id, ...d.data() } as CertificateItem));
-      setDbCertificates(data);
-    });
-    return () => unsub();
-  }, []);
+  const { certificates: dbCertificates } = useCertificates();
 
   const { value: aboutHeroBg } = useCMSAsset('about_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
   const { value: aboutStrengthImg } = useCMSAsset('about_strength_img', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000');

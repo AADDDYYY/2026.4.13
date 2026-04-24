@@ -5,6 +5,7 @@ import { useProducts } from '../../hooks/useProducts';
 import { Trash2, Edit2, Plus, Database, FlaskConical, LayoutGrid, Layers, RefreshCw, AlertCircle, Eye, EyeOff, Globe, Package } from 'lucide-react';
 import { products as staticProducts, Product } from '../../data/products';
 import ProductFormModal from './ProductFormModal';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 
 export default function ProductManagement() {
   const { products, cloudProducts, loading } = useProducts();
@@ -20,10 +21,18 @@ export default function ProductManagement() {
     }
     const newStatus = product.status === 'published' ? 'draft' : 'published';
     try {
-      await updateDoc(doc(db, 'products', product.id), {
-        status: newStatus,
-        updatedAt: new Date().toISOString()
-      });
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase
+          .from('products')
+          .update({ status: newStatus, updated_at: new Date().toISOString() })
+          .eq('id', product.id);
+        if (error) throw error;
+      } else {
+        await updateDoc(doc(db, 'products', product.id), {
+          status: newStatus,
+          updatedAt: new Date().toISOString()
+        });
+      }
     } catch (e) {
       console.error(e);
       alert('切换状态失败');
@@ -35,19 +44,28 @@ export default function ProductManagement() {
     setShowSyncConfirm(false);
     try {
       let count = 0;
-      for (const p of staticProducts) {
-        // Use setDoc to copy static to cloud
-        await setDoc(doc(db, 'products', p.id), {
+      if (isSupabaseConfigured()) {
+        const payloadProducts = staticProducts.map(p => ({
           ...p,
-          managedBy: 'cloud',
-          updatedAt: new Date().toISOString()
-        });
-        count++;
+          updated_at: new Date().toISOString()
+        }));
+        const { error } = await supabase.from('products').upsert(payloadProducts);
+        if (error) throw error;
+        count = staticProducts.length;
+      } else {
+        for (const p of staticProducts) {
+          await setDoc(doc(db, 'products', p.id), {
+            ...p,
+            managedBy: 'cloud',
+            updatedAt: new Date().toISOString()
+          });
+          count++;
+        }
       }
       alert(`成功同步 ${count} 款产品！`);
     } catch (e) {
       console.error(e);
-      alert('同步失败 (核对权限): ' + (e as Error).message);
+      alert('同步失败: ' + (e as Error).message);
     } finally {
       setIsSyncing(false);
     }
@@ -55,11 +73,21 @@ export default function ProductManagement() {
 
   const handleSaveProduct = async (productData: Product) => {
     try {
-      await setDoc(doc(db, 'products', productData.id), {
-        ...productData,
-        managedBy: 'cloud',
-        updatedAt: new Date().toISOString()
-      });
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase
+          .from('products')
+          .upsert({
+            ...productData,
+            updated_at: new Date().toISOString()
+          });
+        if (error) throw error;
+      } else {
+        await setDoc(doc(db, 'products', productData.id), {
+          ...productData,
+          managedBy: 'cloud',
+          updatedAt: new Date().toISOString()
+        });
+      }
     } catch (e) {
       console.error(e);
       throw e;
@@ -72,10 +100,13 @@ export default function ProductManagement() {
   };
 
   const handleDelete = async (id: string) => {
-    // We already use states for modal, let's just make deletion simple for now 
-    // or add a 'confirmingDeleteId' state if we want to be safe.
     try {
-      await deleteDoc(doc(db, 'products', id));
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('products').delete().eq('id', id);
+        if (error) throw error;
+      } else {
+        await deleteDoc(doc(db, 'products', id));
+      }
     } catch (e) {
       alert('删除失败: ' + (e as Error).message);
     }

@@ -286,10 +286,12 @@ const MarketSectors = () => {
   const { value: sector4 } = useCMSAsset('home_sector_wood', 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800');
 
   const sectors = [
-    { title: "皮革涂饰", en: "Leather Finishing", img: sector1 },
-    { title: "消费电子", en: "Consumer Electronics", img: sector2 },
-    { title: "工业涂料", en: "Industrial Coatings", img: sector3 },
-    { title: "木器家具", en: "Wood & Furniture", img: sector4 }
+    { title: "皮革化学品", en: "Leather Chemicals", img: sector1, id: "leather" },
+    { title: "汽车革用树脂", en: "Automotive Leather", img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800', id: "automotive" },
+    { title: "塑胶用树脂", en: "Plastic & Electronics", img: sector2, id: "plastic" },
+    { title: "油墨用树脂", en: "Ink & Packaging", img: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800', id: "ink" },
+    { title: "木器用树脂", en: "Wood & Furniture", img: sector4, id: "wood" },
+    { title: "电池金属用树脂", en: "Battery & Metal", img: sector3, id: "industrial" }
   ];
 
   return (
@@ -303,7 +305,7 @@ const MarketSectors = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8 md:gap-10">
           {sectors.map((sector, idx) => (
             <motion.div
               key={idx}
@@ -313,7 +315,7 @@ const MarketSectors = () => {
               transition={{ delay: idx * 0.15, duration: 1 }}
             >
               <Link 
-                to={`/products?industry=${sector.en === "Leather Finishing" ? "leather" : sector.en === "Consumer Electronics" ? "plastic" : sector.en === "Industrial Coatings" ? "metal" : "wood"}`}
+                to={`/products?industry=${sector.id}`}
                 className="group relative aspect-[3/4.5] md:aspect-[3/4.5] rounded-[40px] md:rounded-[60px] overflow-hidden cursor-pointer shadow-2xl block"
               >
                 <img src={sector.img} alt={sector.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" referrerPolicy="no-referrer" />

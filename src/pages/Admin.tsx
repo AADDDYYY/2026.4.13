@@ -11,6 +11,7 @@ import InquiryDashboard from '../components/admin/InquiryDashboard';
 import NewsManagement from '../components/admin/NewsManagement';
 import CertificateManagement from '../components/admin/CertificateManagement';
 import LeadDetailsModal from '../components/admin/LeadDetailsModal';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { 
   BarChart, 
   Bar, 
@@ -68,7 +69,31 @@ const TextUpdateField = ({ assetKey, label, user, placeholder, type = 'text' }: 
   const [hasChanged, setHasChanged] = useState(false);
 
   useEffect(() => {
-    // Fetch initial value
+    if (isSupabaseConfigured()) {
+      const fetchAsset = async () => {
+        const { data, error } = await supabase
+          .from('cms_assets')
+          .select('value')
+          .eq('id', assetKey)
+          .single();
+        if (!error && data) {
+          setValue(data.value);
+        }
+      };
+      fetchAsset();
+
+      const channelName = `asset_${assetKey}_${Math.random().toString(36).substring(7)}`;
+      const subscription = supabase
+        .channel(channelName)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'cms_assets', filter: `id=eq.${assetKey}` }, (payload: any) => {
+          if (payload.new) setValue(payload.new.value);
+        })
+        .subscribe();
+      
+      return () => { supabase.removeChannel(subscription); };
+    }
+
+    // Only run Firestore if Supabase is not ready
     const unsubscribe = onSnapshot(doc(db, 'cms_assets', assetKey), (doc) => {
       if (doc.exists()) {
         setValue(doc.data().value);
@@ -81,13 +106,27 @@ const TextUpdateField = ({ assetKey, label, user, placeholder, type = 'text' }: 
     if (!user) return;
     setIsSaving(true);
     try {
-      await setDoc(doc(db, 'cms_assets', assetKey), {
+      const payload = {
         key: assetKey,
         type: 'text',
         value: value,
-        updatedAt: new Date().toISOString(),
-        updatedBy: user.uid
-      });
+        updated_at: new Date().toISOString(),
+        updated_by: user.uid
+      };
+
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('cms_assets').upsert({
+          id: assetKey,
+          ...payload
+        });
+        if (error) throw error;
+      } else {
+        await setDoc(doc(db, 'cms_assets', assetKey), {
+          ...payload,
+          updatedAt: payload.updated_at,
+          updatedBy: payload.updated_by
+        });
+      }
       setHasChanged(false);
     } catch (err) {
       console.error(err);
@@ -139,6 +178,34 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (isSupabaseConfigured()) {
+       const fetchAsset = async () => {
+        const { data, error } = await supabase
+          .from('cms_assets')
+          .select('value, history')
+          .eq('id', assetKey)
+          .single();
+        if (!error && data) {
+          setHistory(data.history || []);
+          setCurrentValue(data.value || null);
+        }
+      };
+      fetchAsset();
+
+      const channelName = `image_asset_${assetKey}_${Math.random().toString(36).substring(7)}`;
+      const subscription = supabase
+        .channel(channelName)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'cms_assets', filter: `id=eq.${assetKey}` }, (payload: any) => {
+          if (payload.new) {
+            setHistory(payload.new.history || []);
+            setCurrentValue(payload.new.value || null);
+          }
+        })
+        .subscribe();
+      
+      return () => { supabase.removeChannel(subscription); };
+    }
+
     // Listen for history updates for this specific asset
     const unsubscribe = onSnapshot(doc(db, 'cms_assets', assetKey), (snap) => {
       if (snap.exists()) {
@@ -157,30 +224,42 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
     setIsUploading(true);
     try {
       const base64Data = await compressImage(file, 1920);
-      const assetRef = doc(db, 'cms_assets', assetKey);
-      const snap = await getDoc(assetRef);
-      
-      let newHistory = [];
-      if (snap.exists()) {
-        const currentData = snap.data();
-        const prevValue = currentData.value;
-        const oldHistory = currentData.history || [];
-        if (prevValue && !prevValue.startsWith('http')) { // Only backup local uploads to save space/complexity if needed
-          newHistory = [prevValue, ...oldHistory].slice(0, 5);
-        } else if (prevValue) {
-          newHistory = [prevValue, ...oldHistory].slice(0, 5);
-        }
-      }
-
-      await setDoc(assetRef, {
+      const payload = {
         key: assetKey,
         type: 'image',
         value: base64Data,
-        history: newHistory,
-        updatedAt: new Date().toISOString(),
-        updatedBy: user.uid
-      });
-      alert(`成功！[${label}] 已上传。上一张图片已存入历史记录。`);
+        updated_at: new Date().toISOString(),
+        updated_by: user.uid
+      };
+
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('cms_assets').upsert({
+          id: assetKey,
+          ...payload
+        });
+        if (error) throw error;
+      } else {
+        const assetRef = doc(db, 'cms_assets', assetKey);
+        const snap = await getDoc(assetRef);
+        
+        let newHistory = [];
+        if (snap.exists()) {
+          const currentData = snap.data();
+          const prevValue = currentData.value;
+          const oldHistory = currentData.history || [];
+          if (prevValue) {
+            newHistory = [prevValue, ...oldHistory].slice(0, 5);
+          }
+        }
+
+        await setDoc(assetRef, {
+          ...payload,
+          updatedAt: payload.updated_at,
+          updatedBy: payload.updated_by,
+          history: newHistory,
+        });
+      }
+      alert(`成功！[${label}] 已上传。`);
     } catch(err) {
       console.error(err);
       alert('上传失败');
@@ -353,15 +432,41 @@ export default function Admin() {
   const fetchSamplesFallback = async () => {
     setIsRefreshing(true);
     try {
-      const q = query(collection(db, 'sample_requests'));
-      const s = await getDocs(q);
-      setRawSampleCount(s.size);
-      const ss = s.docs.map(d => ({ id: d.id, ...d.data() } as SampleRequest));
-      setSampleRequests(ss.sort((a,b) => {
-        const timeA = a.createdAt?.seconds || (a.createdAt?.toMillis ? a.createdAt.toMillis() / 1000 : 0);
-        const timeB = b.createdAt?.seconds || (b.createdAt?.toMillis ? b.createdAt.toMillis() / 1000 : 0);
-        return timeB - timeA;
-      }));
+      if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+          .from('leads')
+          .select('*')
+          .order('created_at', { ascending: false });
+          
+        if (error) {
+          console.error("Supabase leads error:", error);
+          setSyncError("Supabase Leads Error: " + error.message);
+          throw error;
+        }
+        
+        console.log("Supabase leads fetched:", data?.length);
+        
+        setSampleRequests((data || []).map(r => ({
+          ...r,
+          userName: r.name || r.userName || 'Unknown',
+          companyName: r.company || r.companyName || 'Unknown',
+          applicationArea: r.industry || r.applicationArea || 'Unknown',
+          productId: r.product_id || r.productId || 'N/A',
+          productName: r.product_name || r.productName || 'N/A',
+          createdAt: r.created_at || r.createdAt
+        } as any)));
+        setRawSampleCount(data?.length || 0);
+      } else {
+        const q = query(collection(db, 'sample_requests'));
+        const s = await getDocs(q);
+        setRawSampleCount(s.size);
+        const ss = s.docs.map(d => ({ id: d.id, ...d.data() } as SampleRequest));
+        setSampleRequests(ss.sort((a,b) => {
+          const timeA = a.createdAt?.seconds || (a.createdAt?.toMillis ? a.createdAt.toMillis() / 1000 : 0);
+          const timeB = b.createdAt?.seconds || (b.createdAt?.toMillis ? b.createdAt.toMillis() / 1000 : 0);
+          return timeB - timeA;
+        }));
+      }
       setSyncError(null);
     } catch (err) {
       console.error("Manual refresh error:", err);
@@ -393,23 +498,64 @@ export default function Admin() {
         }, { merge: true }).catch(err => console.error("Admin provision error:", err));
       }
       
-      // Fetch dynamic audit logs from firestore
-      const qLogs = query(collection(db, 'system_logs'), limit(10), orderBy('timestamp', 'desc'));
-      const unsubscribeLogs = onSnapshot(qLogs, (snapshot) => {
-        const logs = snapshot.docs.map(d => ({
-          id: d.id,
-          user: d.data().userId || 'System',
-          action: d.data().type === 'error' ? 'Runtime Exception' : 'Asset Accessed',
-          time: d.data().timestamp?.toDate?.()?.toLocaleString() || new Date().toLocaleString(),
-          target: d.data().url || 'Internal'
-        }));
-        setAuditLogs(logs);
-      }, (err) => console.error("Audit log sync error:", err));
+      // Fetch dynamic audit logs with smart switch
+      let unsubscribeLogs: (() => void) | null = null;
+      let logsChannel: any = null;
+
+      if (isSupabaseConfigured()) {
+        const fetchLogs = async () => {
+          const { data, error } = await supabase
+            .from('system_logs')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(10);
+          if (!error && data) {
+            setAuditLogs(data.map(d => ({
+              id: d.id,
+              user: d.user_id || 'System',
+              action: d.type === 'error' ? 'Runtime Exception' : 'Asset Accessed',
+              time: new Date(d.created_at).toLocaleString(),
+              target: d.url || 'Internal'
+            })));
+          }
+        };
+        fetchLogs();
+        logsChannel = supabase
+          .channel(`system_logs_sync_${Math.random().toString(36).substring(7)}`)
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'system_logs' }, fetchLogs)
+          .subscribe();
+      } else {
+        const qLogs = query(collection(db, 'system_logs'), limit(10), orderBy('timestamp', 'desc'));
+        unsubscribeLogs = onSnapshot(qLogs, (snapshot) => {
+          const logs = snapshot.docs.map(d => ({
+            id: d.id,
+            user: d.data().userId || 'System',
+            action: d.data().type === 'error' ? 'Runtime Exception' : 'Asset Accessed',
+            time: d.data().timestamp?.toDate?.()?.toLocaleString() || new Date().toLocaleString(),
+            target: d.data().url || 'Internal'
+          }));
+          setAuditLogs(logs);
+        }, (err) => console.error("Audit log sync error:", err));
+      }
 
       // Fetch sample requests with smart fallback
       let unsubscribeSamples: (() => void) | null = null;
+      let supabaseChannel: any = null;
 
-      const startSampleSync = (withOrder: boolean) => {
+      const startSampleSync = async (withOrder: boolean) => {
+        if (isSupabaseConfigured()) {
+          // Supabase Path
+          fetchSamplesFallback(); // Initial fetch
+          supabaseChannel = supabase
+            .channel(`admin_leads_${Math.random().toString(36).substring(7)}`)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, () => {
+               fetchSamplesFallback();
+               playNotificationSound();
+            })
+            .subscribe();
+          return;
+        }
+
         if (unsubscribeSamples) unsubscribeSamples();
         
         const q = withOrder 
@@ -458,8 +604,10 @@ export default function Admin() {
       startSampleSync(true);
 
       return () => {
-        unsubscribeLogs();
+        if (unsubscribeLogs) unsubscribeLogs();
         if (unsubscribeSamples) unsubscribeSamples();
+        if (supabaseChannel) supabase.removeChannel(supabaseChannel);
+        if (logsChannel) supabase.removeChannel(logsChannel);
       };
     }
   }, [user]);
@@ -480,6 +628,25 @@ export default function Admin() {
   useEffect(() => {
     if (isAuthReady && user) {
       setLoading(true);
+
+      if (isSupabaseConfigured()) {
+        const fetchAllAssets = async () => {
+          const { data, error } = await supabase.from('cms_assets').select('*');
+          if (!error && data) {
+            setAssets(data.map(d => ({ ...d, id: d.id } as CMSAsset)));
+          }
+          setLoading(false);
+        };
+        fetchAllAssets();
+
+        const assetsChannel = supabase
+          .channel(`all_cms_assets_${Math.random().toString(36).substring(7)}`)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'cms_assets' }, fetchAllAssets)
+          .subscribe();
+        
+        return () => { supabase.removeChannel(assetsChannel); };
+      }
+
       const q = query(collection(db, 'cms_assets'));
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const data: CMSAsset[] = [];
@@ -799,11 +966,16 @@ export default function Admin() {
               <h2 className="text-3xl font-black text-brand-dark">📥 样品申请中心 (Sample Requests)</h2>
             </div>
             <div className="flex items-center gap-4">
-               {rawSampleCount !== null && (
-                 <div className="px-4 py-2 bg-brand-gray text-brand-dark/40 text-[10px] font-black rounded-lg border border-brand-border">
-                   DB COUNT: {rawSampleCount}
-                 </div>
-               )}
+                {rawSampleCount !== null && (
+                  <button 
+                    onClick={fetchSamplesFallback}
+                    className="px-4 py-2 bg-brand-gray/30 hover:bg-brand-blue/10 hover:border-brand-blue/30 text-brand-dark/60 hover:text-brand-blue text-[10px] font-black rounded-lg border border-brand-border transition-all flex items-center gap-2 group"
+                    title="点击强制同步数据库计数"
+                  >
+                    <Activity size={10} className={`${isRefreshing ? 'animate-spin' : 'group-hover:animate-pulse'}`} />
+                    DB COUNT: {rawSampleCount}
+                  </button>
+                )}
                <div className="px-4 py-2 bg-brand-blue/5 text-brand-blue text-[10px] font-black rounded-lg border border-brand-blue/20">
                   ADMIN: {user.email === "a.d.d.y.25433@gmail.com" ? "YES" : "NO"}
                </div>
@@ -818,7 +990,7 @@ export default function Admin() {
                  className="px-6 py-2 bg-brand-gray text-brand-dark border border-brand-border text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50"
                >
                  <Activity size={12} className={isRefreshing ? 'animate-spin' : ''} />
-                 RELOAD
+                 REFRESH DATA
                </button>
                <button
                  onClick={handleExportCSV}
@@ -851,7 +1023,7 @@ export default function Admin() {
                  className="px-6 py-2 bg-amber-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-amber-600 transition-all flex items-center gap-2"
                >
                  <FlaskRound size={12} />
-                 WRITE TEST DATA
+                 WRITE TEST DATA (S)
                </button>
                <button 
                  onClick={async () => {
@@ -1337,7 +1509,7 @@ export default function Admin() {
                   {user && <ImageUploadButton assetKey="market_inner_packaging" label="包装印刷" user={user} />}
                   {user && <ImageUploadButton assetKey="market_inner_home" label="建筑家居" user={user} />}
                   {user && <ImageUploadButton assetKey="market_inner_leather" label="皮革涂饰" user={user} />}
-                  {user && <ImageUploadButton assetKey="market_inner_sports" label="金属与工业配图" user={user} />}
+                  {user && <ImageUploadButton assetKey="market_inner_sports" label="工业与能源" user={user} />}
                 </div>
               </div>
             </div>

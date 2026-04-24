@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore } from 'firebase/firestore';
 import firebaseConfig from '../firebase-applet-config.json';
 
 // Initialize Firebase
@@ -8,7 +8,17 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize services
 export const auth = getAuth(app);
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = initializeFirestore(app, {}, firebaseConfig.firestoreDatabaseId); // Removed experimentalForceLongPolling to improve stability
+
+// Global quota tracker to prevent redundant failing calls and SDK crashes
+let _isQuotaExceeded = false;
+export const isFirestoreQuotaExceeded = () => _isQuotaExceeded;
+export const markFirestoreQuotaExceeded = () => {
+  if (!_isQuotaExceeded) {
+    console.warn("CRITICAL: Firestore Quota Exceeded. Halting all cloud operations for this session to prevent SDK instability.");
+    _isQuotaExceeded = true;
+  }
+};
 
 export enum OperationType {
   CREATE = 'create',

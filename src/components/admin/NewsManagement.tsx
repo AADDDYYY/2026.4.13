@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { db } from '../../firebase';
+import { db, isFirestoreQuotaExceeded, markFirestoreQuotaExceeded } from '../../firebase';
 import { collection, onSnapshot, query, orderBy, deleteDoc, doc } from 'firebase/firestore';
 import { Plus, Edit2, Trash2, Clock, Tag, ExternalLink, Newspaper, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import NewsFormModal from './NewsFormModal';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 
 export interface NewsItem {
   id: string;
@@ -25,6 +26,34 @@ export default function NewsManagement() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (isSupabaseConfigured()) {
+      const fetchNews = async () => {
+        const { data, error } = await supabase
+          .from('news')
+          .select('*')
+          .order('date', { ascending: false });
+        if (!error && data) {
+          setNews(data as NewsItem[]);
+        }
+        setLoading(false);
+      };
+      fetchNews();
+
+      const subscription = supabase
+        .channel(`news_changes_${Math.random().toString(36).substring(7)}`)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, fetchNews)
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(subscription);
+      };
+    }
+
+    if (isFirestoreQuotaExceeded()) {
+      setLoading(false);
+      return;
+    }
+
     const q = query(collection(db, 'news'), orderBy('date', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const newsData = snapshot.docs.map(doc => ({
@@ -32,6 +61,12 @@ export default function NewsManagement() {
         ...doc.data()
       } as NewsItem));
       setNews(newsData);
+      setLoading(false);
+    }, (err) => {
+      console.error('NewsManagement error:', err);
+      if (err.code === 'resource-exhausted' || err.message.includes('Quota exceeded')) {
+        markFirestoreQuotaExceeded();
+      }
       setLoading(false);
     });
 
@@ -41,7 +76,12 @@ export default function NewsManagement() {
   const handleDelete = async (id: string) => {
     if (confirm('确定要删除这条新闻吗？')) {
       try {
-        await deleteDoc(doc(db, 'news', id));
+        if (isSupabaseConfigured()) {
+          const { error } = await supabase.from('news').delete().eq('id', id);
+          if (error) throw error;
+        } else {
+          await deleteDoc(doc(db, 'news', id));
+        }
       } catch (err) {
         console.error('Delete error:', err);
         alert('删除失败');

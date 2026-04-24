@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowLeft, Clock, Tag, Share2, Printer, Bookmark } from "lucide-react";
-import { db } from "../firebase";
+import { db, isFirestoreQuotaExceeded, markFirestoreQuotaExceeded } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 
@@ -27,13 +28,34 @@ export default function NewsDetail() {
   useEffect(() => {
     async function fetchNews() {
       if (!id) return;
+      
       try {
-        const snap = await getDoc(doc(db, "news", id));
-        if (snap.exists()) {
-          setItem({ id: snap.id, ...snap.data() } as NewsItem);
+        if (isSupabaseConfigured()) {
+          const { data, error } = await supabase
+            .from('news')
+            .select('*')
+            .eq('id', id)
+            .single();
+          
+          if (error) throw error;
+          if (data) {
+            setItem(data as NewsItem);
+          }
+        } else {
+          if (isFirestoreQuotaExceeded()) {
+            setLoading(false);
+            return;
+          }
+          const snap = await getDoc(doc(db, "news", id));
+          if (snap.exists()) {
+            setItem({ id: snap.id, ...snap.data() } as NewsItem);
+          }
         }
-      } catch (e) {
+      } catch (e: any) {
         console.error(e);
+        if (e.code === 'resource-exhausted' || e.message?.includes('Quota exceeded')) {
+          markFirestoreQuotaExceeded();
+        }
       } finally {
         setLoading(false);
       }

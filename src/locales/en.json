@@ -386,10 +386,10 @@
         "desc": "Provide a full set of water-based finishing solutions for shoe materials, bags, and garment leather. Give leather a natural look, delicate feel, and excellent physical properties.",
         "features": ["Leather Finishing Agents", "Water-based Shoe Glue", "Abrasion Resistant Bag Coating", "Fashion Color Performance"]
       },
-      "sports": {
-        "title": "Industrial & Sports",
-        "desc": "Applied to sports equipment, motorcycles, and special industrial fields. Provide high-strength, high-toughness, and special functional coating protection.",
-        "features": ["Sports Equipment Wear Paint", "Motorcycle Decorative Coating", "Special Functional Adhesives", "High Strength Protection"]
+      "industrial": {
+        "title": "Industrial & Energy",
+        "desc": "Dedicated to coil coating, metal anti-corrosion, power batteries, and special industrial fields. Provide surface treatment solutions with high strength, broad-spectrum adhesion, long-term anti-corrosion, and electrochemical stability.",
+        "features": ["Industrial Protective Coating", "Battery Separator Adhesive", "Special Machinery Anti-corrosion", "Efficient Electrochemical Stability"]
       },
       "view_details": "View Detailed Solutions"
     },
@@ -690,16 +690,16 @@
       ]
     },
     "industrial": {
-      "overview": "In extreme industrial environments and high-intensity sports scenarios, material protection performance is critical. Seaton's special functional resins provide indestructible protection for industrial equipment and sports gear.",
+      "overview": "Seaton provides a full set of water-based polymer solutions for industrial manufacturing and new energy tracks. From harsh industrial anti-corrosion environments to high-tech power battery bonding scenarios, we are committed to solving both performance and environmental challenges through molecular-level design.",
       "challenges": [
-        "Extremely high requirements for impact and fatigue resistance",
-        "Long-term anti-corrosion protection for metal substrates",
-        "Integration of special functionalities (e.g., anti-slip, anti-static)",
-        "Performance stability under extreme climates"
+        "Long-term ultra-strong anti-corrosion requirements for industrial substrates",
+        "Surface stability under extreme chemical environments",
+        "Electrochemical compatibility inside new energy batteries",
+        "Mechanical protection needs under high-intensity operations"
       ],
       "solutions": [
         {
-          "title": "Industrial Protection & Metal",
+          "title": "Industrial Protection",
           "desc": "For hardware and mechanical equipment, providing fast-drying, high-adhesion, high-salt-spray-resistant waterborne anti-rust solutions.",
           "products": ["seapur-50m01", "seapur-50g85", "seacryl-11p28"]
         },
@@ -712,13 +712,13 @@
       "benefits": [
         "Outstanding physical protection strength",
         "Extending equipment service life",
-        "Multi-functional integrated solutions",
-        "Efficient and eco-friendly application experience"
+        "Supporting green energy transition",
+        "Safe and harmless environmental characteristics"
       ],
       "coreAdvantages": [
         { "title": "High-Toughness Protection System", "desc": "The film does not peel or crack under severe impact, providing long-term protection for equipment." },
         { "title": "Excellent Anti-Corrosion Performance", "desc": "Passes hundreds of hours of salt spray testing, effectively blocking moisture and oxygen from corroding metal." },
-        { "title": "Multi-functional Integration", "desc": "Special functions like anti-static, anti-slip, and high-temperature resistance can be integrated as needed." }
+        { "title": "Electrochemical Stability", "desc": "Specially optimized functional monomers for power batteries, ensuring long life and high safety." }
       ]
     }
   }

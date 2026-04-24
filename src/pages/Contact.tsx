@@ -8,6 +8,7 @@ import { useProducts } from "../hooks/useProducts";
 import { db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { handleFirestoreError, OperationType } from "../firebase";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -43,20 +44,42 @@ export default function Contact() {
     setIsSubmitting(true);
     
     try {
-      await addDoc(collection(db, "sample_requests"), {
-        userName: formData.name,
+      const payload = {
+        name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        companyName: formData.company,
-        applicationArea: formData.industry,
+        company: formData.company,
+        industry: formData.industry,
         substrate: formData.substrate,
         message: formData.message,
-        productName: productName || "General Inquiry",
-        productId: productName ? (products.find(p => p.name === productName)?.id || "other") : "none",
+        product_name: productName || "General Inquiry",
+        product_id: productName ? (products.find(p => p.name === productName)?.id || "other") : "none",
         status: "new",
         type: requestType,
-        createdAt: serverTimestamp()
-      });
+      };
+
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('leads').insert([payload]);
+        if (error) {
+           console.error("Supabase write error details:", error);
+           if (error.code === 'PGRST204' || (error.message && error.message.includes('column'))) {
+             alert(`提交失败：数据库表结构不完整。\n\n请在 Supabase SQL Editor 中运行代码添加缺失的列（如 status, product_id, type 等）。\n\n错误详情: ${error.message}`);
+           } else {
+             alert("提交失败: " + error.message);
+           }
+           throw error;
+        }
+      } else {
+        // Fallback to Firebase
+        await addDoc(collection(db, "sample_requests"), {
+          ...payload,
+          userName: payload.name, // Mapping to original firebase fields
+          companyName: payload.company,
+          applicationArea: payload.industry,
+          createdAt: serverTimestamp()
+        });
+      }
+
       setIsSubmitted(true);
       setFormData({
         name: "",
@@ -69,11 +92,7 @@ export default function Contact() {
       });
     } catch (error) {
       console.error("Error submitting contact form:", error);
-      try {
-        handleFirestoreError(error, OperationType.CREATE, "sample_requests");
-      } catch (errInfo) {
-        alert("提交失败（安全审计拒绝）。详细信息: " + (errInfo as Error).message);
-      }
+      alert("提交失败，请稍后重试。");
     } finally {
       setIsSubmitting(false);
     }

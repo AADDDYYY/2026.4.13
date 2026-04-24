@@ -1,4 +1,4 @@
-import { Car, Smartphone, Package, Home, Scissors, Trophy } from "lucide-react";
+import { Car, Smartphone, Package, Home, Scissors, Battery } from "lucide-react";
 
 export interface MarketApplicationDetail {
   id: string;
@@ -85,7 +85,7 @@ export const marketApplicationsData: Record<string, MarketApplicationDetail> = {
       {
         title: "家电外观装饰",
         desc: "为冰箱、洗衣机面板提供丰富的色彩表现力与长效的防腐蚀保护。",
-        products: ["seacryl-11a01", "seapur-50g85", "seacryl-11p22", "seacryl-11p28", "seacryl-11p27", "seacryl-11p58", "seacryl-11p51", "seacryl-13g29", "seacryl-23g24", "seacryl-20g04", "seacryl-20g05", "seacryl-12g37", "seacryl-23g27", "seapur-40g30", "seapur-40p35", "seapur-50g24"]
+        products: ["seacryl-11a01", "seapur-50g85", "seacryl-11p22", "seacryl-11p28", "seacryl-11p27", "seacryl-11p58", "seacryl-11p51", "seacryl-13g29", "seacryl-23g24", "seacryl-20g04", "seacryl-20g05", "seacryl-23g27", "seapur-40g30", "seapur-40p35"]
       }
     ],
     benefits: [
@@ -227,23 +227,23 @@ export const marketApplicationsData: Record<string, MarketApplicationDetail> = {
       "https://images.unsplash.com/photo-1473187983305-f6150a1e7246?auto=format&fit=crop&q=80&w=800"
     ]
   },
-  metal: {
-    id: "metal",
-    title: "金属与工业防护",
-    en: "Metal & Industrial Protection",
+  industrial: {
+    id: "industrial",
+    title: "工业与能源",
+    en: "Industrial & Energy",
     heroImage: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1920",
-    icon: Trophy,
-    overview: "应用于卷材、金属防腐及特种工业领域。西顿提供的特种功能树脂，为金属五金及工业设备提供坚不可摧的保护。",
+    icon: Battery,
+    overview: "应用于工业防腐、动力电池及特种工业领域。西顿提供的特种功能树脂，为工业设备及新能源产品提供坚不可摧的保护。",
     challenges: [
-      "极高的金属附着力与防锈要求",
-      "对金属基材的长效防腐蚀保护",
-      "特殊功能性（如防滑、抗静电）的集成",
+      "极高的工业基材附着力要求",
+      "新能源电池的电化学稳定性要求",
+      "特殊功能性（如高机械强度、抗静电）的集成",
       "极端气候下的性能稳定性"
     ],
     solutions: [
       {
-        title: "工业防护与金属",
-        desc: "针对五金件、机械设备，提供快速干、高附着、高耐盐雾的水性防锈方案。",
+        title: "工业防护",
+        desc: "针对工业五金、机械设备，提供高强度、高附着、优异耐性的水性防护方案。",
         products: ["seapur-50m01", "seapur-50g85", "seacryl-11p28"]
       },
       {
@@ -255,13 +255,13 @@ export const marketApplicationsData: Record<string, MarketApplicationDetail> = {
     benefits: [
       "卓越的物理防护强度",
       "延长设备使用寿命",
-      "多功能性集成方案",
+      "助力绿色能源转型",
       "高效环保的施工体验"
     ],
     coreAdvantages: [
       { title: "高韧性防护体系", desc: "漆膜在剧烈撞击下不剥离、不碎裂，为器材提供长效保护。" },
-      { title: "优异的防腐性能", desc: "通过数百小时盐雾测试，有效阻隔水分与氧气对金属的侵蚀。" },
-      { title: "多功能集成", desc: "可根据需求集成抗静电、防滑、耐高温等特殊功能。" }
+      { title: "优异的耐候性能", desc: "通过严苛的老化测试，有效阻隔环境因素对基材的侵蚀。" },
+      { title: "新能源专注", desc: "针对锂电池等特种工况优化的分子结构，确保极端环境下的安全性。" }
     ],
     gallery: [
       "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=800",

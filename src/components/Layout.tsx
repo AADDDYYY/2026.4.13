@@ -96,7 +96,6 @@ export const Header = () => {
         { label: t("divisions.plastic", "塑胶涂料树脂"), to: "/products?division=plastic" },
         { label: t("divisions.ink", "印刷油墨树脂"), to: "/products?division=ink" },
         { label: t("divisions.wood", "木器涂料树脂"), to: "/products?division=wood" },
-        { label: t("divisions.metal", "金属/薄膜涂料树脂"), to: "/products?division=metal" },
         { label: t("divisions.leather", "皮革/纺织/胶粘剂树脂"), to: "/products?division=leather" },
       ]
     },
@@ -113,11 +112,12 @@ export const Header = () => {
     {
       title: t("mega.by_industry", "按应用领域"),
       items: [
-        { label: t("industries.plastic", "塑胶应用"), to: "/products?industry=plastic" },
-        { label: t("industries.metal", "金属应用"), to: "/products?industry=metal" },
-        { label: t("industries.wood", "木器应用"), to: "/products?industry=wood" },
-        { label: t("industries.ink", "油墨应用"), to: "/products?industry=ink" },
-        { label: t("industries.leather", "皮革/纺织应用"), to: "/products?industry=leather" },
+        { label: t("industries.plastic", "塑胶用树脂"), to: "/products?industry=plastic" },
+        { label: t("industries.automotive", "汽车革用树脂"), to: "/products?industry=automotive" },
+        { label: t("industries.wood", "木器用树脂"), to: "/products?industry=wood" },
+        { label: t("industries.ink", "油墨用树脂"), to: "/products?industry=ink" },
+        { label: t("industries.leather", "皮革化学品"), to: "/products?industry=leather" },
+        { label: t("industries.industrial", "电池与工业用树脂"), to: "/products?industry=industrial" },
       ]
     }
   ];

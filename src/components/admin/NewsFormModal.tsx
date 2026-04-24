@@ -5,6 +5,7 @@ import { X, Save, UploadCloud, Camera, Eye, EyeOff, Newspaper, Clock, Hash, Alig
 import { motion } from 'motion/react';
 import { NewsItem } from './NewsManagement';
 import { compressImage } from '../../utils/compressImage';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 
 interface NewsFormModalProps {
   isOpen: boolean;
@@ -59,13 +60,25 @@ export default function NewsFormModal({ isOpen, onClose, editingItem }: NewsForm
     setIsSaving(true);
     try {
       const newsId = editingItem?.id || `news-${Date.now()}`;
-      await setDoc(doc(db, 'news', newsId), {
+      const payload = {
         ...formData,
-        updatedAt: serverTimestamp(),
-        // Ensure some defaults if not present
         status: formData.status || 'published',
         date: formData.date || new Date().toISOString().split('T')[0],
-      }, { merge: true });
+        updated_at: new Date().toISOString()
+      };
+
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('news').upsert({
+          id: newsId,
+          ...payload
+        });
+        if (error) throw error;
+      } else {
+        await setDoc(doc(db, 'news', newsId), {
+          ...payload,
+          updatedAt: serverTimestamp(),
+        }, { merge: true });
+      }
       
       onClose();
     } catch (err) {

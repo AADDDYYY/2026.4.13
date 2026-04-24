@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Car, Smartphone, Package, Home, Scissors, Trophy, ArrowRight } from "lucide-react";
+import { Car, Smartphone, Package, Home, Scissors, Battery, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -64,13 +64,13 @@ export default function MarketApplications() {
       features: t("market_apps.items.leather.features", { returnObjects: true }) as string[]
     },
     {
-      id: "metal",
-      title: t("market_apps.items.metal.title"),
-      en: "Metal & Industrial",
-      desc: t("market_apps.items.metal.desc"),
-      icon: <Trophy size={40} />,
+      id: "industrial",
+      title: t("market_apps.items.industrial.title"),
+      en: "Industrial & Energy",
+      desc: t("market_apps.items.industrial.desc"),
+      icon: <Battery size={40} />,
       image: imgSports,
-      features: t("market_apps.items.metal.features", { returnObjects: true }) as string[]
+      features: t("market_apps.items.industrial.features", { returnObjects: true }) as string[]
     }
   ];
 
@@ -79,9 +79,10 @@ export default function MarketApplications() {
       {/* Hero Section */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
         {marketHeroBg ? (
-          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
-            <img src={marketHeroBg} alt="Market Hero" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden">
+            <img src={marketHeroBg} alt="Market Hero" className="w-full h-full object-cover img-enhance object-right" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
           </div>
         ) : (
           <div className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-brand-blue/5 rounded-full blur-[250px] -z-10"></div>

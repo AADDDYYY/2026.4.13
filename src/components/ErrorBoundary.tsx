@@ -2,6 +2,7 @@ import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RotateCcw, Home } from "lucide-react";
 import { db, auth } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
 interface Props {
   children: ReactNode;
@@ -25,17 +26,31 @@ export class ErrorBoundary extends Component<Props, State> {
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
     
-    // Remote Logging to Firestore
+    // Remote Logging
     try {
-      addDoc(collection(db, 'system_logs'), {
+      const logData = {
         type: 'error',
         message: error.message,
         stack: error.stack || 'No stack trace',
         url: window.location.href,
-        timestamp: serverTimestamp(),
         userAgent: navigator.userAgent,
         userId: auth.currentUser?.uid || 'anonymous'
-      }).catch(err => console.error("Failed to sync log to cloud:", err));
+      };
+
+      if (isSupabaseConfigured()) {
+        supabase.from('system_logs').insert([{
+          ...logData,
+          user_id: logData.userId,
+          created_at: new Date().toISOString()
+        }]).then(({ error: sbErr }) => {
+          if (sbErr) console.error("Supabase log failed:", sbErr);
+        });
+      } else {
+        addDoc(collection(db, 'system_logs'), {
+          ...logData,
+          timestamp: serverTimestamp(),
+        }).catch(err => console.error("Failed to sync log to cloud:", err));
+      }
     } catch (e) {
       console.error("Critical: Logger failed", e);
     }

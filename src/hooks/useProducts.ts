@@ -1,52 +1,83 @@
 import { useState, useEffect, useMemo } from 'react';
-import { collection, onSnapshot, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { products as staticProducts, Product } from '../data/products';
 
+let globalCloudProducts: Product[] = [];
+let globalLoading = false;
+let globalError: string | null = null;
+const listeners = new Set<(data: { products: Product[], loading: boolean, error: string | null }) => void>();
+let subscription: any = null;
+
+async function fetchInitialProducts() {
+  if (!isSupabaseConfigured()) return;
+  
+  globalLoading = true;
+  notifyListeners();
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('name', { ascending: true });
+
+  if (error) {
+    console.error("Supabase products fetch error:", error);
+    globalError = error.message;
+  } else {
+    globalCloudProducts = (data || []).map(item => ({
+      ...item,
+    } as Product));
+    globalError = null;
+  }
+  globalLoading = false;
+  notifyListeners();
+}
+
+function startSubscription() {
+  if (subscription || !isSupabaseConfigured()) return;
+
+  subscription = supabase
+    .channel('products_changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
+      fetchInitialProducts();
+    })
+    .subscribe();
+}
+
+function notifyListeners() {
+  listeners.forEach(l => l({ products: globalCloudProducts, loading: globalLoading, error: globalError }));
+}
+
 export function useProducts() {
-  const [cloudProducts, setCloudProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [cloudProducts, setCloudProducts] = useState<Product[]>(globalCloudProducts);
+  const [loading, setLoading] = useState(globalLoading);
+  const [error, setError] = useState<string | null>(globalError);
 
   useEffect(() => {
-    // Listen to Firebase products in real-time
-    const unsubscribe = onSnapshot(
-      collection(db, 'products'),
-      (snapshot) => {
-        const fetchedProducts = snapshot.docs.map(doc => ({
-          ...doc.data(),
-          id: doc.id // Ensure ID matches the document ID
-        } as Product));
-        setCloudProducts(fetchedProducts);
-        setLoading(false);
-      },
-      (err) => {
-        console.error("Error fetching cloud products:", err);
-        setError(err.message);
-        setLoading(false);
-      }
-    );
+    const listener = (data: { products: Product[], loading: boolean, error: string | null }) => {
+      setCloudProducts(data.products);
+      setLoading(data.loading);
+      setError(data.error);
+    };
+    listeners.add(listener);
 
-    return () => unsubscribe();
+    if (globalCloudProducts.length === 0 && !globalLoading && !globalError) {
+      fetchInitialProducts();
+    }
+    startSubscription();
+    
+    return () => { listeners.delete(listener); };
   }, []);
 
-  // Merge static products with cloud products. Cloud overrides static if IDs match.
-  const allProducts = useMemo(() => {
-    const productMap = new Map<string, Product>();
-    
-    // 1. Add static products first
-    staticProducts.forEach(p => productMap.set(p.id, p));
-    
-    // 2. Override/Add cloud products
-    cloudProducts.forEach(p => productMap.set(p.id, p));
-    
-    // Return as array and sort by name
-    return Array.from(productMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+  const products = useMemo(() => {
+    const map = new Map<string, Product>();
+    staticProducts.forEach(p => map.set(p.id, p));
+    cloudProducts.forEach(p => map.set(p.id, p));
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
   }, [cloudProducts]);
 
   const publishedProducts = useMemo(() => {
-    return allProducts.filter(p => p.status !== 'draft');
-  }, [allProducts]);
+    return products.filter(p => p.status !== 'draft');
+  }, [products]);
 
-  return { products: allProducts, publishedProducts, cloudProducts, loading, error };
+  return { products, publishedProducts, cloudProducts, loading, error };
 }
