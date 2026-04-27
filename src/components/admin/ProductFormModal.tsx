@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Product } from '../../data/products';
-import { X, Save, Plus, Trash2, FlaskConical, TestTube2, Thermometer, Droplets, Info, LayoutGrid, FileText, UploadCloud, FileCheck, Image as ImageIcon, Camera, Eye, EyeOff } from 'lucide-react';
+import { X, Save, Plus, Trash2, FlaskConical, TestTube2, Thermometer, Droplets, Info, LayoutGrid, FileText, UploadCloud, FileCheck, Image as ImageIcon, Camera, Eye, EyeOff, Flame, RefreshCw } from 'lucide-react';
 import { compressImage } from '../../utils/compressImage';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import ImageCropperModal from './ImageCropperModal';
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -34,7 +36,8 @@ const emptyProduct: Product = {
   description: '',
   image: 'https://picsum.photos/seed/chemical/800/600',
   tdsUrl: '',
-  sdsUrl: ''
+  sdsUrl: '',
+  is_hot: false
 };
 
 export default function ProductFormModal({ isOpen, onClose, onSave, initialProduct }: ProductFormModalProps) {
@@ -42,20 +45,65 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
   const [activeTab, setActiveTab] = useState<'basic' | 'tech' | 'performance'>('basic');
   const [newFeature, setNewFeature] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [cropperImage, setCropperImage] = useState<string | null>(null);
   const tdsInputRef = useRef<HTMLInputElement>(null);
   const sdsInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadToSupabase = async (base64OrFile: string | File, bucket: string): Promise<string> => {
+    if (!isSupabaseConfigured()) throw new Error('Supabase not configured');
+    
+    let fileToUpload: File | Blob;
+    if (typeof base64OrFile === 'string' && base64OrFile.startsWith('data:')) {
+      const res = await fetch(base64OrFile);
+      fileToUpload = await res.blob();
+    } else {
+      fileToUpload = base64OrFile as File;
+    }
+
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.jpg`;
+    const filePath = `${fileName}`;
+
+    const { error } = await supabase.storage
+      .from(bucket)
+      .upload(filePath, fileToUpload);
+
+    if (error) throw error;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropperImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageCropComplete = async (croppedBase64: string) => {
+    setIsUploading(true);
     try {
-      const compressedBase64 = await compressImage(file, 1200, 0.8);
-      setFormData({ ...formData, image: compressedBase64 });
+      if (isSupabaseConfigured()) {
+        const publicUrl = await uploadToSupabase(croppedBase64, 'products');
+        setFormData({ ...formData, image: publicUrl });
+      } else {
+        setFormData({ ...formData, image: croppedBase64 });
+      }
     } catch (error) {
       console.error('Image upload failed:', error);
       alert('图片上传失败');
+    } finally {
+      setIsUploading(false);
+      setCropperImage(null);
     }
   };
 
@@ -63,16 +111,28 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 1024 * 1024) { // 1MB Limit
-      alert('文件太大！由于数据库限制，请上传小于 1MB 的 PDF 文档。');
-      return;
+    setIsUploading(true);
+    try {
+      if (isSupabaseConfigured()) {
+        const publicUrl = await uploadToSupabase(file, 'products');
+        setFormData({ ...formData, [field]: publicUrl });
+      } else {
+        if (file.size > 1024 * 1024) { 
+          alert('文件太大！由于数据库限制，请上传小于 1MB 的 PDF 文档或启用 Supabase 存储。');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (upload) => {
+          setFormData({ ...formData, [field]: upload.target?.result as string });
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+       console.error('File upload failed:', error);
+       alert('文档上传失败');
+    } finally {
+      setIsUploading(false);
     }
-
-    const reader = new FileReader();
-    reader.onload = (upload) => {
-      setFormData({ ...formData, [field]: upload.target?.result as string });
-    };
-    reader.readAsDataURL(file);
   };
 
   useEffect(() => {
@@ -140,6 +200,14 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
       
       <div className="relative w-full max-w-5xl bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
+        {cropperImage && (
+          <ImageCropperModal 
+            image={cropperImage}
+            onClose={() => setCropperImage(null)}
+            onCropComplete={handleImageCropComplete}
+            aspect={4/3}
+          />
+        )}
         <div className="p-8 border-b border-brand-border bg-brand-gray/30 text-brand-dark">
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -149,22 +217,41 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
               <p className="text-[10px] uppercase font-black tracking-widest text-brand-dark/40 mt-1">Configure Technical Data Sheets</p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-brand-border shadow-sm">
-                <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark/40">发布状态:</span>
-                <button 
-                  type="button"
-                  onClick={() => setFormData({...formData, status: formData.status === 'draft' ? 'published' : 'draft'})}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all ${
-                    formData.status !== 'draft' 
-                      ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
-                      : 'bg-brand-dark text-white'
-                  }`}
-                >
-                  {formData.status !== 'draft' ? <Eye size={12} /> : <EyeOff size={12} />}
-                  <span className="text-[9px] font-black uppercase tracking-widest">
-                    {formData.status !== 'draft' ? '已上架' : '已下架'}
-                  </span>
-                </button>
+              <div className="flex items-center gap-4 bg-white px-5 py-2 rounded-2xl border border-brand-border shadow-sm">
+                <div className="flex items-center gap-2 pr-4 border-r border-brand-border">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark/40">推荐置顶:</span>
+                  <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, is_hot: !formData.is_hot})}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all ${
+                      formData.is_hot 
+                        ? 'bg-orange-50 text-orange-600 border border-orange-100 shadow-sm' 
+                        : 'bg-brand-gray text-brand-dark/30 border border-brand-border'
+                    }`}
+                  >
+                    <Flame size={12} className={formData.is_hot ? "animate-pulse" : ""} />
+                    <span className="text-[9px] font-black uppercase tracking-widest">
+                      {formData.is_hot ? '热门产品' : '普通'}
+                    </span>
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark/40">发布状态:</span>
+                  <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, status: formData.status === 'draft' ? 'published' : 'draft'})}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all ${
+                      formData.status !== 'draft' 
+                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
+                        : 'bg-brand-dark text-white'
+                    }`}
+                  >
+                    {formData.status !== 'draft' ? <Eye size={12} /> : <EyeOff size={12} />}
+                    <span className="text-[9px] font-black uppercase tracking-widest">
+                      {formData.status !== 'draft' ? '已上架' : '已下架'}
+                    </span>
+                  </button>
+                </div>
               </div>
               <button 
                 type="button"
@@ -236,33 +323,35 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
                     <div className="flex flex-col gap-4">
                       <div className="aspect-square rounded-[24px] overflow-hidden bg-white border border-brand-border group relative">
                         <img src={formData.image || 'https://picsum.photos/seed/chemical/800/600'} className="w-full h-full object-cover" />
-                        <button type="button" onClick={() => imageInputRef.current?.click()} className="absolute inset-0 bg-brand-dark/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"><Camera size={20} /></button>
+                        <button type="button" disabled={isUploading} onClick={() => imageInputRef.current?.click()} className="absolute inset-0 bg-brand-dark/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                          {isUploading ? <RefreshCw className="animate-spin" size={24} /> : <Camera size={24} />}
+                        </button>
                       </div>
-                      <input type="file" ref={imageInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} />
+                      <input type="file" ref={imageInputRef} className="hidden" accept="image/*" onChange={handleImageSelect} />
                       <input 
                         value={formData.image?.startsWith('data:') ? '已内嵌图片' : formData.image}
                         onChange={e => setFormData({...formData, image: e.target.value})}
-                        placeholder="图片 URL URL..."
+                        placeholder="或者输入图片 URL..."
                         className="w-full px-4 py-2 bg-white border border-brand-border rounded-xl text-[10px] font-bold"
                       />
                     </div>
                     <div className="lg:col-span-2 space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-4">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-brand-blue">TDS 文档</label>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-brand-blue">TDS 文档 (PDF)</label>
                           <div className="flex gap-2">
-                            <button type="button" onClick={() => tdsInputRef.current?.click()} className="flex-1 py-3 bg-white border border-brand-border rounded-xl text-[9px] font-black uppercase tracking-widest hover:border-brand-blue transition-all">
-                              {formData.tdsUrl ? '更换 TDS' : '上传 TDS'}
+                            <button type="button" disabled={isUploading} onClick={() => tdsInputRef.current?.click()} className="flex-1 py-3 bg-white border border-brand-border rounded-xl text-[9px] font-black uppercase tracking-widest hover:border-brand-blue transition-all disabled:opacity-50">
+                              {isUploading ? '处理中...' : formData.tdsUrl ? '更换 TDS' : '上传 TDS'}
                             </button>
                             {formData.tdsUrl && <button type="button" onClick={() => setFormData({...formData, tdsUrl: ''})} className="p-3 bg-red-50 text-red-500 rounded-xl"><Trash2 size={14} /></button>}
                           </div>
                           <input type="file" ref={tdsInputRef} className="hidden" accept=".pdf" onChange={(e) => handleFileUpload(e, 'tdsUrl')} />
                         </div>
                         <div className="space-y-4">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-brand-blue">SDS 说明书</label>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-brand-blue">SDS 说明书 (PDF)</label>
                           <div className="flex gap-2">
-                            <button type="button" onClick={() => sdsInputRef.current?.click()} className="flex-1 py-3 bg-white border border-brand-border rounded-xl text-[9px] font-black uppercase tracking-widest hover:border-brand-blue transition-all">
-                              {formData.sdsUrl ? '更换 SDS' : '上传 SDS'}
+                            <button type="button" disabled={isUploading} onClick={() => sdsInputRef.current?.click()} className="flex-1 py-3 bg-white border border-brand-border rounded-xl text-[9px] font-black uppercase tracking-widest hover:border-brand-blue transition-all disabled:opacity-50">
+                              {isUploading ? '处理中...' : formData.sdsUrl ? '更换 SDS' : '上传 SDS'}
                             </button>
                             {formData.sdsUrl && <button type="button" onClick={() => setFormData({...formData, sdsUrl: ''})} className="p-3 bg-red-50 text-red-500 rounded-xl"><Trash2 size={14} /></button>}
                           </div>

@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 import { NewsItem } from './NewsManagement';
 import { compressImage } from '../../utils/compressImage';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import ImageCropperModal from './ImageCropperModal';
 
 interface NewsFormModalProps {
   isOpen: boolean;
@@ -27,27 +28,44 @@ export default function NewsFormModal({ isOpen, onClose, editingItem }: NewsForm
 
   const [isSaving, setIsSaving] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [cropperImage, setCropperImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (editingItem) {
       setFormData(editingItem);
       setImagePreview(editingItem.image);
+    } else {
+      setFormData({
+        title: '',
+        category: 'corporate',
+        type: 'press_release',
+        date: new Date().toISOString().split('T')[0],
+        summary: '',
+        content: '',
+        image: '',
+        status: 'published'
+      });
+      setImagePreview(null);
     }
-  }, [editingItem]);
+  }, [editingItem, isOpen]);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      try {
-        const compressedBase64 = await compressImage(file, 1200, 0.7);
-        setImagePreview(compressedBase64);
-        setFormData(prev => ({ ...prev, image: compressedBase64 }));
-      } catch (err) {
-        console.error('Image compression failed:', err);
-        alert('图片处理失败，请重试');
-      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCropperImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
+  };
+
+  const handleImageCropComplete = (croppedBase64: string) => {
+    setImagePreview(croppedBase64);
+    setFormData(prev => ({ ...prev, image: croppedBase64 }));
+    setCropperImage(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -105,6 +123,14 @@ export default function NewsFormModal({ isOpen, onClose, editingItem }: NewsForm
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
         className="bg-white w-full max-w-4xl max-h-[90vh] rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative z-10 pointer-events-auto"
       >
+        {cropperImage && (
+          <ImageCropperModal 
+            image={cropperImage}
+            onClose={() => setCropperImage(null)}
+            onCropComplete={handleImageCropComplete}
+            aspect={16/9}
+          />
+        )}
         {/* Header */}
         <div className="px-10 py-8 border-b border-brand-border flex items-center justify-between bg-white sticky top-0 z-20">
           <div className="flex items-center gap-4">
@@ -161,7 +187,7 @@ export default function NewsFormModal({ isOpen, onClose, editingItem }: NewsForm
                     </>
                   )}
                 </div>
-                <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+                <input type="file" ref={fileInputRef} onChange={handleImageSelect} accept="image/*" className="hidden" />
               </div>
 
               <div className="space-y-6">

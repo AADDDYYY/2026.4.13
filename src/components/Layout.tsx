@@ -127,7 +127,7 @@ export const Header = () => {
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 shrink-0" onClick={() => setIsMenuOpen(false)}>
           <img 
-            src="/logo.svg" 
+            src={useCMSAsset('site_logo', '/logo.svg').value} 
             alt="西顿新材料" 
             className="h-12 md:h-14 lg:h-16 w-auto transition-all duration-500"
             referrerPolicy="no-referrer" 

@@ -4,6 +4,7 @@ import { collection, onSnapshot, query, addDoc, updateDoc, deleteDoc, doc, serve
 import { Plus, Trash2, Edit2, Image as ImageIcon, Save, X } from 'lucide-react';
 import { compressImage } from '../../utils/compressImage';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import ImageCropperModal from './ImageCropperModal';
 
 export interface CertificateItem {
   id: string;
@@ -18,6 +19,7 @@ export default function CertificateManagement() {
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<CertificateItem>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [cropperData, setCropperData] = useState<{ id: string, image: string } | null>(null);
 
   useEffect(() => {
     if (isSupabaseConfigured()) {
@@ -102,22 +104,30 @@ export default function CertificateManagement() {
     } catch (err) { console.error(err); }
   };
 
-  const handleImageUpload = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropperData({ id, image: reader.result as string });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageCropComplete = async (croppedBase64: string) => {
+    if (!cropperData) return;
     try {
       setIsLoading(true);
-      const base64 = await compressImage(file, 1000, 0.7);
-      
       if (isSupabaseConfigured()) {
-        const { error } = await supabase.from('certificates').update({ image: base64 }).eq('id', id);
+        const { error } = await supabase.from('certificates').update({ image: croppedBase64 }).eq('id', cropperData.id);
         if (error) throw error;
       } else {
-        await updateDoc(doc(db, 'certificates', id), { image: base64 });
+        await updateDoc(doc(db, 'certificates', cropperData.id), { image: croppedBase64 });
       }
+      setCropperData(null);
     } catch (err) {
       console.error(err);
-      alert("上传失败，图片可能过大");
+      alert("上传失败");
     } finally {
       setIsLoading(false);
     }
@@ -125,6 +135,14 @@ export default function CertificateManagement() {
 
   return (
     <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border mb-12">
+      {cropperData && (
+        <ImageCropperModal 
+          image={cropperData.image}
+          onClose={() => setCropperData(null)}
+          onCropComplete={handleImageCropComplete}
+          aspect={3/4}
+        />
+      )}
       <div className="flex items-center justify-between mb-12">
         <div className="flex items-center gap-4">
           <div className="w-2 h-8 bg-brand-blue rounded-full"></div>
@@ -152,7 +170,7 @@ export default function CertificateManagement() {
                 <span className="text-white font-bold bg-brand-blue px-4 py-2 rounded-full text-sm">
                   {isLoading ? '上传中...' : '更换图片'}
                 </span>
-                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(cert.id, e)} disabled={isLoading} />
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(cert.id, e)} disabled={isLoading} />
               </label>
             </div>
 

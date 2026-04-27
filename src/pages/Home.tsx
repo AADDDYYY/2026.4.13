@@ -149,6 +149,7 @@ const ValuePillars = () => {
 const CorporateVideo = () => {
   const { t } = useTranslation();
   const { value: rawPromoVideoUrl } = useCMSAsset('home_promo_video', 'https://14342357.s21v.faiusr.com/58/9/ABUIABA6GAAg1fuzzgYo0KbyTw.mp4');
+  const { value: videoPoster } = useCMSAsset('home_video_poster', '');
 
   let promoVideoUrl = rawPromoVideoUrl;
   if (promoVideoUrl === '/promo.mp4' || !promoVideoUrl || promoVideoUrl.trim() === '') {
@@ -181,6 +182,7 @@ const CorporateVideo = () => {
           ) : (
             <video 
               src={promoVideoUrl} 
+              poster={videoPoster}
               controls 
               playsInline
               preload="metadata"
@@ -280,18 +282,20 @@ const FeaturedTechnologies = () => {
 const MarketSectors = () => {
   const { t } = useTranslation();
   
-  const { value: sector1 } = useCMSAsset('home_sector_leather', 'https://images.unsplash.com/photo-1524292332709-b33366a7f141?auto=format&fit=crop&q=80&w=800');
-  const { value: sector2 } = useCMSAsset('home_sector_electronics', 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800');
-  const { value: sector3 } = useCMSAsset('home_sector_industrial', 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800');
-  const { value: sector4 } = useCMSAsset('home_sector_wood', 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=800');
+  const { value: imgLeather } = useCMSAsset('market_inner_leather', 'https://images.unsplash.com/photo-1524290263334-92f5374171a6?auto=format&fit=crop&q=80&w=800');
+  const { value: imgAutomotive } = useCMSAsset('market_inner_automotive', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800');
+  const { value: imgElectronics } = useCMSAsset('market_inner_electronics', 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800');
+  const { value: imgPackaging } = useCMSAsset('market_inner_packaging', 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800');
+  const { value: imgHome } = useCMSAsset('market_inner_home', 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80&w=800');
+  const { value: imgIndustrial } = useCMSAsset('market_inner_sports', 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800');
 
   const sectors = [
-    { title: "皮革化学品", en: "Leather Chemicals", img: sector1, id: "leather" },
-    { title: "汽车革用树脂", en: "Automotive Leather", img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800', id: "automotive" },
-    { title: "塑胶用树脂", en: "Plastic & Electronics", img: sector2, id: "plastic" },
-    { title: "油墨用树脂", en: "Ink & Packaging", img: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800', id: "ink" },
-    { title: "木器用树脂", en: "Wood & Furniture", img: sector4, id: "wood" },
-    { title: "电池金属用树脂", en: "Battery & Metal", img: sector3, id: "industrial" }
+    { title: "皮革化学品", en: "Leather Chemicals", img: imgLeather, id: "leather" },
+    { title: "汽车革用树脂", en: "Automotive Leather", img: imgAutomotive, id: "automotive" },
+    { title: "塑胶用树脂", en: "Plastic & Electronics", img: imgElectronics, id: "plastic" },
+    { title: "油墨用树脂", en: "Ink & Packaging", img: imgPackaging, id: "ink" },
+    { title: "木器用树脂", en: "Wood & Furniture", img: imgHome, id: "wood" },
+    { title: "电池金属用树脂", en: "Battery & Metal", img: imgIndustrial, id: "industrial" }
   ];
 
   return (
@@ -319,7 +323,7 @@ const MarketSectors = () => {
                 className="group relative aspect-[3/4.5] md:aspect-[3/4.5] rounded-[40px] md:rounded-[60px] overflow-hidden cursor-pointer shadow-2xl block"
               >
                 <img src={sector.img} alt={sector.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-brand-dark/50 group-hover:bg-brand-dark/30 transition-colors duration-700"></div>
+                <div className="absolute inset-0 bg-brand-dark/30 group-hover:bg-brand-dark/10 transition-colors duration-700"></div>
                 <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
                   <h3 className="text-2xl md:text-3xl font-black text-white mb-2 md:mb-4 tracking-tight">{sector.title}</h3>
                   <p className="text-white/50 text-[10px] font-black uppercase tracking-widest">{sector.en}</p>

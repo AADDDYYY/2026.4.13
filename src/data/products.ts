@@ -24,6 +24,7 @@ export interface Product {
   tdsUrl?: string;
   sdsUrl?: string;
   status?: 'published' | 'draft';
+  is_hot?: boolean;
   performance?: {
     hardness: number;
     flexibility: number;

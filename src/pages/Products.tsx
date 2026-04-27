@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Shield, Zap, Droplets, FlaskConical, ArrowRight, Sparkles, Search, Car, Smartphone, Package, Home, Scissors, Trophy } from "lucide-react";
+import { Shield, Zap, Droplets, FlaskConical, ArrowRight, Sparkles, Search, Car, Smartphone, Package, Home, Scissors, Trophy, Flame } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -224,7 +224,14 @@ export default function Products() {
                     className="grid grid-cols-12 gap-6 p-12 items-center hover:bg-brand-gray transition-all duration-500 group"
                   >
                     <div className="col-span-2">
-                      <div className="text-2xl font-black tracking-tight text-brand-dark group-hover:text-brand-blue transition-colors">{product.name}</div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-2xl font-black tracking-tight text-brand-dark group-hover:text-brand-blue transition-colors">{product.name}</div>
+                        {product.is_hot && (
+                          <div className="flex items-center gap-1 px-3 py-1 bg-orange-500 text-white rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-orange-500/20 animate-pulse">
+                            <Flame size={10} fill="currentColor" /> HOT
+                          </div>
+                        )}
+                      </div>
                       <div className="text-[10px] text-brand-dark/30 font-black uppercase tracking-widest mt-3">{product.type}</div>
                     </div>
                     <div className="col-span-1">

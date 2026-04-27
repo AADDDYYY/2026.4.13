@@ -72,7 +72,13 @@ export function useProducts() {
     const map = new Map<string, Product>();
     staticProducts.forEach(p => map.set(p.id, p));
     cloudProducts.forEach(p => map.set(p.id, p));
-    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+    return Array.from(map.values()).sort((a, b) => {
+      // Sort by is_hot first (true comes first)
+      if (a.is_hot && !b.is_hot) return -1;
+      if (!a.is_hot && b.is_hot) return 1;
+      // Then sort by name
+      return a.name.localeCompare(b.name);
+    });
   }, [cloudProducts]);
 
   const publishedProducts = useMemo(() => {

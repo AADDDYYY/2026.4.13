@@ -11,6 +11,7 @@ import InquiryDashboard from '../components/admin/InquiryDashboard';
 import NewsManagement from '../components/admin/NewsManagement';
 import CertificateManagement from '../components/admin/CertificateManagement';
 import LeadDetailsModal from '../components/admin/LeadDetailsModal';
+import ImageCropperModal from '../components/admin/ImageCropperModal';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { 
   BarChart, 
@@ -175,6 +176,7 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
   const [history, setHistory] = useState<string[]>([]);
   const [currentValue, setCurrentValue] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
+  const [cropperImage, setCropperImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -206,7 +208,6 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
       return () => { supabase.removeChannel(subscription); };
     }
 
-    // Listen for history updates for this specific asset
     const unsubscribe = onSnapshot(doc(db, 'cms_assets', assetKey), (snap) => {
       if (snap.exists()) {
         const data = snap.data();
@@ -217,17 +218,26 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
     return () => unsubscribe();
   }, [assetKey]);
 
-  const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if(!file || !user) return;
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropperImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleUpload = async (croppedBase64: string) => {
+    if(!croppedBase64 || !user) return;
     
     setIsUploading(true);
     try {
-      const base64Data = await compressImage(file, 1920);
       const payload = {
         key: assetKey,
         type: 'image',
-        value: base64Data,
+        value: croppedBase64,
         updated_at: new Date().toISOString(),
         updated_by: user.uid
       };
@@ -299,7 +309,17 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
 
   return (
     <div className="mt-6 w-full space-y-4">
-      <input type="file" accept="image/*" ref={fileInputRef} onChange={handleUpload} className="hidden" />
+      <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileSelect} className="hidden" />
+      
+      {cropperImage && (
+        <ImageCropperModal 
+          image={cropperImage}
+          onClose={() => setCropperImage(null)}
+          onCropComplete={handleUpload}
+          aspect={assetKey.includes('hero') || assetKey.includes('banner') || assetKey.includes('bg') ? 16 / 9 : 1}
+        />
+      )}
+
       <div className="flex items-center gap-4">
         {currentValue && (
           <div className="w-14 h-14 rounded-lg overflow-hidden border border-brand-border shrink-0 bg-brand-gray group/preview relative">
@@ -1237,9 +1257,13 @@ export default function Admin() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div className="space-y-8">
               <h3 className="text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
-                <SearchIcon size={20} className="text-brand-blue" /> 搜索引擎优化 (SEO & Social)
+                <SearchIcon size={20} className="text-brand-blue" /> 品牌与 SEO (Brand & SEO)
               </h3>
               <div className="bg-brand-gray/50 p-8 rounded-3xl border border-brand-border">
+                <div className="mb-8">
+                  <h4 className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">企业 Logo (Site Logo)</h4>
+                  {user && <ImageUploadButton assetKey="site_logo" label="上传 Logo (建议矢量 .svg 或透明 .png)" user={user} />}
+                </div>
                 {user && <TextUpdateField assetKey="seo_title" label="网站标题 (Browser Title)" user={user} placeholder="例如：西顿新材料 - 全球领先的水性树脂专家" />}
                 {user && <TextUpdateField assetKey="seo_keywords" label="搜索关键词 (Keywords)" user={user} placeholder="关键词用逗号隔开，如：水性树脂, PUD, 环保涂料" />}
                 {user && <TextUpdateField assetKey="seo_description" label="页面描述 (Description)" user={user} type="textarea" placeholder="简短的公司介绍，会出现在搜索结果下方" />}
@@ -1366,29 +1390,30 @@ export default function Admin() {
           <div className="space-y-12">
             {/* Home Hero */}
             <div>
-              <h3 className="text-lg font-black text-brand-dark mb-4">1. 首页顶部巨幅背景图与企业宣传片</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                {user && <ImageUploadButton assetKey="home_hero_bg" label="上传首页背景 (建议横图 1920x1080)" user={user} />}
-                {user && <TextUpdateField assetKey="home_promo_video" label="企业片直链或B站/腾讯/YouTube嵌入代码" user={user} placeholder="//player.bilibili.com/..." />}
+              <h3 className="text-lg font-black text-brand-dark mb-4">1. 首页顶部巨幅背景图与企业宣传片 (Hero)</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                {user && <ImageUploadButton assetKey="home_hero_bg" label="上传首页大图背景 (建议 1920x1080)" user={user} />}
+                {user && <ImageUploadButton assetKey="home_video_poster" label="视频播放预览图 (Cover)" user={user} />}
+                {user && <TextUpdateField assetKey="home_promo_video" label="企业宣传片 (视频文件 URL 或 B站/优酷 嵌入代码)" user={user} placeholder="https://...mp4" />}
               </div>
               
               <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
-                  { label: "经典深蓝科技", url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" },
-                  { label: "绿色环保材料", url: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?q=80&w=2564&auto=format&fit=crop" },
-                  { label: "微观结晶质感", url: "https://images.unsplash.com/photo-1633423377259-7157ccf726cb?q=80&w=2564&auto=format&fit=crop" }
+                  { label: "深蓝科技 (默认)", url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" },
+                  { label: "绿色实验室", url: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=2564" },
+                  { label: "微观新材料", url: "https://images.unsplash.com/photo-1633423377259-7157ccf726cb?q=80&w=2564&auto=format&fit=crop" }
                 ].map((preset, idx) => (
                   <div key={idx} className="group relative rounded-xl overflow-hidden border-2 border-transparent hover:border-brand-blue cursor-pointer transition-all"
                     onClick={async () => {
                       if(!user) return;
                       try {
                         await setDoc(doc(db, 'cms_assets', 'home_hero_bg'), { key: 'home_hero_bg', type: 'image', value: preset.url, updatedAt: new Date().toISOString(), updatedBy: user.uid });
-                        alert(`成功！首页大图已更换为：${preset.label}`);
+                        alert(`已成功设为背景：${preset.label}`);
                       } catch(e) { console.error(e); }
                     }}
                   >
                     <img src={preset.url} alt={preset.label} className="w-full h-24 object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-2"><span className="text-white font-bold text-xs">{preset.label}</span></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-2 text-white font-bold text-[10px]">{preset.label}</div>
                   </div>
                 ))}
               </div>
@@ -1406,15 +1431,18 @@ export default function Admin() {
               )}
             </div>
 
-            {/* Home Market Sectors */}
+            {/* Home Market Sectors (Unified with Market Applications) */}
             <div className="border-t border-brand-border pt-8">
-              <h3 className="text-lg font-black text-brand-dark mb-4">3. 市场应用四大板块 (Market Sectors)</h3>
+              <h3 className="text-lg font-black text-brand-dark mb-4">3. 赋能多元行业 (Market Sectors - 对应市场应用内页)</h3>
+              <p className="text-brand-dark/40 text-xs mb-6 -mt-2 italic">此处的图片与“全站图集 - 市场应用”内页图集同步，修改任一处都会实时更新全球页面。</p>
               {user && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <ImageUploadButton assetKey="home_sector_leather" label="皮革涂饰 (Leather)" user={user} />
-                  <ImageUploadButton assetKey="home_sector_electronics" label="消费电子 (Electronics)" user={user} />
-                  <ImageUploadButton assetKey="home_sector_industrial" label="工业涂料 (Industrial)" user={user} />
-                  <ImageUploadButton assetKey="home_sector_wood" label="木器家具 (Wood)" user={user} />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <ImageUploadButton assetKey="market_inner_leather" label="皮革化学/涂饰 (Leather)" user={user} />
+                  <ImageUploadButton assetKey="market_inner_automotive" label="汽车革用/工业 (Automotive)" user={user} />
+                  <ImageUploadButton assetKey="market_inner_electronics" label="塑胶用/消费电子 (Electronics)" user={user} />
+                  <ImageUploadButton assetKey="market_inner_packaging" label="油墨用/包装印刷 (Packaging)" user={user} />
+                  <ImageUploadButton assetKey="market_inner_home" label="木器用/建筑家居 (Home)" user={user} />
+                  <ImageUploadButton assetKey="market_inner_sports" label="电池金属/工业能源 (Industrial)" user={user} />
                 </div>
               )}
             </div>
@@ -1428,31 +1456,37 @@ export default function Admin() {
             <div className="space-y-12">
               <div>
                 <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
-                   通用背景 / Backgrounds
+                   页面背景 / Banner
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {user && <ImageUploadButton assetKey="about_hero_bg" label="关于页顶部 Banner" user={user} />}
-                  {user && <ImageUploadButton assetKey="rd_hero_bg" label="研发页顶部 Banner" user={user} />}
+                  {user && <ImageUploadButton assetKey="about_strength_img" label="企业实力/规模配图" user={user} />}
                 </div>
               </div>
 
               <div className="border-t border-brand-border pt-8">
                 <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
-                  <Factory size={16} className="text-brand-blue" /> 智能制造基地 (Manufacturing Base)
+                   荣誉奖项与资质 (Certificates & Honors)
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {user && <ImageUploadButton assetKey="about_strength_img" label="主工厂背景 (大)" user={user} />}
-                  {user && <ImageUploadButton assetKey="mfg_gallery_1" label="实况画廊 1" user={user} />}
-                  {user && <ImageUploadButton assetKey="mfg_gallery_2" label="实况画廊 2" user={user} />}
-                  {user && <ImageUploadButton assetKey="mfg_gallery_3" label="实况画廊 3" user={user} />}
-                  {user && <ImageUploadButton assetKey="mfg_gallery_4" label="实况画廊 4" user={user} />}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {user && <ImageUploadButton assetKey="honor_img_1" label="荣誉 1 (Giant)" user={user} />}
+                  {user && <ImageUploadButton assetKey="honor_img_2" label="荣誉 2 (PHD)" user={user} />}
+                  {user && <ImageUploadButton assetKey="honor_img_3" label="资质证书 3" user={user} />}
+                  {user && <ImageUploadButton assetKey="honor_img_4" label="专利授权 4" user={user} />}
+                  {user && <ImageUploadButton assetKey="honor_img_5" label="专利授权 5" user={user} />}
                 </div>
               </div>
 
               <div className="border-t border-brand-border pt-8">
-                <p className="text-brand-dark/40 text-sm">
-                  请在下方的“资质证书与知识产权管理”专属面板中维护相关图片。
-                </p>
+                <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
+                  <Factory size={16} className="text-brand-blue" /> 智能制造基地 (Manufacturing Gallery)
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {user && <ImageUploadButton assetKey="mfg_gallery_1" label="自动化生产线 1" user={user} />}
+                  {user && <ImageUploadButton assetKey="mfg_gallery_2" label="质量控制中心 2" user={user} />}
+                  {user && <ImageUploadButton assetKey="mfg_gallery_3" label="实验室设备 3" user={user} />}
+                  {user && <ImageUploadButton assetKey="mfg_gallery_4" label="智慧仓储物流 4" user={user} />}
+                </div>
               </div>
             </div>
           </div>

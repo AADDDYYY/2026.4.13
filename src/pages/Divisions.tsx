@@ -119,10 +119,10 @@ export default function Divisions() {
                 <img 
                   src={division.image} 
                   alt={division.title} 
-                  className="w-full h-full object-cover opacity-10 group-hover:opacity-20 transition-opacity duration-1000"
+                  className="w-full h-full object-cover opacity-40 group-hover:opacity-70 transition-opacity duration-1000"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-white/10 to-transparent"></div>
               </div>
 
               {/* Content */}

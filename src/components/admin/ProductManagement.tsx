@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { db } from '../../firebase';
 import { collection, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { useProducts } from '../../hooks/useProducts';
-import { Trash2, Edit2, Plus, Database, FlaskConical, LayoutGrid, Layers, RefreshCw, AlertCircle, Eye, EyeOff, Globe, Package } from 'lucide-react';
+import { Trash2, Edit2, Plus, Database, FlaskConical, LayoutGrid, Layers, RefreshCw, AlertCircle, Eye, EyeOff, Globe, Package, Flame } from 'lucide-react';
 import { products as staticProducts, Product } from '../../data/products';
 import ProductFormModal from './ProductFormModal';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
@@ -24,7 +24,11 @@ export default function ProductManagement() {
       if (isSupabaseConfigured()) {
         const { error } = await supabase
           .from('products')
-          .update({ status: newStatus, updated_at: new Date().toISOString() })
+          .update({ 
+            status: newStatus, 
+            is_hot: product.is_hot, // Keep is_hot status during status toggle
+            updated_at: new Date().toISOString() 
+          })
           .eq('id', product.id);
         if (error) throw error;
       } else {
@@ -206,6 +210,11 @@ export default function ProductManagement() {
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
+                              {product.is_hot && (
+                                <span className="flex items-center gap-0.5 px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded text-[8px] font-black uppercase tracking-tighter">
+                                  <Flame size={8} fill="currentColor" /> HOT
+                                </span>
+                              )}
                               <span className="font-black text-brand-dark leading-none">{product.name}</span>
                               {isCloud ? (
                                 <Database size={10} className="text-emerald-500" />
