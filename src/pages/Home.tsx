@@ -66,30 +66,17 @@ const Hero = () => {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-5xl"
         >
-          <div className="flex items-center gap-6 mb-8 md:mb-12">
-            <div className="h-[2px] w-12 md:w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black tracking-wider uppercase text-[10px] md:text-[11px]">
-              {t("hero.lab", "Global Materials Science Leader")}
-            </span>
-          </div>
-
-          <h1 className="text-5xl sm:text-7xl md:text-[10rem] xl:text-[12rem] font-black tracking-tight text-brand-dark mb-10 md:mb-16 leading-[0.95]">
-            {t("hero.title_part1", "边界之外")}<br />
-            <span className="text-brand-blue">{t("hero.title_part2", "起点所在")}</span>
+          <h1 className="text-5xl sm:text-7xl md:text-[10rem] xl:text-[12rem] font-black tracking-tight text-brand-dark mb-8 md:mb-12 leading-[0.95]">
+            SEATON<br />
+            <span className="text-brand-blue">MATERIALS</span>
           </h1>
           
-          <p className="text-lg sm:text-2xl md:text-3xl text-brand-dark/60 leading-relaxed mb-16 md:mb-24 max-w-5xl font-light">
-            {t("home.hero.desc", "当传统材料的性能达到极限，真正的创新才刚刚开始。在西顿新材料，我们不仅在拓展物理与化学的边界，更把每一次突破作为全新的起点。从纳米级的基材重构到宏观工业的绿色转型，我们跨越已知，以聚合物合成技术为您开启无限可能的未来。")}
-          </p>
-          
-          <div className="flex flex-col sm:flex-row flex-wrap gap-6 md:gap-10">
-            <Link to="/products" className="group flex items-center justify-center sm:justify-start gap-6 bg-brand-blue text-white px-10 md:px-14 py-5 md:py-7 rounded-full font-black transition-all hover:bg-brand-dark hover:text-white shadow-2xl shadow-brand-blue/30 text-base md:text-lg text-center">
-              {t("home.hero.explore_btn", "探索产品中心")}
-              <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform hidden sm:block" />
-            </Link>
-            <Link to="/contact" className="group flex items-center justify-center sm:justify-start gap-6 border-2 border-brand-dark/20 text-brand-dark px-10 md:px-14 py-5 md:py-7 rounded-full font-black transition-all hover:bg-brand-dark/5 text-base md:text-lg text-center">
-              {t("home.hero.sample_btn", "索取样品")}
-            </Link>
+          <div className="max-w-6xl">
+            <p className="text-2xl md:text-5xl text-brand-dark/80 leading-[1.1] font-black tracking-tight">
+              全球领先的高性能水性聚氨酯专家，<br />
+              以尖端材料科技驱动工业绿色转型，<br />
+              为多元产业提供卓越的表面处理解决方案。
+            </p>
           </div>
         </motion.div>
       </div>
@@ -206,18 +193,18 @@ const FeaturedTechnologies = () => {
   const { value: techBgSub2 } = useCMSAsset('home_tech_bg_sub2', 'https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&q=80&w=800');
 
   return (
-    <section className="py-24 md:py-56 bg-brand-gray px-6 md:px-20 overflow-hidden border-y border-brand-border">
-      <div className="max-w-[1800px] mx-auto">
+    <section id="innovation" className="py-24 md:py-48 bg-white overflow-hidden relative">
+      <div className="w-full max-w-[1800px] mx-auto px-6 md:px-20 relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 md:mb-32 gap-12 md:gap-16">
           <div className="max-w-4xl">
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-6 md:mb-8 block">Innovation Hub</span>
-            <h2 className="text-4xl sm:text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">
-              引领行业的技术革新<br />
-              <span className="text-brand-blue">Innovation Hub</span>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-6 md:mb-8 block">Innovation Center</span>
+            <h2 className="text-5xl sm:text-7xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">
+              聚合尖端科技<br />
+              <span className="text-brand-blue">赋能产业升级</span>
             </h2>
           </div>
-          <Link to="/innovation" className="text-brand-blue font-black flex items-center gap-4 hover:underline text-base md:text-lg uppercase tracking-[0.3em] group">
-            查看所有技术方案 <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+          <Link to="/rd" className="text-brand-blue font-black flex items-center gap-4 hover:underline text-base md:text-lg uppercase tracking-[0.3em] group">
+            进入研发创新中心 <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
           </Link>
         </div>
 
@@ -235,7 +222,8 @@ const FeaturedTechnologies = () => {
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-brand-dark/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-blue/90 via-brand-dark/40 to-transparent mix-blend-multiply opacity-60"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent"></div>
             <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-end">
               <span className="text-brand-blue font-black text-[10px] md:text-xs uppercase tracking-[0.3em] mb-4 md:mb-6">Core Technology</span>
               <h3 className="text-3xl md:text-5xl font-black text-white mb-4 md:mb-8 tracking-tight">自消光水性聚氨酯</h3>
@@ -262,7 +250,8 @@ const FeaturedTechnologies = () => {
                 className="group relative flex-1 rounded-[50px] overflow-hidden shadow-xl"
               >
                 <img src={tech.img} alt={tech.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/30 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-blue/80 via-brand-dark/40 to-transparent mix-blend-multiply opacity-50 transition-opacity group-hover:opacity-70"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-transparent to-transparent"></div>
                 <div className="absolute inset-0 p-12 flex flex-col justify-center">
                   <h3 className="text-3xl font-black text-white mb-6 tracking-tight">{tech.title}</h3>
                   <p className="text-white/60 max-w-sm mb-8 leading-relaxed font-medium">{tech.desc}</p>
@@ -285,17 +274,17 @@ const MarketSectors = () => {
   const { value: imgLeather } = useCMSAsset('market_inner_leather', 'https://images.unsplash.com/photo-1524290263334-92f5374171a6?auto=format&fit=crop&q=80&w=800');
   const { value: imgAutomotive } = useCMSAsset('market_inner_automotive', 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800');
   const { value: imgElectronics } = useCMSAsset('market_inner_electronics', 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&q=80&w=800');
-  const { value: imgPackaging } = useCMSAsset('market_inner_packaging', 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800');
+  const { value: imgPackaging } = useCMSAsset('market_inner_packaging', 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1200');
   const { value: imgHome } = useCMSAsset('market_inner_home', 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80&w=800');
   const { value: imgIndustrial } = useCMSAsset('market_inner_sports', 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800');
 
   const sectors = [
-    { title: "皮革化学品", en: "Leather Chemicals", img: imgLeather, id: "leather" },
-    { title: "汽车革用树脂", en: "Automotive Leather", img: imgAutomotive, id: "automotive" },
-    { title: "塑胶用树脂", en: "Plastic & Electronics", img: imgElectronics, id: "plastic" },
-    { title: "油墨用树脂", en: "Ink & Packaging", img: imgPackaging, id: "ink" },
-    { title: "木器用树脂", en: "Wood & Furniture", img: imgHome, id: "wood" },
-    { title: "电池金属用树脂", en: "Battery & Metal", img: imgIndustrial, id: "industrial" }
+    { title: "皮革事业部", en: "Leather Division", img: imgLeather, id: "leather" },
+    { title: "汽车革事业部", en: "Automotive Division", img: imgAutomotive, id: "automotive" },
+    { title: "塑胶事业部", en: "Plastic Division", img: imgElectronics, id: "plastic" },
+    { title: "油墨事业部", en: "Ink Division", img: imgPackaging, id: "ink" },
+    { title: "木器事业部", en: "Wood Division", img: imgHome, id: "wood" },
+    { title: "电池金属事业部", en: "Industrial Division", img: imgIndustrial, id: "industrial" }
   ];
 
   return (

@@ -170,114 +170,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Certifications & Honors Showcase */}
-      <section className="py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-56">
-        <div className="max-w-[1800px] mx-auto">
-          <div className="text-center mb-32">
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-8 block">Authoritative Endorsement</span>
-            <h2 className="text-5xl md:text-8xl font-black text-brand-dark mb-12 tracking-tighter leading-[0.9]">{t("about.honors.title")}<span className="text-brand-blue">{t("about.honors.subtitle")}</span></h2>
-            <p className="text-brand-dark/40 max-w-4xl mx-auto font-light leading-relaxed text-2xl">
-              {t("about.honors.desc")}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-32">
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1 }}
-              className="p-16 rounded-[50px] bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-2xl transition-all duration-700 group"
-            >
-              <Award className="text-brand-blue mb-10 group-hover:scale-110 transition-transform" size={64} />
-              <h3 className="text-3xl font-black mb-6 tracking-tight text-brand-dark">{t("about.honors.giant")}</h3>
-              <p className="text-brand-dark/40 font-medium leading-relaxed mb-10 text-lg">{t("about.honors.giant_desc")}</p>
-              <div className="flex items-center gap-3 text-brand-blue text-xs font-black uppercase tracking-[0.2em]">
-                <span>{t("about.honors.view_cert")}</span>
-                <ChevronRight size={18} />
-              </div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.15, duration: 1 }}
-              className="p-16 rounded-[50px] bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-2xl transition-all duration-700 group"
-            >
-              <Users className="text-brand-blue mb-10 group-hover:scale-110 transition-transform" size={64} />
-              <h3 className="text-3xl font-black mb-6 tracking-tight text-brand-dark">{t("about.honors.phd")}</h3>
-              <p className="text-brand-dark/40 font-medium leading-relaxed mb-10 text-lg">{t("about.honors.phd_desc")}</p>
-              <div className="flex items-center gap-3 text-brand-blue text-xs font-black uppercase tracking-[0.2em]">
-                <span>{t("about.honors.view_cert")}</span>
-                <ChevronRight size={18} />
-              </div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 1 }}
-              className="p-16 rounded-[50px] bg-white border border-brand-border hover:border-brand-blue/30 shadow-sm hover:shadow-2xl transition-all duration-700 group"
-            >
-              <ShieldCheck className="text-brand-blue mb-10 group-hover:scale-110 transition-transform" size={64} />
-              <h3 className="text-3xl font-black mb-6 tracking-tight text-brand-dark">{t("about.honors.patents_title")}</h3>
-              <p className="text-brand-dark/40 font-medium leading-relaxed mb-10 text-lg">{t("about.honors.patents_desc")}</p>
-              <div className="flex items-center gap-3 text-brand-blue text-xs font-black uppercase tracking-[0.2em]">
-                <span>{t("about.honors.patent_list")}</span>
-                <ChevronRight size={18} />
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Patent & Honor Gallery Window */}
-          <div className="relative">
-            <div className="flex gap-8 overflow-x-auto pb-12 custom-scrollbar snap-x">
-              {(dbCertificates.length > 0 ? dbCertificates : [
-                { title: t("about.honors.giant"), type: "荣誉证书", image: honorImg1 },
-                { title: t("about.honors.phd"), type: "政府挂牌", image: honorImg2 },
-                { title: "高新技术企业证书", type: "资质认定", image: honorImg3 },
-                { title: "发明专利：一种水性树脂合成工艺", type: "专利授权", image: honorImg4 },
-                { title: "发明专利：高性能聚氨酯分散体", type: "专利授权", image: honorImg5 },
-              ]).map((item, idx) => (
-                <motion.div 
-                  key={idx}
-                  whileHover={{ y: -10 }}
-                  className="min-w-[300px] md:min-w-[400px] snap-start"
-                >
-                  <div className="aspect-[3/4] rounded-[30px] overflow-hidden border border-brand-border bg-white p-4 mb-6 group relative shadow-md">
-                    <div className="w-full h-full rounded-[20px] overflow-hidden relative flex items-center justify-center bg-gray-50">
-                      {item.image ? (
-                        <img 
-                          src={item.image} 
-                          alt={item.title} 
-                          className="w-full h-full object-contain transition-all duration-700 scale-100 group-hover:scale-110 img-cert"
-                          referrerPolicy="no-referrer"
-                        />
-                      ) : (
-                        <Award size={48} className="text-gray-300" />
-                      )}
-                    </div>
-                  </div>
-                  <div className="px-4">
-                    <span className="text-brand-blue text-[10px] font-bold uppercase tracking-widest mb-2 block">{item.type}</span>
-                    <h4 className="text-brand-dark font-black text-lg tracking-tight">{item.title}</h4>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Scroll Indicator */}
-            <div className="flex items-center justify-center gap-4 mt-12">
-              <div className="w-12 h-1 bg-brand-blue rounded-full"></div>
-              <div className="w-2 h-1 bg-white/10 rounded-full"></div>
-              <div className="w-2 h-1 bg-white/10 rounded-full"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Manufacturing Gallery */}
       <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
         <div className="flex flex-col md:flex-row justify-between items-end mb-32 gap-12">
@@ -330,6 +222,103 @@ export default function About() {
                 referrerPolicy="no-referrer"
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Authoritative Endorsement & Certificates */}
+      <section className="py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-56 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-blue/5 rounded-full blur-[200px] -z-10"></div>
+        <div className="max-w-[1800px] mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center mb-32">
+            <div className="lg:col-span-6">
+              <span className="text-brand-blue font-black uppercase tracking-[0.4em] text-[11px] mb-8 block font-mono">
+                Authoritative Endorsement
+              </span>
+              <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9] mb-12">
+                {t("about.honors.title")}<br />
+                <span className="text-brand-blue">{t("about.honors.subtitle")}</span>
+              </h2>
+              <p className="text-brand-dark/40 text-xl font-medium leading-relaxed max-w-xl">
+                {t("about.honors.desc")}
+              </p>
+            </div>
+            <div className="lg:col-span-6">
+              <div className="grid grid-cols-2 gap-8">
+                <div className="aspect-square rounded-[40px] overflow-hidden border border-brand-border p-8 bg-white shadow-xl hover:shadow-2xl transition-all group">
+                  <div className="h-full flex flex-col justify-between">
+                    <ShieldCheck className="text-brand-blue mb-8" size={48} />
+                    <div>
+                      <div className="text-2xl font-black tracking-tight text-brand-dark mb-4">{t("about.honors.giant")}</div>
+                      <div className="text-brand-dark/40 text-xs font-medium">{t("about.honors.giant_desc")}</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="aspect-square rounded-[40px] overflow-hidden border border-brand-border p-8 bg-white shadow-xl hover:shadow-2xl transition-all translate-y-12 group">
+                  <div className="h-full flex flex-col justify-between">
+                    <Microscope className="text-brand-blue mb-8" size={32} />
+                    <div>
+                      <div className="text-2xl font-black tracking-tight text-brand-dark mb-4">{t("about.honors.phd")}</div>
+                      <div className="text-brand-dark/40 text-xs font-medium">{t("about.honors.phd_desc")}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {['荣誉资质', '专利授权', '政府认定', '体系认证'].map((cat, idx) => {
+              const catCerts = dbCertificates?.filter((c: any) => (c.category || c.type) === cat).slice(0, 4) || [];
+              
+              return (
+                <motion.div 
+                  key={cat}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1, duration: 0.8 }}
+                  className="bg-white p-8 rounded-[40px] border border-brand-border hover:border-brand-blue/30 transition-all shadow-sm hover:shadow-xl"
+                >
+                  <div className="flex items-center gap-3 mb-8 pb-4 border-b border-brand-border/50">
+                    <div className="w-1.5 h-4 bg-brand-blue rounded-full"></div>
+                    <h3 className="text-xl font-black text-brand-dark tracking-tight">{cat}</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {catCerts.length > 0 ? (
+                      catCerts.map((cert: any) => (
+                        <div key={cert.id} className="flex items-center gap-4 group cursor-pointer p-3 rounded-2xl hover:bg-brand-gray transition-all">
+                          <div className="w-12 h-16 bg-brand-gray rounded-lg overflow-hidden shrink-0 border border-brand-border group-hover:border-brand-blue/30 transition-all flex items-center justify-center p-1 bg-white">
+                            {cert.image ? (
+                              <img src={cert.image} alt={cert.title} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                            ) : (
+                              <Award className="text-brand-dark/10" size={20} />
+                            )}
+                          </div>
+                          <div>
+                            <div className="text-[13px] font-black text-brand-dark leading-tight group-hover:text-brand-blue transition-colors line-clamp-2">
+                              {cert.title}
+                            </div>
+                            <div className="text-[9px] text-brand-dark/30 font-black uppercase tracking-wider mt-1">
+                               {cert.type || cat}
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-8">
+                        <Award className="text-brand-dark/5 mx-auto mb-4" size={32} />
+                        <div className="text-[10px] text-brand-dark/20 font-black uppercase tracking-widest">暂无证书</div>
+                      </div>
+                    )}
+                    <button className="w-full mt-4 py-3 rounded-xl border border-dashed border-brand-border text-brand-dark/30 text-[10px] font-black uppercase tracking-widest hover:border-brand-blue/50 hover:text-brand-blue transition-all flex items-center justify-center gap-2">
+                      {t("about.honors.view_cert")} <ChevronRight size={12} />
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -10,6 +10,7 @@ export interface CertificateItem {
   id: string;
   title: string;
   type: string;
+  category: string; // Added category field
   image: string;
   order: number;
 }
@@ -64,6 +65,7 @@ export default function CertificateManagement() {
       const payload = {
         title: '新证书/专利',
         type: '荣誉资质',
+        category: '荣誉资质',
         image: '',
         order: certs.length,
       };
@@ -189,8 +191,19 @@ export default function CertificateManagement() {
                     value={editForm.type ?? cert.type} 
                     onChange={e => setEditForm({...editForm, type: e.target.value})}
                     className="w-full px-3 py-2 border rounded-lg text-sm"
-                    placeholder="分类 (如: 发明专利)"
+                    placeholder="证书类型 (如: 发明专利)"
                   />
+                  <select 
+                    value={editForm.category ?? cert.category} 
+                    onChange={e => setEditForm({...editForm, category: e.target.value})}
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                  >
+                    <option value="荣誉资质">荣誉资质</option>
+                    <option value="专利授权">专利授权</option>
+                    <option value="政府认定">政府认定</option>
+                    <option value="体系认证">体系认证</option>
+                    <option value="其他">其他</option>
+                  </select>
                   <div className="flex justify-end gap-2 mt-2">
                     <button onClick={() => setIsEditing(null)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg"><X size={16}/></button>
                     <button onClick={() => handleUpdate(cert.id, editForm)} className="p-2 text-brand-blue hover:bg-blue-50 rounded-lg"><Save size={16}/></button>
@@ -201,7 +214,10 @@ export default function CertificateManagement() {
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <h4 className="font-bold text-brand-dark">{cert.title}</h4>
-                      <span className="text-xs text-brand-blue font-bold px-2 py-1 bg-brand-blue/10 rounded-full inline-block mt-1">{cert.type}</span>
+                      <div className="flex gap-2 mt-1">
+                        <span className="text-[10px] text-brand-blue font-bold px-2 py-0.5 bg-brand-blue/10 rounded-full inline-block">{cert.category}</span>
+                        <span className="text-[10px] text-gray-500 font-bold px-2 py-0.5 bg-gray-100 rounded-full inline-block">{cert.type}</span>
+                      </div>
                     </div>
                     <div className="flex gap-1">
                       <button onClick={() => {setIsEditing(cert.id); setEditForm(cert);}} className="p-1.5 text-gray-400 hover:text-brand-blue rounded-lg"><Edit2 size={14}/></button>

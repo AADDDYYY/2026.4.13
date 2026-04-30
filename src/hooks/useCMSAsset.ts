@@ -58,7 +58,11 @@ async function initializeCMS() {
           .subscribe();
       }
     } catch (error: any) {
-      console.error("CMS initialization error:", error);
+      // Gracefully handle missing tables or network errors without a loud console.error
+      // Only log a warning in development mode, or a softer message
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn("CMS could not initialize assets (likely table is missing or project is paused):", error.message || error);
+      }
       isInitialized = true;
       notifyListeners();
     }

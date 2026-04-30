@@ -80,10 +80,8 @@ export const Header = () => {
 
   const navLinks = [
     { to: "/about", label: t("nav.about") },
-    { to: "/divisions", label: t("nav.divisions", "事业部") },
     { to: "/products", label: t("nav.products"), hasMega: true },
     { to: "/market-applications", label: t("nav.market_applications", "市场应用") },
-    { to: "/innovation", label: t("nav.innovation", "革新") },
     { to: "/rd", label: t("nav.rd", "研发创新") },
     { to: "/sustainability", label: t("nav.sustainability", "可持续发展") },
     { to: "/contact", label: t("nav.contact") },
@@ -93,10 +91,10 @@ export const Header = () => {
     {
       title: t("mega.by_division", "按事业部分类"),
       items: [
-        { label: t("divisions.plastic", "塑胶涂料树脂"), to: "/products?division=plastic" },
-        { label: t("divisions.ink", "印刷油墨树脂"), to: "/products?division=ink" },
-        { label: t("divisions.wood", "木器涂料树脂"), to: "/products?division=wood" },
-        { label: t("divisions.leather", "皮革/纺织/胶粘剂树脂"), to: "/products?division=leather" },
+        { label: t("divisions.plastic", "塑胶事业部"), to: "/products?division=plastic" },
+        { label: t("divisions.ink", "油墨事业部"), to: "/products?division=ink" },
+        { label: t("divisions.wood", "木器事业部"), to: "/products?division=wood" },
+        { label: t("divisions.leather", "皮革事业部"), to: "/products?division=leather" },
       ]
     },
     {
@@ -134,17 +132,17 @@ export const Header = () => {
           />
         </Link>
         
-        <nav className="hidden md:flex items-center gap-8 xl:gap-12 ml-auto">
+        <nav className="hidden md:flex items-center gap-10 xl:gap-14 ml-auto">
           {navLinks.map((link) => (
             <div 
               key={link.to}
-              className="relative"
+              className="relative py-2"
               onMouseEnter={() => link.hasMega && setIsProductsHovered(true)}
               onMouseLeave={() => link.hasMega && setIsProductsHovered(false)}
             >
               <Link 
                 to={link.to} 
-                className={`text-[12px] uppercase tracking-normal font-black transition-all duration-300 ${location.pathname === link.to ? "text-brand-blue" : "text-brand-dark/70 hover:text-brand-blue"}`}
+                className={`text-[14px] uppercase tracking-wide font-black transition-all duration-300 ${location.pathname === link.to ? "text-brand-blue" : "text-brand-dark/70 hover:text-brand-blue"}`}
               >
                 {link.label}
               </Link>

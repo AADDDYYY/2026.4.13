@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS public.products (
 CREATE TABLE IF NOT EXISTS public.certificates (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
+    type TEXT,
+    category TEXT,
     image TEXT NOT NULL,
     "order" INTEGER DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT NOW(),

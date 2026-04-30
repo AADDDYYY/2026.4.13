@@ -1,10 +1,12 @@
 import { motion } from "motion/react";
-import { Microscope, Zap, FlaskConical, Binary, ShieldCheck, Cpu, TestTube, GraduationCap } from "lucide-react";
+import { Microscope, Zap, FlaskConical, Binary, ShieldCheck, Cpu, TestTube, GraduationCap, Award, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useCMSAsset } from "../hooks/useCMSAsset";
+import { useCertificates } from "../hooks/useCertificates";
 
 export default function RD() {
   const { t } = useTranslation();
+  const { certificates } = useCertificates();
 
   const { value: rdHeroBg } = useCMSAsset('rd_hero_bg', 'https://images.unsplash.com/photo-1542382156909-9ae38d3884c1?auto=format&fit=crop&q=80&w=1600');
   const { value: rdLabImg1 } = useCMSAsset('rd_lab_img1', 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=600');
@@ -45,16 +47,16 @@ export default function RD() {
           <div className="flex items-center justify-center gap-6 mb-8 md:mb-16">
             <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
             <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
-              R&D Innovation Center
+              Beyond Boundaries · 起点所在
             </span>
             <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
           </div>
           <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
-            {t("rd.hero.title")}<br />
-            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">R&D Innovation Center</span>
+            边界之外<br />
+            <span className="text-brand-blue">起点所在</span>
           </h1>
-          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
-            {t("rd.hero.desc")}
+          <p className="text-brand-dark/60 text-xl sm:text-2xl md:text-4xl max-w-6xl mx-auto font-bold leading-relaxed">
+            当传统材料的性能达到极限，真正的创新才刚刚开始。在西顿新材料，我们不仅在拓展物理与化学的边界，更把每一次突破作为全新的起点。从纳米级的基材重构到宏观工业的绿色转型，我们跨越已知，以聚合物合成技术为您开启无限可能的未来。
           </p>
         </motion.div>
       </div>
@@ -163,7 +165,7 @@ export default function RD() {
       </section>
 
       {/* Technical Capabilities & Testing */}
-      <section className="py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-56">
+      <section className="py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-32">
         <div className="max-w-[1800px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
             <div className="order-2 lg:order-1">
@@ -203,7 +205,7 @@ export default function RD() {
       </section>
 
       {/* R&D Philosophy */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-32">
         <div className="bg-brand-gray border border-brand-border rounded-[80px] p-24 lg:p-48 text-center relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[150px]"></div>
           <div className="relative z-10">

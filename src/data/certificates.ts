@@ -2,6 +2,7 @@ export interface CertificateItem {
   id: string;
   title: string;
   type: string;
+  category: string;
   image: string;
   order: number;
 }
@@ -12,6 +13,7 @@ export const certificatesData: CertificateItem[] = [
     id: "cert_1",
     title: "高新技术企业证书",
     type: "资质认定",
+    category: "政府认定",
     image: "",
     order: 0
   }
