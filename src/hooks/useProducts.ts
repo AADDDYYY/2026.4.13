@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { db } from '../firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { products as staticProducts, Product } from '../data/products';
 
 let globalCloudProducts: Product[] = [];
@@ -9,38 +11,59 @@ const listeners = new Set<(data: { products: Product[], loading: boolean, error:
 let subscription: any = null;
 
 async function fetchInitialProducts() {
-  if (!isSupabaseConfigured()) return;
-  
-  globalLoading = true;
-  notifyListeners();
+  if (isSupabaseConfigured()) {
+    globalLoading = true;
+    notifyListeners();
 
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .order('name', { ascending: true });
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('name', { ascending: true });
 
-  if (error) {
-    console.error("Supabase products fetch error:", error);
-    globalError = error.message;
-  } else {
-    globalCloudProducts = (data || []).map(item => ({
-      ...item,
-    } as Product));
-    globalError = null;
+    if (error) {
+      console.error("Supabase products fetch error:", error);
+      globalError = error.message;
+    } else {
+      globalCloudProducts = (data || []).map(item => ({
+        ...item,
+      } as Product));
+      globalError = null;
+    }
+    globalLoading = false;
+    notifyListeners();
   }
-  globalLoading = false;
-  notifyListeners();
 }
 
 function startSubscription() {
-  if (subscription || !isSupabaseConfigured()) return;
+  if (subscription) return;
 
-  subscription = supabase
-    .channel('products_changes')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
-      fetchInitialProducts();
-    })
-    .subscribe();
+  if (isSupabaseConfigured()) {
+    subscription = supabase
+      .channel('products_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
+        fetchInitialProducts();
+      })
+      .subscribe();
+  } else {
+    // Firebase fallback
+    globalLoading = true;
+    notifyListeners();
+    const q = query(collection(db, 'products'), orderBy('name', 'asc'));
+    subscription = onSnapshot(q, (snapshot) => {
+      globalCloudProducts = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+      } as Product));
+      globalLoading = false;
+      globalError = null;
+      notifyListeners();
+    }, (error) => {
+      console.error("Firebase products fetch error:", error);
+      globalError = error.message;
+      globalLoading = false;
+      notifyListeners();
+    });
+  }
 }
 
 function notifyListeners() {

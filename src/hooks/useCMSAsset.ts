@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { db } from '../firebase';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 // Global cache for all CMS assets to minimize reads
 const CACHE_KEY = 'cms_assets_cache';
@@ -28,45 +30,71 @@ const listeners = new Set<(assets: Record<string, string>) => void>();
 let subscription: any = null;
 
 async function initializeCMS() {
-  if (initPromise || !isSupabaseConfigured()) {
+  if (initPromise) {
     return initPromise;
   }
 
-  initPromise = (async () => {
-    try {
-      const { data, error } = await supabase.from('cms_assets').select('*');
-      
-      if (error) throw error;
+  if (isSupabaseConfigured()) {
+    initPromise = (async () => {
+      try {
+        const { data, error } = await supabase.from('cms_assets').select('*');
+        
+        if (error) throw error;
 
-      const newAssets: Record<string, string> = {};
-      (data || []).forEach(item => {
-        newAssets[item.id] = item.value;
-      });
-      globalAssets = newAssets;
-      cacheAssets(globalAssets);
-      
-      isInitialized = true;
-      notifyListeners();
+        const newAssets: Record<string, string> = {};
+        (data || []).forEach(item => {
+          newAssets[item.id] = item.value;
+        });
+        globalAssets = newAssets;
+        cacheAssets(globalAssets);
+        
+        isInitialized = true;
+        notifyListeners();
 
-      // Subscription for real-time updates
-      if (!subscription) {
-        subscription = supabase
-          .channel('cms_assets_changes')
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'cms_assets' }, () => {
-            initializeCMS(); // Re-fetch on change
-          })
-          .subscribe();
+        // Subscription for real-time updates
+        if (!subscription) {
+          subscription = supabase
+            .channel('cms_assets_changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'cms_assets' }, () => {
+              initializeCMS(); // Re-fetch on change
+            })
+            .subscribe();
+        }
+      } catch (error: any) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn("CMS could not initialize assets (likely table is missing or project is paused):", error.message || error);
+        }
+        isInitialized = true;
+        notifyListeners();
       }
-    } catch (error: any) {
-      // Gracefully handle missing tables or network errors without a loud console.error
-      // Only log a warning in development mode, or a softer message
-      if (process.env.NODE_ENV !== 'production') {
-        console.warn("CMS could not initialize assets (likely table is missing or project is paused):", error.message || error);
+    })();
+  } else {
+    // Firebase fallback
+    initPromise = (async () => {
+      try {
+        if (!subscription) {
+          subscription = onSnapshot(collection(db, 'cms_assets'), (snapshot) => {
+            const newAssets: Record<string, string> = {};
+            snapshot.docs.forEach(doc => {
+              newAssets[doc.id] = doc.data().value;
+            });
+            globalAssets = newAssets;
+            cacheAssets(globalAssets);
+            isInitialized = true;
+            notifyListeners();
+          }, (error) => {
+            console.error("Firebase CMS assets fetch error:", error);
+            isInitialized = true;
+            notifyListeners();
+          });
+        }
+      } catch (error: any) {
+        console.error("Firebase CMS initialization error:", error);
+        isInitialized = true;
+        notifyListeners();
       }
-      isInitialized = true;
-      notifyListeners();
-    }
-  })();
+    })();
+  }
 
   return initPromise;
 }

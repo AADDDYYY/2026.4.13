@@ -102,11 +102,11 @@ export default function News() {
   });
 
   return (
-    <div className="pt-24 md:pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-32 md:pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56 relative">
         {newsHeroBg ? (
-          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+          <div className="absolute inset-0 -z-10 rounded-b-[60px] md:rounded-b-[100px] overflow-hidden opacity-20">
             <img src={newsHeroBg} alt="News Hero" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
           </div>
@@ -120,33 +120,33 @@ export default function News() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-center"
         >
-          <div className="flex items-center justify-center gap-6 mb-16">
-            <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px]">
+          <div className="flex items-center justify-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px]">
               News & Insights
             </span>
-            <div className="h-px w-16 bg-brand-blue"></div>
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tight leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("news_page.hero.title")}<br />
-            <span className="text-brand-blue tracking-normal">News & Insights</span>
+            <span className="text-brand-blue block md:inline mt-4 md:mt-0 tracking-normal">News & Insights</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl max-w-5xl mx-auto font-light leading-relaxed">
             {t("news_page.hero.desc")}
           </p>
         </motion.div>
       </div>
 
       {/* Filters Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-32 space-y-16">
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-16">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-16 md:mb-32 space-y-8 md:space-y-16">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-8 md:gap-16">
           {/* Type Toggle */}
-          <div className="flex gap-px bg-brand-gray border border-brand-border rounded-full overflow-hidden p-1.5 shadow-sm">
+          <div className="flex w-full md:w-auto gap-px bg-brand-gray border border-brand-border rounded-full overflow-hidden p-1 md:p-1.5 shadow-sm">
             {types.map(type => (
               <button
                 key={type}
                 onClick={() => setActiveType(type)}
-                className={`px-12 py-4 rounded-full transition-all duration-500 font-black text-[11px] uppercase tracking-[0.3em] ${
+                className={`flex-1 md:flex-none px-6 md:px-12 py-3 md:py-4 rounded-full transition-all duration-500 font-black text-[9px] md:text-[11px] uppercase tracking-[0.1em] md:tracking-[0.3em] ${
                   activeType === type 
                   ? "bg-brand-blue text-white shadow-2xl shadow-brand-blue/20" 
                   : "text-brand-dark/40 hover:text-brand-blue"
@@ -159,24 +159,24 @@ export default function News() {
 
           {/* Search Bar */}
           <div className="w-full lg:max-w-xl relative group">
-            <Search className="absolute left-8 top-1/2 -translate-y-1/2 text-brand-dark/20 group-focus-within:text-brand-blue transition-colors" size={20} />
+            <Search className="absolute left-6 md:left-8 top-1/2 -translate-y-1/2 text-brand-dark/20 group-focus-within:text-brand-blue transition-colors w-4.5 h-4.5 md:w-5 md:h-5" />
             <input
               type="text"
               placeholder={t("news_page.filters.search_placeholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-20 pr-8 py-6 bg-brand-gray border border-brand-border rounded-full outline-none focus:border-brand-blue/30 focus:bg-white transition-all font-medium text-lg text-brand-dark shadow-sm"
+              className="w-full pl-16 md:pl-20 pr-6 md:pr-8 py-4 md:py-6 bg-brand-gray border border-brand-border rounded-full outline-none focus:border-brand-blue/30 focus:bg-white transition-all font-medium text-base md:text-lg text-brand-dark shadow-sm"
             />
           </div>
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex flex-wrap justify-center gap-2 md:gap-6">
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-10 py-4 rounded-full border transition-all duration-500 text-[11px] font-black uppercase tracking-[0.3em] ${
+              className={`px-6 md:px-10 py-3 md:py-4 rounded-full border transition-all duration-500 text-[9px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.3em] ${
                 activeCategory === cat
                 ? "bg-brand-blue text-white border-brand-blue shadow-2xl shadow-brand-blue/20"
                 : "bg-white border-brand-border text-brand-dark/40 hover:border-brand-blue hover:text-brand-blue"
@@ -189,8 +189,8 @@ export default function News() {
       </div>
 
       {/* News Grid */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16">
           <AnimatePresence mode="popLayout">
             {filteredNews.map((item, index) => (
               <motion.div
@@ -200,42 +200,42 @@ export default function News() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.8, delay: index * 0.05 }}
-                className="group bg-brand-gray border border-brand-border rounded-[60px] overflow-hidden hover:border-brand-blue/30 transition-all duration-700 flex flex-col h-full shadow-sm hover:shadow-2xl"
+                className="group bg-brand-gray border border-brand-border rounded-[40px] md:rounded-[60px] overflow-hidden hover:border-brand-blue/30 transition-all duration-700 flex flex-col h-full shadow-sm hover:shadow-2xl"
               >
-                <div className="relative h-80 overflow-hidden">
+                <div className="relative h-64 md:h-80 overflow-hidden">
                   <img 
                     src={item.image} 
                     alt={item.title} 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute top-10 left-10 bg-brand-blue text-white text-[10px] font-black px-6 py-2 rounded-full uppercase tracking-[0.2em] shadow-2xl">
+                  <div className="absolute top-6 md:top-10 left-6 md:left-10 bg-brand-blue text-white text-[9px] md:text-[10px] font-black px-4 md:px-6 py-1.5 md:py-2 rounded-full uppercase tracking-[0.1em] md:tracking-[0.2em] shadow-2xl">
                     {t(`news_page.filters.${item.type}`)}
                   </div>
                 </div>
                 
-                <div className="p-12 flex-grow flex flex-col">
-                  <div className="flex items-center gap-8 text-brand-dark/30 text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                    <div className="flex items-center gap-3">
-                      <Clock size={14} className="text-brand-blue" />
+                <div className="p-8 md:p-12 flex-grow flex flex-col">
+                  <div className="flex items-center gap-4 md:gap-8 text-brand-dark/30 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mb-6 md:mb-8">
+                    <div className="flex items-center gap-2 md:gap-3">
+                      <Clock className="text-brand-blue w-3 h-3 md:w-3.5 md:h-3.5" />
                       {item.date}
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Tag size={14} className="text-brand-blue" />
+                    <div className="flex items-center gap-2 md:gap-3">
+                      <Tag className="text-brand-blue w-3 h-3 md:w-3.5 md:h-3.5" />
                       <span className="text-brand-blue">{t(`news_page.filters.${item.category}`)}</span>
                     </div>
                   </div>
                   
-                  <h3 className="text-3xl font-black mb-8 group-hover:text-brand-blue transition-colors line-clamp-2 leading-tight tracking-tight text-brand-dark">
+                  <h3 className="text-2xl md:text-3xl font-black mb-4 md:mb-8 group-hover:text-brand-blue transition-colors line-clamp-2 leading-tight tracking-tight text-brand-dark">
                     {item.title}
                   </h3>
                   
-                  <p className="text-brand-dark/40 text-xl mb-12 line-clamp-3 leading-relaxed font-medium">
+                  <p className="text-brand-dark/40 text-lg md:text-xl mb-8 md:mb-12 line-clamp-3 leading-relaxed font-medium">
                     {item.summary}
                   </p>
                   
-                  <div className="mt-auto pt-10 border-t border-brand-border">
-                    <Link to={`/news/${item.id}`} className="text-brand-blue font-black text-[11px] uppercase tracking-[0.3em] flex items-center gap-4 group/btn">
+                  <div className="mt-auto pt-8 md:pt-10 border-t border-brand-border">
+                    <Link to={`/news/${item.id}`} className="text-brand-blue font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] md:tracking-[0.3em] flex items-center gap-4 group/btn">
                       {t("news_page.items.read_more")} 
                       <ArrowRight size={20} className="group-hover/btn:translate-x-3 transition-transform" />
                     </Link>
@@ -250,9 +250,9 @@ export default function News() {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-56 bg-brand-gray rounded-[60px] border border-brand-border shadow-2xl"
+            className="text-center py-24 md:py-56 bg-brand-gray rounded-[40px] md:rounded-[60px] border border-brand-border shadow-2xl"
           >
-            <p className="text-brand-dark/30 text-2xl font-black tracking-tight">{t("news_page.items.no_results")}</p>
+            <p className="text-brand-dark/30 text-xl md:text-2xl font-black tracking-tight">{t("news_page.items.no_results")}</p>
           </motion.div>
         )}
       </div>

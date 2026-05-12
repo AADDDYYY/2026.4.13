@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { db } from '../firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { certificatesData as staticCerts, CertificateItem } from '../data/certificates';
 
 let globalCloudCerts: CertificateItem[] = [];
@@ -9,38 +11,59 @@ const listeners = new Set<(data: { certs: CertificateItem[], loading: boolean, e
 let subscription: any = null;
 
 async function fetchInitialCerts() {
-  if (!isSupabaseConfigured()) return;
-  
-  globalLoading = true;
-  notifyListeners();
+  if (isSupabaseConfigured()) {
+    globalLoading = true;
+    notifyListeners();
 
-  const { data, error } = await supabase
-    .from('certificates')
-    .select('*')
-    .order('order', { ascending: true });
+    const { data, error } = await supabase
+      .from('certificates')
+      .select('*')
+      .order('order', { ascending: true });
 
-  if (error) {
-    console.error("Supabase certificates fetch error:", error);
-    globalError = error.message;
-  } else {
-    globalCloudCerts = (data || []).map(item => ({
-      ...item,
-    } as CertificateItem));
-    globalError = null;
+    if (error) {
+      console.error("Supabase certificates fetch error:", error);
+      globalError = error.message;
+    } else {
+      globalCloudCerts = (data || []).map(item => ({
+        ...item,
+      } as CertificateItem));
+      globalError = null;
+    }
+    globalLoading = false;
+    notifyListeners();
   }
-  globalLoading = false;
-  notifyListeners();
 }
 
 function startSubscription() {
-  if (subscription || !isSupabaseConfigured()) return;
+  if (subscription) return;
 
-  subscription = supabase
-    .channel('certificates_changes')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'certificates' }, () => {
-      fetchInitialCerts();
-    })
-    .subscribe();
+  if (isSupabaseConfigured()) {
+    subscription = supabase
+      .channel('certificates_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'certificates' }, () => {
+        fetchInitialCerts();
+      })
+      .subscribe();
+  } else {
+    // Firebase fallback
+    globalLoading = true;
+    notifyListeners();
+    const q = query(collection(db, 'certificates'), orderBy('order', 'asc'));
+    subscription = onSnapshot(q, (snapshot) => {
+      globalCloudCerts = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+      } as CertificateItem));
+      globalLoading = false;
+      globalError = null;
+      notifyListeners();
+    }, (error) => {
+      console.error("Firebase certificates fetch error:", error);
+      globalError = error.message;
+      globalLoading = false;
+      notifyListeners();
+    });
+  }
 }
 
 function notifyListeners() {

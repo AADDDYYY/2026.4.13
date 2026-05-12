@@ -74,31 +74,32 @@ export default function NewsManagement() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (confirm('确定要删除这条新闻吗？')) {
-      try {
-        if (isSupabaseConfigured()) {
-          const { error } = await supabase.from('news').delete().eq('id', id);
-          if (error) throw error;
-        } else {
-          await deleteDoc(doc(db, 'news', id));
-        }
-      } catch (err) {
-        console.error('Delete error:', err);
-        alert('删除失败');
+    // Optimistic delete
+    setNews(prev => prev.filter(n => n.id !== id));
+    
+    try {
+      if (isSupabaseConfigured()) {
+        const { error } = await supabase.from('news').delete().eq('id', id);
+        if (error) throw error;
+      } else {
+        await deleteDoc(doc(db, 'news', id));
       }
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('删除失败');
     }
   };
 
   return (
-    <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+    <div className="bg-white p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-sm border border-brand-border overflow-hidden mb-8 md:mb-12">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 md:mb-12">
         <div className="flex items-center gap-4">
-          <div className="w-2 h-8 bg-brand-blue rounded-full"></div>
+          <div className="w-1.5 h-6 md:w-2 md:h-8 bg-brand-blue rounded-full"></div>
           <div>
-            <h2 className="text-3xl font-black text-brand-dark flex items-center gap-3">
-              <Newspaper size={28} className="text-brand-blue" /> 新闻与见解管理 (News & Insights)
+            <h2 className="text-2xl md:text-3xl font-black text-brand-dark flex items-center gap-3">
+              <Newspaper className="w-6 h-6 md:w-7 md:h-7 text-brand-blue" /> 新闻与见解管理
             </h2>
-            <p className="text-brand-dark/40 text-[11px] font-black uppercase tracking-widest mt-1">Content Management System</p>
+            <p className="text-brand-dark/40 text-[9px] md:text-[11px] font-black uppercase tracking-widest mt-1">Content Management System</p>
           </div>
         </div>
         
@@ -107,14 +108,15 @@ export default function NewsManagement() {
             setEditingItem(null);
             setIsModalOpen(true);
           }}
-          className="px-8 py-3 bg-brand-blue text-white rounded-xl font-black text-[12px] uppercase tracking-widest hover:bg-brand-dark transition-all shadow-lg shadow-brand-blue/20 flex items-center gap-2 shrink-0"
+          className="px-6 md:px-8 py-2 md:py-3 bg-brand-blue text-white rounded-xl font-black text-[11px] md:text-[12px] uppercase tracking-widest hover:bg-brand-dark transition-all shadow-lg shadow-brand-blue/20 flex items-center gap-2 shrink-0 w-fit"
         >
-          <Plus size={16} /> 发布新资讯
+          <Plus className="w-3.5 h-3.5 md:w-4 md:h-4" /> 发布咨讯
         </button>
       </div>
 
-      <div className="bg-white rounded-3xl border border-brand-border overflow-hidden">
-        <table className="w-full text-left">
+      <div className="bg-white rounded-2xl md:rounded-3xl border border-brand-border overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[800px]">
           <thead>
             <tr className="bg-brand-gray/50 text-brand-dark/30 text-[9px] font-black uppercase tracking-widest border-b border-brand-border">
               <th className="px-8 py-6">发布日期</th>
@@ -197,6 +199,7 @@ export default function NewsManagement() {
           </tbody>
         </table>
       </div>
+    </div>
 
       <AnimatePresence>
         {isModalOpen && (

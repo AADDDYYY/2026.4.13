@@ -66,25 +66,25 @@ export default function InquiryDashboard({ requests }: InquiryDashboardProps) {
   }, [requests]);
 
   return (
-    <div className="space-y-8 mb-12">
+    <div className="space-y-6 md:space-y-8 mb-8 md:mb-12">
       <div className="flex items-center gap-4 mb-4">
-        <div className="w-2 h-8 bg-brand-blue rounded-full"></div>
+        <div className="w-1.5 h-6 md:w-2 md:h-8 bg-brand-blue rounded-full"></div>
         <div>
-          <h2 className="text-3xl font-black text-brand-dark">📊 咨询数据概览 (Inquiry Analytics)</h2>
-          <p className="text-brand-dark/40 text-[11px] font-black uppercase tracking-widest mt-1">Market Demand & Lead Insights</p>
+          <h2 className="text-2xl md:text-3xl font-black text-brand-dark">📊 咨询数据概览</h2>
+          <p className="text-brand-dark/40 text-[9px] md:text-[11px] font-black uppercase tracking-widest mt-1">Market Demand & Lead Insights</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Trend Area Chart */}
-        <div className="lg:col-span-2 bg-white p-8 rounded-[40px] border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-sm font-black uppercase tracking-widest text-brand-dark flex items-center gap-2">
-              <TrendingUp size={16} className="text-brand-blue" /> 近7日申请趋势
+        <div className="lg:col-span-2 bg-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] border border-brand-border shadow-sm">
+          <div className="flex items-center justify-between mb-6 md:mb-8">
+            <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-brand-dark flex items-center gap-2">
+              <TrendingUp className="w-3.5 h-3.5 md:w-4 md:h-4 text-brand-blue" /> 近7日申请趋势
             </h3>
-            <span className="text-[10px] font-bold text-brand-dark/20 uppercase tracking-widest">Growth Analytics</span>
+            <span className="text-[8px] md:text-[10px] font-bold text-brand-dark/20 uppercase tracking-widest">Growth Analytics</span>
           </div>
-          <div className="h-[300px] w-full">
+          <div className="h-[250px] md:h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={stats.trendData}>
                 <defs>
@@ -98,12 +98,12 @@ export default function InquiryDashboard({ requests }: InquiryDashboardProps) {
                   dataKey="date" 
                   axisLine={false} 
                   tickLine={false} 
-                  tick={{ fontSize: 10, fontWeight: 700, fill: '#ccc' }} 
+                  tick={{ fontSize: 9, fontWeight: 700, fill: '#ccc' }} 
                 />
                 <YAxis 
                   axisLine={false} 
                   tickLine={false} 
-                  tick={{ fontSize: 10, fontWeight: 700, fill: '#ccc' }} 
+                  tick={{ fontSize: 9, fontWeight: 700, fill: '#ccc' }} 
                 />
                 <Tooltip 
                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 40px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
@@ -115,21 +115,21 @@ export default function InquiryDashboard({ requests }: InquiryDashboardProps) {
         </div>
 
         {/* Categories Pie Chart */}
-        <div className="bg-white p-8 rounded-[40px] border border-brand-border shadow-sm">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-sm font-black uppercase tracking-widest text-brand-dark flex items-center gap-2">
-              <Target size={16} className="text-brand-blue" /> 行业偏好分布
+        <div className="bg-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] border border-brand-border shadow-sm">
+          <div className="flex items-center justify-between mb-6 md:mb-8">
+            <h3 className="text-xs md:text-sm font-black uppercase tracking-widest text-brand-dark flex items-center gap-2">
+              <Target className="w-3.5 h-3.5 md:w-4 md:h-4 text-brand-blue" /> 行业偏好分布
             </h3>
           </div>
-          <div className="h-[300px] w-full">
+          <div className="h-[250px] md:h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={stats.areaData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
+                  innerRadius={55}
+                  outerRadius={85}
                   paddingAngle={5}
                   dataKey="value"
                 >
@@ -143,11 +143,11 @@ export default function InquiryDashboard({ requests }: InquiryDashboardProps) {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-4 flex flex-wrap gap-4 justify-center">
-            {stats.areaData.slice(0, 3).map((item, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }}></div>
-                <span className="text-[9px] font-black uppercase tracking-widest text-brand-dark/40">{item.name}</span>
+          <div className="mt-4 flex flex-wrap gap-3 md:gap-4 justify-center">
+            {stats.areaData.slice(0, 4).map((item, i) => (
+              <div key={i} className="flex items-center gap-1.5 md:gap-2">
+                <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }}></div>
+                <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-brand-dark/40">{item.name}</span>
               </div>
             ))}
           </div>

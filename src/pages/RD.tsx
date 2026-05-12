@@ -25,9 +25,9 @@ export default function RD() {
   ];
 
   return (
-    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-32 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56 relative">
         {rdHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden">
             <img src={rdHeroBg} alt="R&D Hero" className="w-full h-full object-cover img-enhance object-right" referrerPolicy="no-referrer" />
@@ -51,33 +51,33 @@ export default function RD() {
             </span>
             <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
           </div>
-          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             边界之外<br />
             <span className="text-brand-blue">起点所在</span>
           </h1>
-          <p className="text-brand-dark/60 text-xl sm:text-2xl md:text-4xl max-w-6xl mx-auto font-bold leading-relaxed">
+          <p className="text-brand-dark/60 text-lg sm:text-2xl md:text-3xl lg:text-4xl max-w-6xl mx-auto font-bold leading-relaxed px-4 sm:px-0">
             当传统材料的性能达到极限，真正的创新才刚刚开始。在西顿新材料，我们不仅在拓展物理与化学的边界，更把每一次突破作为全新的起点。从纳米级的基材重构到宏观工业的绿色转型，我们跨越已知，以聚合物合成技术为您开启无限可能的未来。
           </p>
         </motion.div>
       </div>
 
       {/* Stats Grid */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-brand-border border border-brand-border rounded-[40px] md:rounded-[60px] overflow-hidden shadow-2xl">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-brand-border border border-brand-border rounded-[32px] md:rounded-[60px] overflow-hidden shadow-2xl">
           {rdStats.map((stat, idx) => (
-            <div key={idx} className="bg-brand-gray p-12 lg:p-20 text-center hover:bg-white transition-all duration-700 group">
-              <div className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter group-hover:text-brand-blue transition-colors text-brand-dark flex items-baseline justify-center gap-2">
-                {stat.value}<span className="text-xl text-brand-dark/20 uppercase tracking-widest font-black">{stat.unit}</span>
+            <div key={idx} className="bg-brand-gray p-8 lg:p-20 text-center hover:bg-white transition-all duration-700 group">
+              <div className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-4 md:mb-6 tracking-tighter group-hover:text-brand-blue transition-colors text-brand-dark flex flex-col sm:flex-row items-baseline justify-center gap-1">
+                {stat.value}<span className="text-[10px] md:text-xl text-brand-dark/20 uppercase tracking-widest font-black">{stat.unit}</span>
               </div>
-              <div className="text-brand-dark/30 text-[11px] font-black uppercase tracking-[0.3em]">{stat.label}</div>
+              <div className="text-brand-dark/30 text-[8px] md:text-[11px] font-black uppercase tracking-[0.3em]">{stat.label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Lab Section */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-32 items-center">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-32 items-center">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -86,7 +86,7 @@ export default function RD() {
             className="lg:col-span-6"
           >
             <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px] mb-8 md:mb-12 block">Research Infrastructure</span>
-            <h2 className="text-4xl sm:text-5xl md:text-8xl font-black text-brand-dark mb-8 md:mb-16 tracking-tighter leading-[0.9]">
+            <h2 className="text-4xl md:text-8xl font-black text-brand-dark mb-8 md:mb-16 tracking-tighter leading-[0.9]">
               {t("rd.lab.title")}<br />
               <span className="text-brand-dark/30">{t("rd.lab.subtitle")}</span>
             </h2>
@@ -94,40 +94,40 @@ export default function RD() {
               {t("rd.lab.desc")}
             </p>
             
-            <div className="space-y-12">
-              <div className="flex gap-12 group">
-                <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
-                  <GraduationCap size={32} />
+            <div className="space-y-8 md:space-y-12">
+              <div className="flex gap-6 md:gap-12 group">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-brand-blue/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
+                  <GraduationCap size={28} />
                 </div>
                 <div>
-                  <h4 className="font-black text-2xl mb-4 text-brand-dark tracking-tight">{t("rd.lab.team")}</h4>
-                  <p className="text-brand-dark/40 text-base font-medium leading-relaxed max-w-md">{t("rd.lab.team_desc")}</p>
+                  <h4 className="font-black text-xl md:text-2xl mb-2 md:mb-4 text-brand-dark tracking-tight">{t("rd.lab.team")}</h4>
+                  <p className="text-brand-dark/40 text-sm md:text-base font-medium leading-relaxed max-w-md">{t("rd.lab.team_desc")}</p>
                 </div>
               </div>
               
-              <div className="flex gap-12 group">
-                <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
-                  <Microscope size={32} />
+              <div className="flex gap-6 md:gap-12 group">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-brand-blue/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
+                  <Microscope size={28} />
                 </div>
                 <div>
-                  <h4 className="font-black text-2xl mb-4 text-brand-dark tracking-tight">{t("rd.lab.center")}</h4>
-                  <p className="text-brand-dark/40 text-base font-medium leading-relaxed max-w-md">{t("rd.lab.center_desc")}</p>
+                  <h4 className="font-black text-xl md:text-2xl mb-2 md:mb-4 text-brand-dark tracking-tight">{t("rd.lab.center")}</h4>
+                  <p className="text-brand-dark/40 text-sm md:text-base font-medium leading-relaxed max-w-md">{t("rd.lab.center_desc")}</p>
                 </div>
               </div>
 
-              <div className="flex gap-12 group">
-                <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
-                  <Binary size={32} />
+              <div className="flex gap-6 md:gap-12 group">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-brand-blue/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-brand-blue shrink-0 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
+                  <Binary size={28} />
                 </div>
                 <div>
-                  <h4 className="font-black text-2xl mb-4 text-brand-dark tracking-tight">{t("rd.lab.custom")}</h4>
-                  <p className="text-brand-dark/40 text-base font-medium leading-relaxed max-w-md">{t("rd.lab.custom_desc")}</p>
+                  <h4 className="font-black text-xl md:text-2xl mb-2 md:mb-4 text-brand-dark tracking-tight">{t("rd.lab.custom")}</h4>
+                  <p className="text-brand-dark/40 text-sm md:text-base font-medium leading-relaxed max-w-md">{t("rd.lab.custom_desc")}</p>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-2 gap-12 relative lg:col-span-6">
+          <div className="grid grid-cols-2 gap-6 md:gap-12 relative lg:col-span-6 mt-16 lg:mt-0">
             <div className="absolute inset-0 bg-brand-blue/5 blur-[120px] -z-10"></div>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -165,37 +165,37 @@ export default function RD() {
       </section>
 
       {/* Technical Capabilities & Testing */}
-      <section className="py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-32">
+      <section className="py-24 md:py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-20 md:mb-32">
         <div className="max-w-[1800px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
-            <div className="order-2 lg:order-1">
-              <div className="grid grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+            <div className="order-2 lg:order-1 mt-12 lg:mt-0">
+              <div className="grid grid-cols-2 gap-6 md:gap-12">
                 {[
-                  { title: t("rd.testing.chemical"), desc: t("rd.testing.chemical_desc"), icon: <ShieldCheck size={32} /> },
-                  { title: t("rd.testing.aging"), desc: t("rd.testing.aging_desc"), icon: <Cpu size={32} /> },
-                  { title: t("rd.testing.mechanical"), desc: t("rd.testing.mechanical_desc"), icon: <TestTube size={32} /> },
-                  { title: t("rd.testing.simulation"), desc: t("rd.testing.simulation_desc"), icon: <FlaskConical size={32} /> }
+                  { title: t("rd.testing.chemical"), desc: t("rd.testing.chemical_desc"), icon: <ShieldCheck size={28} /> },
+                  { title: t("rd.testing.aging"), desc: t("rd.testing.aging_desc"), icon: <Cpu size={28} /> },
+                  { title: t("rd.testing.mechanical"), desc: t("rd.testing.mechanical_desc"), icon: <TestTube size={28} /> },
+                  { title: t("rd.testing.simulation"), desc: t("rd.testing.simulation_desc"), icon: <FlaskConical size={28} /> }
                 ].map((item, idx) => (
-                  <div key={idx} className="p-12 rounded-[40px] bg-white border border-brand-border hover:border-brand-blue/30 transition-all duration-700 group shadow-sm hover:shadow-2xl">
-                    <div className="text-brand-blue mb-6 group-hover:scale-110 transition-transform">{item.icon}</div>
-                    <h4 className="text-brand-dark font-black text-xl mb-4 tracking-tight">{item.title}</h4>
-                    <p className="text-brand-dark/40 text-sm leading-relaxed font-bold">{item.desc}</p>
+                  <div key={idx} className="p-8 md:p-12 rounded-[32px] md:rounded-[40px] bg-white border border-brand-border hover:border-brand-blue/30 transition-all duration-700 group shadow-sm hover:shadow-2xl">
+                    <div className="text-brand-blue mb-4 md:mb-6 group-hover:scale-110 transition-transform">{item.icon}</div>
+                    <h4 className="text-brand-dark font-black text-lg md:text-xl mb-2 md:mb-4 tracking-tight">{item.title}</h4>
+                    <p className="text-brand-dark/40 text-xs md:text-sm leading-relaxed font-bold">{item.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
             <div className="order-1 lg:order-2">
-              <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-12 block">Quality Assurance</span>
-              <h2 className="text-5xl md:text-8xl font-black text-brand-dark mb-16 tracking-tighter leading-[0.9]">
+              <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px] mb-8 md:mb-12 block">Quality Assurance</span>
+              <h2 className="text-4xl md:text-8xl font-black text-brand-dark mb-8 md:mb-16 tracking-tighter leading-[0.9]">
                 {t("rd.testing.title")}<br />
                 <span className="text-brand-dark/30">{t("rd.testing.subtitle")}</span>
               </h2>
-              <p className="text-brand-dark/40 text-2xl mb-16 font-light leading-relaxed max-w-xl">
+              <p className="text-brand-dark/40 text-lg md:text-2xl mb-12 md:mb-16 font-light leading-relaxed max-w-xl">
                 {t("rd.testing.desc")}
               </p>
-              <div className="flex items-center gap-10 p-12 rounded-[40px] bg-white border border-brand-border shadow-2xl">
-                <div className="text-6xl font-black text-brand-blue tracking-tighter">CNAS</div>
-                <div className="text-brand-dark/40 text-sm leading-relaxed border-l border-brand-border pl-10 font-bold max-w-xs">
+              <div className="flex items-center gap-6 md:gap-10 p-8 md:p-12 rounded-[32px] md:rounded-[40px] bg-white border border-brand-border shadow-2xl">
+                <div className="text-4xl md:text-6xl font-black text-brand-blue tracking-tighter">CNAS</div>
+                <div className="text-brand-dark/40 text-xs md:text-sm leading-relaxed border-l border-brand-border pl-6 md:pl-10 font-bold max-w-xs">
                   {t("rd.testing.cnas")}
                 </div>
               </div>
@@ -205,13 +205,13 @@ export default function RD() {
       </section>
 
       {/* R&D Philosophy */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-32">
-        <div className="bg-brand-gray border border-brand-border rounded-[80px] p-24 lg:p-48 text-center relative overflow-hidden shadow-2xl">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-32">
+        <div className="bg-brand-gray border border-brand-border rounded-[40px] md:rounded-[80px] p-12 md:p-24 lg:p-48 text-center relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[150px]"></div>
           <div className="relative z-10">
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-12 block">Our Philosophy</span>
-            <h2 className="text-5xl md:text-[9rem] font-black mb-16 tracking-tighter leading-[0.8] text-brand-dark">{t("rd.philosophy.title")}<br /><span className="text-brand-dark/30">{t("rd.philosophy.subtitle")}</span></h2>
-            <p className="text-brand-dark/40 text-2xl md:text-3xl max-w-5xl mx-auto font-light leading-relaxed">
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px] mb-8 md:mb-12 block">Our Philosophy</span>
+            <h2 className="text-3xl sm:text-5xl md:text-[9rem] font-black mb-12 md:mb-16 tracking-tighter leading-[0.8] text-brand-dark">{t("rd.philosophy.title")}<br /><span className="text-brand-dark/30">{t("rd.philosophy.subtitle")}</span></h2>
+            <p className="text-brand-dark/40 text-base md:text-3xl max-w-5xl mx-auto font-light leading-relaxed">
               {t("rd.philosophy.desc")}
             </p>
           </div>

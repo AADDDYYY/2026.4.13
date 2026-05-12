@@ -82,9 +82,9 @@ export default function Products() {
   }, [searchQuery, categoryFilter, activeDivision, activeIndustry, products]);
 
   return (
-    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-32 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56 relative">
         {productHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[60px] md:rounded-b-[100px] overflow-hidden opacity-20">
             <img src={productHeroBg} alt="Product Hero" className="w-full h-full object-cover" />
@@ -106,9 +106,9 @@ export default function Products() {
                {t("products.english_subtitle") || "Product Intelligence Center"}
             </span>
           </div>
-          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("products.title")}<br />
-            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">{t("products.english_title") || "Product Intelligence Center"}</span>
+            <span className="text-brand-blue text-[0.6em] sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal block md:inline mt-4 md:mt-0">{t("products.english_title") || "Product Intelligence Center"}</span>
           </h1>
           <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("products.subtitle")}
@@ -117,15 +117,15 @@ export default function Products() {
       </div>
 
       {/* Filters Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-48">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-48">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
           {/* Industry Filter Categories */}
-          <div className="lg:col-span-12 mb-16">
-            <div className="flex items-center gap-6 mb-12">
+          <div className="lg:col-span-12 mb-12">
+            <div className="flex items-center gap-6 mb-8">
               <div className="w-1.5 h-6 bg-brand-blue"></div>
-              <span className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40">行业应用领域 / Industry Applications</span>
+              <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40">行业应用领域 / Industry Applications</span>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-6">
               {industryApplications.map((ind) => {
                 const isActive = activeIndustry === (ind.value || "all");
                 return (
@@ -134,19 +134,18 @@ export default function Products() {
                     whileHover={{ y: -8, scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setActiveIndustry(ind.value || "all")}
-                    className={`flex flex-col items-center justify-center p-8 rounded-[32px] border transition-all duration-700 aspect-square group ${
+                    className={`flex flex-col items-center justify-center p-4 md:p-8 rounded-[24px] md:rounded-[32px] border transition-all duration-700 aspect-square group ${
                       isActive 
                         ? "bg-brand-blue border-brand-blue text-white shadow-2xl shadow-brand-blue/30" 
                         : "bg-brand-gray border-brand-border text-brand-dark/40 hover:bg-white hover:border-brand-blue/30 hover:text-brand-blue shadow-sm"
                     }`}
                   >
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-700 ${
+                    <div className={`w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-colors duration-700 ${
                       isActive ? "bg-white/20" : "bg-white group-hover:bg-brand-blue/10"
                     }`}>
-                      {ind.icon && <div className={isActive ? "text-white scale-150" : "text-brand-blue scale-150"}>{ind.icon}</div>}
+                      {ind.icon && <div className={isActive ? "text-white scale-110 md:scale-150" : "text-brand-blue scale-110 md:scale-150"}>{ind.icon}</div>}
                     </div>
-                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-center px-2">{ind.title}</span>
-                    <div className={`mt-4 w-1.5 h-1.5 rounded-full transition-all duration-700 ${isActive ? "bg-white scale-150" : "bg-transparent"}`}></div>
+                    <span className="text-[8px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] text-center px-1 md:px-2">{ind.title}</span>
                   </motion.button>
                 );
               })}
@@ -185,7 +184,7 @@ export default function Products() {
       </div>
 
       {/* Technical Product List */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 gap-8 md:gap-12">
           <div>
             <h2 className="text-4xl sm:text-5xl md:text-8xl font-black text-brand-dark mb-4 md:mb-8 tracking-tighter leading-[0.9]">{t("products.catalog")}</h2>
@@ -203,9 +202,9 @@ export default function Products() {
           </div>
         </div>
 
-        <div className="bg-white border border-brand-border rounded-[60px] overflow-hidden shadow-2xl">
+        <div className="bg-white border border-brand-border rounded-[32px] md:rounded-[60px] overflow-hidden shadow-2xl">
           <div className="overflow-x-auto custom-scrollbar">
-            <div className="min-w-[1400px]">
+            <div className="min-w-[1200px] md:min-w-[1400px]">
               <div className="grid grid-cols-12 gap-6 p-12 border-b border-brand-border bg-brand-gray text-[11px] font-black uppercase tracking-[0.3em] text-brand-dark/40">
                 <div className="col-span-2">{t("products.table.name_type")}</div>
                 <div className="col-span-1">{t("products.table.appearance")}</div>
@@ -279,24 +278,25 @@ export default function Products() {
       </section>
 
       {/* Custom Solution CTA */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-16 md:mb-56">
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5 }}
-          className="bg-brand-blue rounded-[80px] p-24 md:p-48 text-center relative overflow-hidden text-white shadow-2xl"
+          className="bg-brand-blue rounded-[40px] md:rounded-[80px] p-12 md:p-24 lg:p-48 text-center relative overflow-hidden text-white shadow-2xl"
         >
           <div className="relative z-10 max-w-5xl mx-auto">
-            <Shield size={80} className="mx-auto mb-16 opacity-30" />
-            <h2 className="text-5xl md:text-[9rem] font-black mb-16 tracking-tighter leading-[0.8]">
+            <Shield size={64} className="mx-auto mb-8 opacity-30 md:hidden" />
+            <Shield size={80} className="mx-auto mb-16 opacity-30 hidden md:block" />
+            <h2 className="text-4xl md:text-[9rem] font-black mb-8 md:mb-16 tracking-tighter leading-[0.8]">
               {t("products.cta.title")}
             </h2>
-            <p className="text-white/80 text-2xl md:text-3xl font-light leading-relaxed mb-24">
+            <p className="text-lg md:text-3xl font-light leading-relaxed mb-12 md:mb-24 px-4">
               {t("products.cta.desc")}
             </p>
-            <Link to="/contact" className="group relative overflow-hidden px-20 py-8 bg-white rounded-full inline-block transition-all hover:scale-105 shadow-2xl">
-              <span className="relative z-10 text-brand-blue font-black tracking-[0.3em] text-[12px] uppercase">
+            <Link to="/contact" className="group relative overflow-hidden px-12 md:px-20 py-6 md:py-8 bg-white rounded-full inline-block transition-all hover:scale-105 shadow-2xl">
+              <span className="relative z-10 text-brand-blue font-black tracking-[0.3em] text-[10px] md:text-[12px] uppercase">
                 {t("products.cta.btn")}
               </span>
             </Link>

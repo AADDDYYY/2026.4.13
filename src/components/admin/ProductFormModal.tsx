@@ -51,33 +51,6 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
   const sdsInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const uploadToSupabase = async (base64OrFile: string | File, bucket: string): Promise<string> => {
-    if (!isSupabaseConfigured()) throw new Error('Supabase not configured');
-    
-    let fileToUpload: File | Blob;
-    if (typeof base64OrFile === 'string' && base64OrFile.startsWith('data:')) {
-      const res = await fetch(base64OrFile);
-      fileToUpload = await res.blob();
-    } else {
-      fileToUpload = base64OrFile as File;
-    }
-
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.jpg`;
-    const filePath = `${fileName}`;
-
-    const { error } = await supabase.storage
-      .from(bucket)
-      .upload(filePath, fileToUpload);
-
-    if (error) throw error;
-
-    const { data: { publicUrl } } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(filePath);
-
-    return publicUrl;
-  };
-
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -92,12 +65,9 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
   const handleImageCropComplete = async (croppedBase64: string) => {
     setIsUploading(true);
     try {
-      if (isSupabaseConfigured()) {
-        const publicUrl = await uploadToSupabase(croppedBase64, 'products');
-        setFormData({ ...formData, image: publicUrl });
-      } else {
-        setFormData({ ...formData, image: croppedBase64 });
-      }
+      const { uploadFileToCloud } = await import('../../utils/fileUpload');
+      const publicUrl = await uploadFileToCloud(croppedBase64, 'products', true);
+      setFormData({ ...formData, image: publicUrl });
     } catch (error) {
       console.error('Image upload failed:', error);
       alert('图片上传失败');
@@ -113,20 +83,9 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
 
     setIsUploading(true);
     try {
-      if (isSupabaseConfigured()) {
-        const publicUrl = await uploadToSupabase(file, 'products');
-        setFormData({ ...formData, [field]: publicUrl });
-      } else {
-        if (file.size > 1024 * 1024) { 
-          alert('文件太大！由于数据库限制，请上传小于 1MB 的 PDF 文档或启用 Supabase 存储。');
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = (upload) => {
-          setFormData({ ...formData, [field]: upload.target?.result as string });
-        };
-        reader.readAsDataURL(file);
-      }
+      const { uploadFileToCloud } = await import('../../utils/fileUpload');
+      const publicUrl = await uploadFileToCloud(file, 'products', false);
+      setFormData({ ...formData, [field]: publicUrl });
     } catch (error) {
        console.error('File upload failed:', error);
        alert('文档上传失败');
@@ -195,10 +154,10 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
   ];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-12 text-brand-dark">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12 text-brand-dark">
       <div className="absolute inset-0 bg-brand-dark/80 backdrop-blur-sm" onClick={onClose}></div>
       
-      <div className="relative w-full max-w-5xl bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-5xl bg-white rounded-[32px] md:rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[95vh] md:max-h-[90vh]">
         {/* Header */}
         {cropperImage && (
           <ImageCropperModal 
@@ -208,47 +167,45 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
             aspect={4/3}
           />
         )}
-        <div className="p-8 border-b border-brand-border bg-brand-gray/30 text-brand-dark">
-          <div className="flex items-center justify-between mb-8">
+        <div className="p-6 md:p-8 border-b border-brand-border bg-brand-gray/30 text-brand-dark flex-shrink-0">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 md:mb-8 gap-4">
             <div>
-              <h2 className="text-2xl font-black">
+              <h2 className="text-xl md:text-2xl font-black">
                 {initialProduct ? '编辑产品详情' : '添加新产品'}
               </h2>
-              <p className="text-[10px] uppercase font-black tracking-widest text-brand-dark/40 mt-1">Configure Technical Data Sheets</p>
+              <p className="text-[9px] md:text-[10px] uppercase font-black tracking-widest text-brand-dark/40 mt-1">Configure Technical Data Sheets</p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-4 bg-white px-5 py-2 rounded-2xl border border-brand-border shadow-sm">
-                <div className="flex items-center gap-2 pr-4 border-r border-brand-border">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark/40">推荐置顶:</span>
+            <div className="flex items-center gap-3 md:gap-4 justify-between sm:justify-start">
+              <div className="flex items-center gap-2 md:gap-4 bg-white px-3 md:px-5 py-1.5 md:py-2 rounded-xl md:rounded-2xl border border-brand-border shadow-sm">
+                <div className="flex items-center gap-2 pr-2 md:pr-4 border-r border-brand-border">
                   <button 
                     type="button"
                     onClick={() => setFormData({...formData, is_hot: !formData.is_hot})}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all ${
+                    className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg md:rounded-xl transition-all ${
                       formData.is_hot 
-                        ? 'bg-orange-50 text-orange-600 border border-orange-100 shadow-sm' 
+                        ? 'bg-orange-50 text-orange-600 border border-orange-100' 
                         : 'bg-brand-gray text-brand-dark/30 border border-brand-border'
                     }`}
                   >
                     <Flame size={12} className={formData.is_hot ? "animate-pulse" : ""} />
-                    <span className="text-[9px] font-black uppercase tracking-widest">
-                      {formData.is_hot ? '热门产品' : '普通'}
+                    <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest hidden xs:inline">
+                      {formData.is_hot ? '置顶' : '置顶'}
                     </span>
                   </button>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-brand-dark/40">发布状态:</span>
                   <button 
                     type="button"
                     onClick={() => setFormData({...formData, status: formData.status === 'draft' ? 'published' : 'draft'})}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all ${
+                    className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg md:rounded-xl transition-all ${
                       formData.status !== 'draft' 
                         ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
                         : 'bg-brand-dark text-white'
                     }`}
                   >
                     {formData.status !== 'draft' ? <Eye size={12} /> : <EyeOff size={12} />}
-                    <span className="text-[9px] font-black uppercase tracking-widest">
-                      {formData.status !== 'draft' ? '已上架' : '已下架'}
+                    <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest hidden xs:inline">
+                      {formData.status !== 'draft' ? '已架' : '已下'}
                     </span>
                   </button>
                 </div>
@@ -256,7 +213,7 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
               <button 
                 type="button"
                 onClick={onClose} 
-                className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-colors text-brand-dark/20 hover:text-brand-dark"
+                className="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-colors text-brand-dark/20 hover:text-brand-dark shrink-0"
               >
                 <X size={20} />
               </button>
@@ -264,7 +221,7 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
           </div>
 
           {/* Tabs Navigation */}
-          <div className="flex gap-2 p-1 bg-brand-gray/50 rounded-2xl w-fit border border-brand-border/50">
+          <div className="flex gap-1.5 p-1 bg-brand-gray/50 rounded-xl md:rounded-2xl w-full sm:w-fit border border-brand-border/50 overflow-x-auto no-scrollbar">
             {[
               { id: 'basic', label: '核心信息', icon: Info },
               { id: 'tech', label: '技术指标', icon: FlaskConical },
@@ -274,13 +231,13 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                className={`flex items-center gap-2 px-4 md:px-6 py-2 md:py-2.5 rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
                   activeTab === tab.id 
                     ? 'bg-white text-brand-blue shadow-sm ring-1 ring-brand-blue/10' 
                     : 'text-brand-dark/40 hover:text-brand-dark hover:bg-white/50'
                 }`}
               >
-                <tab.icon size={14} />
+                <tab.icon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                 {tab.label}
               </button>
             ))}
@@ -444,14 +401,14 @@ export default function ProductFormModal({ isOpen, onClose, onSave, initialProdu
         </div>
 
         {/* Footer */}
-        <div className="p-8 border-t border-brand-border bg-white flex items-center justify-between">
-          <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600/60 font-black">
-            {isSubmitting ? '同步中...' : '更改将实时同步到官网与云端数据库'}
+        <div className="p-6 md:p-8 border-t border-brand-border bg-white flex flex-col sm:flex-row items-center justify-between gap-6 flex-shrink-0">
+          <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-emerald-600/60 text-center sm:text-left">
+            {isSubmitting ? '同步中...' : '更改将实时同步到官网数据库'}
           </p>
-          <div className="flex items-center gap-4">
-            <button onClick={onClose} className="px-6 py-3 text-brand-dark/40 text-[10px] font-black uppercase transition-all tracking-widest font-black">取消</button>
-            <button form="product-form" type="submit" disabled={isSubmitting} className="px-10 py-4 bg-brand-blue text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center gap-2 hover:bg-brand-dark transition-all">
-              <Save size={16} /> {isSubmitting ? '保存中...' : '保存更改'}
+          <div className="flex items-center gap-4 w-full sm:w-auto">
+            <button onClick={onClose} className="flex-1 sm:flex-none px-4 md:px-6 py-2 md:py-3 text-brand-dark/40 text-[9px] md:text-[10px] font-black uppercase tracking-widest">取消</button>
+            <button form="product-form" type="submit" disabled={isSubmitting} className="flex-1 sm:flex-none px-6 md:px-10 py-3 md:py-4 bg-brand-blue text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 hover:bg-brand-dark transition-all">
+              <Save className="w-3.5 h-3.5 md:w-4 md:h-4" /> {isSubmitting ? '保存中' : '保存更改'}
             </button>
           </div>
         </div>

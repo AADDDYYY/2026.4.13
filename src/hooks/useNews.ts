@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { db } from '../firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { newsData as staticNews, NewsItem } from '../data/news';
 
 export type { NewsItem };
@@ -11,39 +13,59 @@ const listeners = new Set<(data: { news: NewsItem[], loading: boolean, error: st
 let subscription: any = null;
 
 async function fetchInitialNews() {
-  if (!isSupabaseConfigured()) return;
-  
-  globalLoading = true;
-  notifyListeners();
+  if (isSupabaseConfigured()) {
+    globalLoading = true;
+    notifyListeners();
 
-  const { data, error } = await supabase
-    .from('news')
-    .select('*')
-    .order('date', { ascending: false });
+    const { data, error } = await supabase
+      .from('news')
+      .select('*')
+      .order('date', { ascending: false });
 
-  if (error) {
-    console.error("Supabase news fetch error:", error);
-    globalError = error.message;
-  } else {
-    globalCloudNews = (data || []).map(item => ({
-      ...item,
-      // Map Supabase fields to NewsItem if needed, though they match in SQL script
-    } as NewsItem));
-    globalError = null;
+    if (error) {
+      console.error("Supabase news fetch error:", error);
+      globalError = error.message;
+    } else {
+      globalCloudNews = (data || []).map(item => ({
+        ...item,
+      } as NewsItem));
+      globalError = null;
+    }
+    globalLoading = false;
+    notifyListeners();
   }
-  globalLoading = false;
-  notifyListeners();
 }
 
 function startSubscription() {
-  if (subscription || !isSupabaseConfigured()) return;
+  if (subscription) return;
 
-  subscription = supabase
-    .channel('news_changes')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, () => {
-      fetchInitialNews();
-    })
-    .subscribe();
+  if (isSupabaseConfigured()) {
+    subscription = supabase
+      .channel('news_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, () => {
+        fetchInitialNews();
+      })
+      .subscribe();
+  } else {
+    // Firebase fallback
+    globalLoading = true;
+    notifyListeners();
+    const q = query(collection(db, 'news'), orderBy('date', 'desc'));
+    subscription = onSnapshot(q, (snapshot) => {
+      globalCloudNews = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+      } as NewsItem));
+      globalLoading = false;
+      globalError = null;
+      notifyListeners();
+    }, (error) => {
+      console.error("Firebase news fetch error:", error);
+      globalError = error.message;
+      globalLoading = false;
+      notifyListeners();
+    });
+  }
 }
 
 function notifyListeners() {

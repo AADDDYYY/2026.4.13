@@ -46,9 +46,9 @@ export default function Sustainability() {
   ];
 
   return (
-    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-32 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56 relative">
         {sustainabilityHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden">
             <img src={sustainabilityHeroBg} alt="Sustainability Hero" className="w-full h-full object-cover img-enhance object-right" referrerPolicy="no-referrer" />
@@ -71,9 +71,9 @@ export default function Sustainability() {
               Sustainability & ESG
             </span>
           </div>
-          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-10 md:mb-16 tracking-tight leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("sustainability_page.hero.title")}<br />
-            <span className="text-emerald-500 sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">Sustainability & ESG</span>
+            <span className="text-emerald-500 text-[0.6em] sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal block md:inline mt-4 md:mt-0">Sustainability & ESG</span>
           </h1>
           <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("sustainability_page.hero.desc")}
@@ -82,9 +82,9 @@ export default function Sustainability() {
       </div>
 
       {/* Stats Grid */}
-      <section className="py-24 md:py-48 border-y border-brand-border bg-brand-gray mb-24 md:mb-56">
+      <section className="py-20 md:py-48 border-y border-brand-border bg-brand-gray mb-20 md:mb-56">
         <div className="max-w-[1800px] mx-auto px-6 md:px-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24 text-center sm:text-left">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24 text-center sm:text-left">
             {sustainabilityStats.map((stat, idx) => (
               <motion.div
                 key={idx}
@@ -93,9 +93,9 @@ export default function Sustainability() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.15, duration: 1 }}
               >
-                <div className="text-[11px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-6">{stat.label}</div>
-                <div className="text-5xl md:text-7xl lg:text-8xl font-black text-brand-dark tracking-tighter flex items-baseline gap-2">
-                  {stat.value}<span className="text-lg font-black text-brand-dark/20 uppercase tracking-widest">{stat.unit}</span>
+                <div className="text-[9px] md:text-[11px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-4 md:mb-6">{stat.label}</div>
+                <div className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-brand-dark tracking-tighter flex flex-col sm:flex-row items-baseline justify-center sm:justify-start gap-1">
+                  {stat.value}<span className="text-[10px] md:text-lg font-black text-brand-dark/20 uppercase tracking-widest">{stat.unit}</span>
                 </div>
               </motion.div>
             ))}
@@ -104,14 +104,14 @@ export default function Sustainability() {
       </section>
 
       {/* ESG Framework */}
-      <section className="py-56 px-6 md:px-20 bg-white mb-56">
+      <section className="py-24 md:py-56 px-6 md:px-20 bg-white mb-20 md:mb-56">
         <div className="max-w-[1800px] mx-auto">
-          <div className="mb-32">
-            <span className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[11px] mb-8 block">Our Commitment</span>
-            <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">{t("sustainability_page.esg.title")}</h2>
+          <div className="mb-16 md:mb-32">
+            <span className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px] mb-6 md:mb-8 block">Our Commitment</span>
+            <h2 className="text-4xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">{t("sustainability_page.esg.title")}</h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-16">
             {esgGoals.map((goal, index) => (
               <motion.div
                 key={index}
@@ -119,18 +119,18 @@ export default function Sustainability() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.15, duration: 1 }}
-                className="p-16 rounded-[50px] border border-brand-border bg-brand-gray hover:border-emerald-500/30 transition-all duration-700 group shadow-sm hover:shadow-2xl"
+                className="p-8 md:p-16 rounded-[40px] md:rounded-[50px] border border-brand-border bg-brand-gray hover:border-emerald-500/30 transition-all duration-700 group shadow-sm hover:shadow-2xl"
               >
-                <div className="w-20 h-20 rounded-3xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-12 border border-emerald-500/20 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500">
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-3xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-8 md:mb-12 border border-emerald-500/20 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500">
                   {goal.icon}
                 </div>
-                <h3 className="text-3xl font-black mb-4 tracking-tight text-brand-dark">{goal.title}</h3>
-                <p className="text-emerald-500 text-[11px] uppercase tracking-[0.3em] mb-10 font-black">{goal.en}</p>
-                <p className="text-brand-dark/40 leading-relaxed font-medium mb-12 text-xl">{goal.desc}</p>
-                <ul className="space-y-6">
+                <h3 className="text-2xl md:text-3xl font-black mb-2 md:mb-4 tracking-tight text-brand-dark">{goal.title}</h3>
+                <p className="text-emerald-500 text-[9px] md:text-[11px] uppercase tracking-[0.3em] mb-6 md:mb-10 font-black">{goal.en}</p>
+                <p className="text-brand-dark/40 leading-relaxed font-medium mb-8 md:mb-12 text-lg md:text-xl">{goal.desc}</p>
+                <ul className="space-y-4 md:space-y-6">
                   {goal.items.map(item => (
-                    <li key={item} className="flex items-center gap-4 text-brand-dark/60 text-base font-black uppercase tracking-widest">
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+                    <li key={item} className="flex items-center gap-3 md:gap-4 text-brand-dark/60 text-sm md:text-base font-black uppercase tracking-widest">
+                      <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-500"></div>
                       {item}
                     </li>
                   ))}
@@ -142,22 +142,22 @@ export default function Sustainability() {
       </section>
 
       {/* Circular Economy */}
-      <section className="py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-56">
+      <section className="py-24 md:py-56 px-6 md:px-20 bg-brand-gray border-y border-brand-border mb-20 md:mb-56">
         <div className="max-w-[1800px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
             <div className="relative">
-              <div className="aspect-square rounded-[60px] overflow-hidden border border-brand-border p-6 bg-white shadow-2xl">
+              <div className="aspect-square rounded-[40px] md:rounded-[60px] overflow-hidden border border-brand-border p-4 md:p-6 bg-white shadow-2xl">
                 <img 
                   src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000" 
                   alt="Nature Conservation" 
-                  className="w-full h-full object-cover rounded-[40px]"
+                  className="w-full h-full object-cover rounded-[32px] md:rounded-[40px]"
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="absolute -top-12 -right-12 bg-emerald-500 p-16 rounded-[40px] shadow-2xl text-white">
-                <Recycle size={64} className="mb-6" />
-                <div className="text-3xl font-black tracking-tighter uppercase">{t("home.sustainability.circular")}</div>
-                <div className="text-white/60 text-[10px] uppercase tracking-[0.3em] font-black mt-3">Circular Economy</div>
+              <div className="absolute -top-6 -right-6 md:-top-12 md:-right-12 bg-emerald-500 p-8 md:p-16 rounded-[32px] md:rounded-[40px] shadow-2xl text-white transform scale-75 md:scale-100">
+                <Recycle size={48} className="mb-4 md:mb-6" />
+                <div className="text-xl md:text-3xl font-black tracking-tighter uppercase">{t("home.sustainability.circular")}</div>
+                <div className="text-white/60 text-[8px] md:text-[10px] uppercase tracking-[0.3em] font-black mt-2 md:mt-3">Circular Economy</div>
               </div>
             </div>
 
@@ -166,25 +166,26 @@ export default function Sustainability() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1.2 }}
+              className="mt-12 lg:mt-0"
             >
-              <span className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[11px] mb-12 block">Sustainable Production</span>
-              <h2 className="text-5xl md:text-8xl font-black mb-16 tracking-tighter leading-[0.9] text-brand-dark">{t("sustainability_page.management.title")}</h2>
-              <p className="text-brand-dark/40 text-2xl font-light leading-relaxed mb-16 max-w-xl">
+              <span className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px] mb-8 md:mb-12 block">Sustainable Production</span>
+              <h2 className="text-4xl md:text-8xl font-black mb-8 md:mb-16 tracking-tighter leading-[0.9] text-brand-dark">{t("sustainability_page.management.title")}</h2>
+              <p className="text-brand-dark/40 text-lg md:text-2xl font-light leading-relaxed mb-12 md:mb-16 max-w-xl">
                 {t("sustainability_page.management.desc")}
               </p>
-              <div className="space-y-12">
+              <div className="space-y-8 md:space-y-12">
                 {[
-                  { title: t("sustainability_page.management.item1_title"), desc: t("sustainability_page.management.item1_desc"), icon: <Wind size={32} /> },
-                  { title: t("sustainability_page.management.item2_title"), desc: t("sustainability_page.management.item2_desc"), icon: <Droplets size={32} /> },
-                  { title: t("sustainability_page.management.item3_title"), desc: t("sustainability_page.management.item3_desc"), icon: <Leaf size={32} /> }
+                  { title: t("sustainability_page.management.item1_title"), desc: t("sustainability_page.management.item1_desc"), icon: <Wind size={28} /> },
+                  { title: t("sustainability_page.management.item2_title"), desc: t("sustainability_page.management.item2_desc"), icon: <Droplets size={28} /> },
+                  { title: t("sustainability_page.management.item3_title"), desc: t("sustainability_page.management.item3_desc"), icon: <Leaf size={28} /> }
                 ].map((item, i) => (
-                  <div key={i} className="flex gap-12 group">
-                    <div className="w-20 h-20 bg-emerald-500/10 rounded-3xl flex items-center justify-center text-emerald-500 border border-emerald-500/20 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-700 shrink-0">
+                  <div key={i} className="flex gap-6 md:gap-12 group">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-500/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-emerald-500 border border-emerald-500/20 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-700 shrink-0">
                       {item.icon}
                     </div>
                     <div>
-                      <h4 className="font-black text-2xl mb-4 text-brand-dark tracking-tight">{item.title}</h4>
-                      <p className="text-brand-dark/40 text-base font-medium leading-relaxed max-w-md">{item.desc}</p>
+                      <h4 className="font-black text-xl md:text-2xl mb-2 md:mb-4 text-brand-dark tracking-tight">{item.title}</h4>
+                      <p className="text-brand-dark/40 text-sm md:text-base font-medium leading-relaxed max-w-md">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -195,27 +196,28 @@ export default function Sustainability() {
       </section>
 
       {/* Future Vision */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 py-56">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 py-24 md:py-56">
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5 }}
-          className="relative p-24 md:p-48 rounded-[60px] overflow-hidden bg-emerald-600 text-white text-center shadow-2xl"
+          className="relative p-12 md:p-24 lg:p-48 rounded-[40px] md:rounded-[60px] overflow-hidden bg-emerald-600 text-white text-center shadow-2xl"
         >
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
           
           <div className="relative z-10 max-w-4xl mx-auto">
-            <Sun size={80} className="mx-auto mb-16" />
-            <h2 className="text-5xl md:text-[9rem] font-black mb-16 tracking-tighter leading-[0.8]">{t("sustainability_page.vision.title")}</h2>
-            <p className="text-white/80 text-2xl md:text-3xl font-light leading-relaxed mb-24">
+            <Sun size={48} className="mx-auto mb-8 md:mb-16 md:hidden" />
+            <Sun size={80} className="mx-auto mb-16 hidden md:block" />
+            <h2 className="text-4xl md:text-[9rem] font-black mb-8 md:mb-16 tracking-tighter leading-[0.8]">{t("sustainability_page.vision.title")}</h2>
+            <p className="text-white/80 text-lg md:text-3xl font-light leading-relaxed mb-12 md:mb-24">
               {t("sustainability_page.vision.desc")}
             </p>
-            <div className="flex flex-wrap justify-center gap-10">
-              <Link to="/contact" className="px-16 py-6 bg-white text-emerald-600 rounded-full font-black hover:bg-emerald-50 transition-all shadow-2xl uppercase tracking-[0.3em] text-[11px]">
+            <div className="flex flex-col sm:flex-row justify-center gap-6 md:gap-10">
+              <Link to="/contact" className="px-12 md:px-16 py-5 md:py-6 bg-white text-emerald-600 rounded-full font-black hover:bg-emerald-50 transition-all shadow-2xl uppercase tracking-[0.3em] text-[10px] md:text-[11px] w-full sm:w-auto">
                 {t("sustainability_page.vision.cta_join")}
               </Link>
-              <Link to="/products" className="px-16 py-6 bg-emerald-700 text-white rounded-full font-black hover:bg-emerald-800 transition-all border border-emerald-500/30 uppercase tracking-[0.3em] text-[11px]">
+              <Link to="/products" className="px-12 md:px-16 py-5 md:py-6 bg-emerald-700 text-white rounded-full font-black hover:bg-emerald-800 transition-all border border-emerald-500/30 uppercase tracking-[0.3em] text-[10px] md:text-[11px] w-full sm:w-auto">
                 {t("sustainability_page.vision.cta_browse")}
               </Link>
             </div>

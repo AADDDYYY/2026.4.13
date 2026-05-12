@@ -4,7 +4,6 @@ import { Layers, Globe, Mail, X, Menu, ChevronDown, ArrowLeft, Activity, Shield,
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useTranslation } from "react-i18next";
-import { AIAssistant } from "./AIAssistant";
 import { useCMSAsset } from "../hooks/useCMSAsset";
 
 interface LayoutProps {
@@ -121,7 +120,8 @@ export const Header = () => {
   ];
 
   return (
-    <header className={`w-full transition-all duration-500 ${isScrolled || !isHome || isMenuOpen ? "bg-white/90 backdrop-blur-xl shadow-sm py-6 fixed top-0 left-0 z-50" : "bg-transparent py-10"}`}>
+    <>
+      <header className={`w-full transition-all duration-500 ${isScrolled || !isHome || isMenuOpen ? "bg-white/90 backdrop-blur-xl shadow-sm py-6 fixed top-0 left-0 z-50" : "bg-transparent py-10"}`}>
       <div className="max-w-[1800px] mx-auto px-6 md:px-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 shrink-0" onClick={() => setIsMenuOpen(false)}>
           <img 
@@ -244,6 +244,7 @@ export const Header = () => {
           {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
+      </header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
@@ -405,7 +406,7 @@ export const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 };
 
@@ -566,7 +567,6 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
       <Footer />
-      <AIAssistant />
 
       {/* Privacy Notice / Cookie Hint */}
       <motion.div 

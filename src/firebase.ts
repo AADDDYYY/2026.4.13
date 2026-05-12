@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { initializeFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 import firebaseConfig from '../firebase-applet-config.json';
 
 // Initialize Firebase
@@ -9,6 +10,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize services
 export const auth = getAuth(app);
 export const db = initializeFirestore(app, {}, firebaseConfig.firestoreDatabaseId); // Removed experimentalForceLongPolling to improve stability
+export const storage = getStorage(app);
 
 // Global quota tracker to prevent redundant failing calls and SDK crashes
 let _isQuotaExceeded = false;

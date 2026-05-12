@@ -78,11 +78,11 @@ export default function Downloads() {
   };
 
   return (
-    <div className="pt-24 md:pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-32 md:pt-48 pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56 relative">
         {downloadsHeroBg ? (
-          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden opacity-20">
+          <div className="absolute inset-0 -z-10 rounded-b-[60px] md:rounded-b-[100px] overflow-hidden opacity-20">
             <img src={downloadsHeroBg} alt="Downloads Hero" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
           </div>
@@ -96,17 +96,17 @@ export default function Downloads() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-7xl"
         >
-          <div className="flex items-center gap-6 mb-16">
-            <div className="h-px w-16 bg-brand-blue"></div>
-            <span className="text-brand-blue font-black uppercase tracking-wider text-[11px]">
+          <div className="flex items-center gap-6 mb-8 md:mb-16">
+            <div className="h-px w-12 md:w-16 bg-brand-blue"></div>
+            <span className="text-brand-blue font-black uppercase tracking-wider text-[10px] md:text-[11px]">
               Resource Center
             </span>
           </div>
-          <h1 className="text-6xl md:text-[10rem] font-black mb-16 tracking-tight leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             下载中心<br />
-            <span className="text-brand-blue tracking-normal">Download Center</span>
+            <span className="text-brand-blue block md:inline mt-4 md:mt-0 tracking-normal">Download Center</span>
           </h1>
-          <p className="text-brand-dark/40 text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
+          <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             获取最新的产品技术参数表、安全说明书以及企业宣传画册，为您的项目提供专业的数据支持。
           </p>
         </motion.div>
@@ -115,12 +115,12 @@ export default function Downloads() {
       {/* Download Grid */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-20">
         {productsLoading ? (
-          <div className="flex flex-col items-center justify-center py-56">
-            <Loader2 className="w-16 h-16 text-brand-blue animate-spin mb-8" />
-            <p className="text-brand-dark/40 font-black uppercase tracking-widest text-[10px]">正在检索技术文档库...</p>
+          <div className="flex flex-col items-center justify-center py-24 md:py-56">
+            <Loader2 className="w-12 h-12 md:w-16 md:h-16 text-brand-blue animate-spin mb-8" />
+            <p className="text-brand-dark/40 font-black uppercase tracking-widest text-[9px] md:text-[10px]">正在检索技术文档库...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-32">
+          <div className="grid grid-cols-1 gap-16 md:gap-32">
             {allDownloads.map((category, idx) => (
               <motion.div
                 key={idx}
@@ -129,30 +129,30 @@ export default function Downloads() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1, duration: 1 }}
               >
-                <div className="flex items-center gap-8 mb-16">
-                  <h2 className="text-4xl font-black tracking-tight">{category.category}</h2>
+                <div className="flex items-center gap-6 md:gap-8 mb-8 md:mb-16">
+                  <h2 className="text-2xl md:text-4xl font-black tracking-tight">{category.category}</h2>
                   <div className="h-px flex-1 bg-brand-border"></div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                   {category.items.map((item, itemIdx) => (
                     <div 
                       key={itemIdx}
-                      className="group bg-brand-gray p-12 rounded-[40px] border border-brand-border hover:bg-white hover:shadow-2xl transition-all duration-700"
+                      className="group bg-brand-gray p-8 md:p-12 rounded-[32px] md:rounded-[40px] border border-brand-border hover:bg-white hover:shadow-2xl transition-all duration-700"
                     >
-                      <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-brand-blue mb-10 shadow-sm group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
-                        <FileText size={32} />
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white flex items-center justify-center text-brand-blue mb-8 md:mb-10 shadow-sm group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
+                        <FileText className="w-6 h-6 md:w-8 md:h-8" />
                       </div>
-                      <h3 className="text-xl font-black mb-4 tracking-tight group-hover:text-brand-blue transition-colors line-clamp-2 min-h-[3.5rem]">{item.name}</h3>
-                      <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] text-brand-dark/30 mb-10">
+                      <h3 className="text-lg md:text-xl font-black mb-4 tracking-tight group-hover:text-brand-blue transition-colors line-clamp-2 min-h-[3rem] md:min-h-[3.5rem]">{item.name}</h3>
+                      <div className="flex items-center justify-between text-[9px] md:text-[11px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-brand-dark/30 mb-8 md:mb-10">
                         <span>{item.type}</span>
                         <span>{item.size}</span>
                       </div>
                       <button 
                         onClick={() => handleDownload(item.url, item.name)}
-                        className="w-full py-5 rounded-2xl bg-white border border-brand-border text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-4 group-hover:bg-brand-dark group-hover:text-white group-hover:border-brand-dark transition-all duration-500"
+                        className="w-full py-4 md:py-5 rounded-xl md:rounded-2xl bg-white border border-brand-border text-[9px] md:text-[11px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] flex items-center justify-center gap-3 md:gap-4 group-hover:bg-brand-dark group-hover:text-white group-hover:border-brand-dark transition-all duration-500"
                       >
-                        <Download size={16} />
+                        <Download className="w-3.5 h-3.5 md:w-4 md:h-4" />
                         Download Now
                       </button>
                     </div>
@@ -165,18 +165,18 @@ export default function Downloads() {
       </div>
 
       {/* Support Section */}
-      <section className="mt-56 py-48 bg-brand-dark text-white">
+      <section className="mt-24 md:mt-56 py-24 md:py-48 bg-brand-dark text-white">
         <div className="max-w-[1800px] mx-auto px-6 md:px-20 text-center">
-          <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-16">
+          <h2 className="text-3xl sm:text-5xl md:text-8xl font-black tracking-tighter mb-8 md:mb-16">
             需要更多技术支持？<br />
-            <span className="text-brand-blue">Contact Our Experts</span>
+            <span className="text-brand-blue block md:inline mt-2 md:mt-0">Contact Our Experts</span>
           </h2>
-          <p className="text-white/40 text-2xl mb-24 max-w-3xl mx-auto font-light">
+          <p className="text-white/40 text-lg md:text-2xl mb-12 md:mb-24 max-w-3xl mx-auto font-light leading-relaxed">
             如果您没有找到所需的文档，或者需要针对特定应用的技术咨询，请随时联系我们的技术团队。
           </p>
-          <Link to="/contact" className="bg-brand-blue text-white px-16 py-8 rounded-full font-black text-xl hover:bg-white hover:text-brand-dark transition-all shadow-2xl shadow-brand-blue/20 inline-flex items-center gap-6 mx-auto">
+          <Link to="/contact" className="bg-brand-blue text-white px-10 md:px-16 py-4 md:py-8 rounded-full font-black text-lg md:text-xl hover:bg-white hover:text-brand-dark transition-all shadow-2xl shadow-brand-blue/20 inline-flex items-center gap-4 md:gap-6 mx-auto">
             联系技术支持
-            <ArrowRight size={24} />
+            <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
           </Link>
         </div>
       </section>

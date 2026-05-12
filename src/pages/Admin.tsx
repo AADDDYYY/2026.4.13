@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { auth, db, handleFirestoreError, OperationType } from '../firebase';
 import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { collection, onSnapshot, doc, setDoc, deleteDoc, query, limit, orderBy, updateDoc, getDocs, serverTimestamp, addDoc, getDoc } from 'firebase/firestore';
-import { Upload, Save, CheckCircle, Smartphone, Mail, MapPin, Globe, Search as SearchIcon, ShieldAlert, Activity, LayoutGrid, RotateCcw, Bug, FlaskRound, Trash2, Clock, CheckCircle2, FileSpreadsheet, Lock, Key, Bell, Package, FileEdit, History, RefreshCw, Award, Factory, Users, Newspaper, Settings, Image as ImageIcon } from 'lucide-react';
+import { Upload, Save, CheckCircle, Smartphone, Mail, MapPin, Globe, Search as SearchIcon, ShieldAlert, Activity, LayoutGrid, RotateCcw, Bug, FlaskRound, Trash2, Clock, CheckCircle2, FileSpreadsheet, Lock, Key, Bell, Package, FileEdit, History, RefreshCw, Award, Factory, Users, Newspaper, Settings, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
 import { runDiagnostics, DashboardStat, fetchCloudHealth, fetchNetworkStatus } from '../services/diagnosticService';
 import { motion, AnimatePresence } from 'motion/react';
 import { compressImage } from '../utils/compressImage';
@@ -176,8 +176,14 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
   const [history, setHistory] = useState<string[]>([]);
   const [currentValue, setCurrentValue] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
+  const [isEditingUrl, setIsEditingUrl] = useState(false);
+  const [tempUrl, setTempUrl] = useState("");
   const [cropperImage, setCropperImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (currentValue) setTempUrl(currentValue);
+  }, [currentValue]);
 
   useEffect(() => {
     if (isSupabaseConfigured()) {
@@ -234,10 +240,13 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
     
     setIsUploading(true);
     try {
+      const { uploadFileToCloud } = await import('../utils/fileUpload');
+      const publicUrl = await uploadFileToCloud(croppedBase64, 'cms_assets', true);
+
       const payload = {
         key: assetKey,
         type: 'image',
-        value: croppedBase64,
+        value: publicUrl,
         updated_at: new Date().toISOString(),
         updated_by: user.uid
       };
@@ -307,6 +316,37 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
     }
   };
 
+  const handleUrlSave = async () => {
+    if (!user) return;
+    setIsUploading(true);
+    try {
+      const payload = {
+        key: assetKey,
+        type: 'image',
+        value: tempUrl,
+        updated_at: new Date().toISOString(),
+        updated_by: user.uid
+      };
+
+      if (isSupabaseConfigured()) {
+        await supabase.from('cms_assets').upsert({ id: assetKey, ...payload });
+      } else {
+        await setDoc(doc(db, 'cms_assets', assetKey), {
+          ...payload,
+          updatedAt: payload.updated_at,
+          updatedBy: payload.updated_by
+        }, { merge: true });
+      }
+      alert('链接设置成功！');
+      setIsEditingUrl(false);
+    } catch(e) {
+      console.error(e);
+      alert('保存链接失败');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <div className="mt-6 w-full space-y-4">
       <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileSelect} className="hidden" />
@@ -318,6 +358,35 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
           onCropComplete={handleUpload}
           aspect={assetKey.includes('hero') || assetKey.includes('banner') || assetKey.includes('bg') ? 16 / 9 : 1}
         />
+      )}
+
+      {isEditingUrl && (
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-4 bg-brand-gray rounded-2xl border border-brand-border flex gap-2 items-center"
+        >
+          <input 
+            type="text" 
+            value={tempUrl}
+            onChange={(e) => setTempUrl(e.target.value)}
+            placeholder="输入图片 URL 或本地路径（如 /logo.png）"
+            className="flex-1 bg-white border border-brand-border rounded-lg px-4 py-2 text-xs font-bold"
+          />
+          <button 
+            onClick={handleUrlSave}
+            disabled={isUploading}
+            className="px-4 py-2 bg-brand-blue text-white rounded-lg text-xs font-black uppercase tracking-widest disabled:opacity-50"
+          >
+            确定
+          </button>
+          <button 
+            onClick={() => setIsEditingUrl(false)}
+            className="px-4 py-2 text-brand-dark/40 text-xs font-bold"
+          >
+            取消
+          </button>
+        </motion.div>
       )}
 
       <div className="flex items-center gap-4">
@@ -337,6 +406,13 @@ const ImageUploadButton = ({ assetKey, label, user }: { assetKey: string, label:
           >
             <Upload size={16} className={isUploading ? 'animate-bounce' : ''} />
             {isUploading ? '正在上传...' : `${label}`}
+          </button>
+          <button 
+            onClick={() => setIsEditingUrl(!isEditingUrl)}
+            className={`p-4 rounded-xl border border-brand-border transition-all ${isEditingUrl ? 'bg-brand-dark text-white' : 'bg-white text-brand-dark hover:bg-brand-gray'}`}
+            title="手动链接 / Edit URL"
+          >
+            <LinkIcon size={18} />
           </button>
           {history.length > 0 && (
             <button 
@@ -691,8 +767,16 @@ export default function Admin() {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
+      if (error.code === 'auth/popup-blocked') {
+        alert('登录弹窗被浏览器拦截。请允许弹窗，或在新标签页中打开此系统重试。');
+      } else if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
+        // Just ignore or show a small message
+        console.log('登录弹窗已关闭');
+      } else {
+        alert('登录失败: ' + error.message);
+      }
     }
   };
 
@@ -749,51 +833,51 @@ export default function Admin() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-brand-gray flex items-center justify-center px-6">
-        <div className="bg-white p-12 md:p-16 rounded-[40px] shadow-2xl border border-brand-border text-center max-w-md w-full">
-          <div className="w-20 h-20 bg-brand-blue/10 rounded-full flex items-center justify-center text-brand-blue mx-auto mb-8 relative">
-            <span className="text-3xl">🛡️</span>
-            <div className="absolute top-0 right-0 w-6 h-6 bg-brand-blue rounded-full flex items-center justify-center text-white border-2 border-white">
+      <div className="min-h-screen bg-brand-gray flex items-center justify-center px-4 md:px-6">
+        <div className="bg-white p-8 md:p-16 rounded-[32px] md:rounded-[40px] shadow-2xl border border-brand-border text-center max-w-md w-full">
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-brand-blue/10 rounded-full flex items-center justify-center text-brand-blue mx-auto mb-6 md:mb-8 relative">
+            <span className="text-2xl md:text-3xl">🛡️</span>
+            <div className="absolute top-0 right-0 w-5 h-5 md:w-6 md:h-6 bg-brand-blue rounded-full flex items-center justify-center text-white border-2 border-white">
               <Lock size={10} />
             </div>
           </div>
-          <h1 className="text-3xl font-black text-brand-dark mb-4 tracking-tight">管理后台系统</h1>
-          <p className="text-brand-dark/50 mb-10 text-sm">选择授权方式登入 Seaton CMS</p>
+          <h1 className="text-2xl md:text-3xl font-black text-brand-dark mb-4 tracking-tight">管理后台系统</h1>
+          <p className="text-brand-dark/50 mb-8 md:mb-10 text-xs md:text-sm">选择授权方式登入 Seaton CMS</p>
           
           <button 
             onClick={handleLogin}
-            className="w-full bg-brand-dark text-white py-4 rounded-xl font-black uppercase tracking-widest text-[12px] hover:bg-black transition-all flex items-center justify-center gap-3 mb-8"
+            className="w-full bg-brand-dark text-white py-3 md:py-4 rounded-xl font-black uppercase tracking-widest text-[11px] md:text-[12px] hover:bg-black transition-all flex items-center justify-center gap-3 mb-6 md:mb-8"
           >
             <Globe size={16} /> SignIn with Google (Overseas)
           </button>
 
-          <div className="relative mb-8">
+          <div className="relative mb-6 md:mb-8">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-brand-border"></div></div>
-            <div className="relative flex justify-center"><span className="bg-white px-4 text-[10px] uppercase font-black tracking-widest text-brand-dark/40">或者使用密码登录</span></div>
+            <div className="relative flex justify-center"><span className="bg-white px-4 text-[9px] md:text-[10px] uppercase font-black tracking-widest text-brand-dark/40">或者使用密码登录</span></div>
           </div>
 
           <form onSubmit={handleEmailLogin} className="space-y-4">
             <div className="text-left space-y-1">
-               <label className="text-[10px] font-black uppercase tracking-widest text-brand-dark/60 ml-2">管理员邮箱</label>
+               <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-brand-dark/60 ml-2">管理员邮箱</label>
                <div className="relative">
                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-brand-dark/30"><Mail size={16}/></div>
-                 <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} className="w-full pl-11 pr-4 py-4 rounded-xl border border-brand-border bg-brand-gray focus:bg-white focus:border-brand-blue outline-none transition-all text-sm font-medium" placeholder="admin@example.com" />
+                 <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} className="w-full pl-11 pr-4 py-3 md:py-4 rounded-xl border border-brand-border bg-brand-gray focus:bg-white focus:border-brand-blue outline-none transition-all text-sm font-medium" placeholder="admin@example.com" />
                </div>
             </div>
             <div className="text-left space-y-1">
-               <label className="text-[10px] font-black uppercase tracking-widest text-brand-dark/60 ml-2">密码</label>
+               <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-brand-dark/60 ml-2">密码</label>
                <div className="relative">
                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-brand-dark/30"><Key size={16}/></div>
-                 <input type="password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} className="w-full pl-11 pr-4 py-4 rounded-xl border border-brand-border bg-brand-gray focus:bg-white focus:border-brand-blue outline-none transition-all text-sm font-medium" placeholder="••••••••" />
+                 <input type="password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} className="w-full pl-11 pr-4 py-3 md:py-4 rounded-xl border border-brand-border bg-brand-gray focus:bg-white focus:border-brand-blue outline-none transition-all text-sm font-medium" placeholder="••••••••" />
                </div>
             </div>
             <button 
               type="submit"
-              className="w-full bg-brand-blue text-white py-4 rounded-xl font-black uppercase tracking-widest text-[12px] hover:bg-brand-blue/90 transition-all shadow-lg mt-4"
+              className="w-full bg-brand-blue text-white py-3 md:py-4 rounded-xl font-black uppercase tracking-widest text-[11px] md:text-[12px] hover:bg-brand-blue/90 transition-all shadow-lg mt-4"
             >
               密码登录系统
             </button>
-            <p className="text-[10px] text-brand-dark/30 mt-4 leading-relaxed">
+            <p className="text-[9px] md:text-[10px] text-brand-dark/30 mt-4 leading-relaxed">
               * 如需使用密码登录，请确保 Firebase Authentication 的 Email/Password 服务已开启，且管理员账号已添加。
             </p>
           </form>
@@ -805,33 +889,33 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-brand-gray pb-32">
       {/* Admin Header */}
-      <div className="bg-white border-b border-brand-border py-6 px-10 flex justify-between items-center sticky top-0 z-50">
-        <div>
-          <h1 className="text-2xl font-black text-brand-dark tracking-tight">Seaton CMS Backend</h1>
-          <p className="text-xs font-bold text-brand-dark/40 uppercase tracking-widest mt-1">Admin Panel</p>
+      <div className="bg-white border-b border-brand-border py-4 md:py-6 px-6 md:px-10 flex flex-col md:flex-row justify-between items-center sticky top-0 z-50 gap-4 md:gap-0">
+        <div className="text-center md:text-left">
+          <h1 className="text-xl md:text-2xl font-black text-brand-dark tracking-tight">Seaton CMS Backend</h1>
+          <p className="text-[10px] md:text-xs font-bold text-brand-dark/40 uppercase tracking-widest mt-1">Admin Panel</p>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="text-sm font-medium text-brand-dark/70">
+        <div className="flex items-center gap-4 md:gap-6">
+          <div className="text-xs md:text-sm font-medium text-brand-dark/70 truncate max-w-[150px] md:max-w-none">
             {user.email}
           </div>
           <button 
             onClick={handleLogout}
-            className="bg-brand-gray hover:bg-red-50 text-brand-dark hover:text-red-500 px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest border border-brand-border transition-colors"
+            className="bg-brand-gray hover:bg-red-50 text-brand-dark hover:text-red-500 px-4 md:px-6 py-2 rounded-full font-black text-[9px] md:text-[10px] uppercase tracking-widest border border-brand-border transition-colors"
           >
             Logout
           </button>
         </div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-6 mt-16 flex flex-col lg:flex-row gap-12">
-        {/* Sticky Sidebar Navigation */}
-        <div className="lg:w-64 shrink-0">
-          <div className="sticky top-32 space-y-2">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-6 mt-8 md:mt-16 flex flex-col lg:flex-row gap-8 md:gap-12">
+        {/* Sticky Sidebar Navigation (Horizontal on mobile) */}
+        <div className="lg:w-64 shrink-0 overflow-x-auto pb-4 lg:pb-0 lg:overflow-visible">
+          <div className="lg:sticky lg:top-32 flex lg:flex-col gap-2 min-w-max lg:min-w-0">
             {[
               { id: 'leads', icon: <Users size={16} />, label: '客户线索' },
               { id: 'news', icon: <Newspaper size={16} />, label: '资讯发布' },
               { id: 'diagnostics', icon: <Activity size={16} />, label: '系统监控' },
-              { id: 'products', icon: <Package size={16} />, label: '产品中心' },
+              /* { id: 'products', icon: <Package size={16} />, label: '产品中心' }, */
               { id: 'global', icon: <Settings size={16} />, label: '全局配置' },
               { id: 'about-us', icon: <Factory size={16} />, label: '关于与工厂' },
               { id: 'market-assets', icon: <Globe size={16} />, label: '页面图集' },
@@ -840,7 +924,7 @@ export default function Admin() {
               <button
                 key={nav.id}
                 onClick={() => document.getElementById(nav.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
-                className="w-full flex items-center gap-3 px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-brand-dark/40 hover:text-brand-blue hover:bg-brand-blue/5 transition-all text-left group"
+                className="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-black uppercase tracking-widest text-brand-dark/40 hover:text-brand-blue hover:bg-brand-blue/5 transition-all text-left group shrink-0"
               >
                 <span className="group-hover:scale-110 transition-transform">{nav.icon}</span>
                 {nav.label}
@@ -861,66 +945,66 @@ export default function Admin() {
           </div>
 
         {/* ---- AI Health & Diagnostics Section ---- */}
-          <div id="diagnostics" className="bg-brand-dark p-10 rounded-[40px] shadow-2xl relative overflow-hidden group">
+          <div id="diagnostics" className="bg-brand-dark p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-2xl relative overflow-hidden group">
           {/* Animated Background Effect */}
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/20 rounded-full blur-[120px] -z-0 opacity-50 group-hover:scale-110 transition-transform duration-[3s]"></div>
           
           <div className="relative z-10">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
-              <div className="flex items-center gap-6">
-                <div className="w-16 h-16 bg-brand-blue rounded-3xl flex items-center justify-center text-white shadow-2xl shadow-brand-blue/30">
-                  <ShieldAlert size={32} />
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8 mb-8 md:mb-12">
+              <div className="flex items-center gap-4 md:gap-6">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-brand-blue rounded-2xl md:rounded-3xl flex items-center justify-center text-white shadow-2xl shadow-brand-blue/30">
+                  <ShieldAlert className="w-7 h-7 md:w-8 md:h-8" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-black text-white tracking-tight">西顿企业级数字堡垒 (Enterprise Digital Fortress)</h2>
-                  <p className="text-brand-blue/60 text-[10px] uppercase font-black tracking-widest mt-2 flex items-center gap-2">
+                  <h2 className="text-xl md:text-3xl font-black text-white tracking-tight">西顿企业级数字堡垒</h2>
+                  <p className="text-brand-blue/60 text-[9px] md:text-[10px] uppercase font-black tracking-widest mt-1 md:mt-2 flex items-center gap-2">
                     <span className="w-2 h-2 bg-brand-blue rounded-full animate-pulse"></span>
-                    SLA-Grade System Monitoring Active
+                    SLA system online
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3 md:gap-4">
                  <button 
                   onClick={() => {
                     localStorage.removeItem('system_errors');
                     setHealthStats(runDiagnostics());
                     alert('本地错误日志已清理。');
                   }}
-                  className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white/40 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/10 transition-all flex items-center gap-2"
+                  className="px-4 md:px-6 py-2 md:py-3 bg-white/5 hover:bg-white/10 text-white/40 hover:text-white rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-white/10 transition-all flex items-center gap-2"
                 >
-                  <RotateCcw size={14} /> 清理日志
+                  <RotateCcw className="w-3 h-3 md:w-3.5 md:h-3.5" /> 清理日志
                 </button>
                 <button 
                   onClick={() => setIsSimulatingBug(true)}
-                  className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest border border-red-500/20 transition-all flex items-center gap-2"
+                  className="px-4 md:px-6 py-2 md:py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-red-500/20 transition-all flex items-center gap-2"
                 >
-                  <Bug size={14} /> 模拟生产环境 Bug
+                  <Bug className="w-3 h-3 md:w-3.5 md:h-3.5" /> 模拟 Bug
                 </button>
                 <button 
                   onClick={refreshDiagnostics}
-                  className="px-8 py-3 bg-brand-blue text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-brand-blue/80 transition-all shadow-xl shadow-brand-blue/20 flex items-center gap-2"
+                  className="px-6 md:px-8 py-2 md:py-3 bg-brand-blue text-white rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-brand-blue/80 transition-all shadow-xl shadow-brand-blue/20 flex items-center gap-2"
                 >
-                  <Activity size={14} /> 立即体检
+                  <Activity className="w-3 h-3 md:w-3.5 md:h-3.5" /> 立即体检
                 </button>
               </div>
             </div>
 
             {isSimulatingBug && <BugSimulator onCrash={() => setIsSimulatingBug(false)} />}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {healthStats.map((stat, idx) => (
-                <div key={idx} className="bg-white/5 border border-white/10 p-6 rounded-3xl hover:bg-white/10 transition-all group/stat">
-                   <div className="flex justify-between items-start mb-4">
-                      <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">{stat.label}</span>
+                <div key={idx} className="bg-white/5 border border-white/10 p-5 md:p-6 rounded-2xl md:rounded-3xl hover:bg-white/10 transition-all group/stat">
+                   <div className="flex justify-between items-start mb-3 md:mb-4">
+                      <span className="text-white/40 text-[8px] md:text-[9px] font-black uppercase tracking-widest">{stat.label}</span>
                       <div className={`w-2 h-2 rounded-full ${
                         stat.status === 'healthy' ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 
                         stat.status === 'warning' ? 'bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]' : 
                         'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]'
                       }`}></div>
                    </div>
-                   <div className="text-3xl font-black text-white mb-2 tracking-tight group-hover/stat:translate-x-1 transition-transform">{stat.value}</div>
-                   <p className="text-white/30 text-[11px] font-medium leading-relaxed">{stat.message}</p>
+                   <div className="text-2xl md:text-3xl font-black text-white mb-1 md:mb-2 tracking-tight group-hover/stat:translate-x-1 transition-transform">{stat.value}</div>
+                   <p className="text-white/30 text-[10px] md:text-[11px] font-medium leading-relaxed">{stat.message}</p>
                 </div>
               ))}
             </div>
@@ -979,142 +1063,54 @@ export default function Admin() {
         </div>
 
         {/* ---- Sample Requests Section ---- */}
-        <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border mb-12">
-          <div className="flex items-center justify-between mb-12">
+        <div className="bg-white p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-sm border border-brand-border mb-8 md:mb-12 overflow-x-auto">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-8 md:mb-12 gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-2 h-8 bg-brand-blue rounded-full"></div>
-              <h2 className="text-3xl font-black text-brand-dark">📥 样品申请中心 (Sample Requests)</h2>
+              <div className="w-1.5 h-6 md:w-2 md:h-8 bg-brand-blue rounded-full"></div>
+              <h2 className="text-2xl md:text-3xl font-black text-brand-dark">📥 样品申请中心</h2>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3 md:gap-4">
                 {rawSampleCount !== null && (
                   <button 
                     onClick={fetchSamplesFallback}
-                    className="px-4 py-2 bg-brand-gray/30 hover:bg-brand-blue/10 hover:border-brand-blue/30 text-brand-dark/60 hover:text-brand-blue text-[10px] font-black rounded-lg border border-brand-border transition-all flex items-center gap-2 group"
+                    className="px-3 md:px-4 py-2 bg-brand-gray/30 hover:bg-brand-blue/10 hover:border-brand-blue/30 text-brand-dark/60 hover:text-brand-blue text-[9px] md:text-[10px] font-black rounded-lg border border-brand-border transition-all flex items-center gap-2 group"
                     title="点击强制同步数据库计数"
                   >
                     <Activity size={10} className={`${isRefreshing ? 'animate-spin' : 'group-hover:animate-pulse'}`} />
                     DB COUNT: {rawSampleCount}
                   </button>
                 )}
-               <div className="px-4 py-2 bg-brand-blue/5 text-brand-blue text-[10px] font-black rounded-lg border border-brand-blue/20">
+               <div className="px-3 md:px-4 py-2 bg-brand-blue/5 text-brand-blue text-[9px] md:text-[10px] font-black rounded-lg border border-brand-blue/20">
                   ADMIN: {user.email === "a.d.d.y.25433@gmail.com" ? "YES" : "NO"}
                </div>
                {syncError && (
-                 <div className="px-4 py-2 bg-red-50 text-red-500 text-[10px] font-black rounded-lg border border-red-100 animate-pulse">
-                   SYNC ERROR: {syncError}
+                 <div className="px-3 md:px-4 py-2 bg-red-50 text-red-500 text-[9px] md:text-[10px] font-black rounded-lg border border-red-100 animate-pulse">
+                   SYNC ERROR
                  </div>
                )}
                <button 
                  onClick={fetchSamplesFallback}
                  disabled={isRefreshing}
-                 className="px-6 py-2 bg-brand-gray text-brand-dark border border-brand-border text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50"
+                 className="px-4 md:px-6 py-2 bg-brand-gray text-brand-dark border border-brand-border text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50"
                >
                  <Activity size={12} className={isRefreshing ? 'animate-spin' : ''} />
-                 REFRESH DATA
+                 REFRESH
                </button>
                <button
                  onClick={handleExportCSV}
-                 className="px-6 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-emerald-700 transition-all flex items-center gap-2 shadow-sm"
+                 className="px-4 md:px-6 py-2 bg-emerald-600 text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-emerald-700 transition-all flex items-center gap-2 shadow-sm"
                >
                  <FileSpreadsheet size={12} />
-                 EXPORT EXCEL (.CSV)
+                 EXPORT
                </button>
-               <button 
-                 onClick={async () => {
-                   try {
-                     await setDoc(doc(collection(db, "sample_requests")), {
-                       userName: "TEST_ADMIN_" + Math.floor(Math.random()*1000),
-                       companyName: "SEATON_SYSTEM",
-                       email: "test@seaton.com",
-                       phone: "13500000000",
-                       productId: "test-id",
-                       productName: "Debug Product",
-                       applicationArea: "other",
-                       message: "Test record to verify database pipe.",
-                       status: "new",
-                       createdAt: serverTimestamp()
-                     });
-                     alert("测试数据已成功写入数据库！");
-                     fetchSamplesFallback();
-                   } catch(e) {
-                     alert("写入失败: " + (e as Error).message);
-                   }
-                 }}
-                 className="px-6 py-2 bg-amber-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-amber-600 transition-all flex items-center gap-2"
-               >
-                 <FlaskRound size={12} />
-                 WRITE TEST DATA (S)
-               </button>
-               <button 
-                 onClick={async () => {
-                   const testData = [
-                     {
-                       userName: "张三 (Test)",
-                       companyName: "科技测试有限公司",
-                       email: "zhangsan.test@example.com",
-                       phone: "13800138001",
-                       productId: "seacryl-11p22",
-                       productName: "SEACRYL 11P22",
-                       applicationArea: "consumer_electronics",
-                       substrate: "abs",
-                       message: "这是第一条自动生成的测试消息，用于检查后台显示。需要咨询 PUD 树脂在电子产品的应用。",
-                       status: "new",
-                       type: "general"
-                     },
-                     {
-                       userName: "李四 (Test)",
-                       companyName: "汽车内饰配套厂",
-                       email: "lisi.auto@example.com",
-                       phone: "13512345678",
-                       productId: "seapur-50g71",
-                       productName: "SEAPUR 50G71",
-                       applicationArea: "automotive",
-                       substrate: "leather",
-                       message: "第二条测试消息。想要申请汽车内饰用皮革涂料树脂的样品。请尽快联系。",
-                       status: "new",
-                       type: "sample"
-                     },
-                     {
-                       userName: "Wang Wei (International)",
-                       companyName: "Global Packaging Solution",
-                       email: "wang.wei@globalpack.com",
-                       phone: "+86 18688889999",
-                       productId: "seacryl-11k40",
-                       productName: "SEACRYL 11K40",
-                       applicationArea: "printing_ink",
-                       substrate: "pet_film",
-                       message: "Test 3: Inquiry about high-resolubility inks for film packaging. Need TDS and technical support.",
-                       status: "new",
-                       type: "tds"
-                     }
-                   ];
-                   
-                   try {
-                     for (const data of testData) {
-                       await addDoc(collection(db, "sample_requests"), {
-                         ...data,
-                         createdAt: serverTimestamp()
-                       });
-                     }
-                     alert("3条测试数据已成功提交！请刷新页面查看。");
-                     fetchSamplesFallback();
-                   } catch(e) {
-                     alert("批量提交失败: " + (e as Error).message);
-                   }
-                 }}
-                 className="px-6 py-2 bg-green-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-green-700 transition-all flex items-center gap-2"
-               >
-                 <CheckCircle2 size={12} />
-                 SEED 3 TEST MESSAGES
-               </button>
-               <div className="px-5 py-2 bg-brand-blue/10 rounded-full border border-brand-blue/20 flex items-center gap-2">
+               <div className="px-4 py-2 bg-brand-blue/10 rounded-full border border-brand-blue/20 flex items-center gap-2">
                   <span className="w-2 h-2 bg-brand-blue rounded-full animate-pulse"></span>
-                  <span className="text-[10px] font-black text-brand-blue uppercase tracking-widest">{sampleRequests.filter(r => r.status === 'new').length} NEW LEADS</span>
+                  <span className="text-[9px] md:text-[10px] font-black text-brand-blue uppercase tracking-widest">{sampleRequests.filter(r => r.status === 'new').length} NEW</span>
                </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl border border-brand-border overflow-hidden">
+          <div className="bg-white rounded-2xl md:rounded-3xl border border-brand-border overflow-hidden min-w-[1000px]">
              <table className="w-full text-left">
                 <thead>
                    <tr className="bg-brand-gray/50 text-brand-dark/30 text-[9px] font-black uppercase tracking-widest border-b border-brand-border">
@@ -1244,124 +1240,126 @@ export default function Admin() {
           </div>
         </div>
 
-        <div id="products">
+        {/* <div id="products">
           <ProductManagement />
-        </div>
+        </div> */}
 
-        <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border mb-12">
-          <div className="flex items-center gap-4 mb-12">
-            <div className="w-2 h-8 bg-brand-blue rounded-full"></div>
-            <h2 className="text-3xl font-black text-brand-dark">🌍 全站基础信息 (Global & SEO)</h2>
+        <div id="global" className="bg-white p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-sm border border-brand-border mb-8 md:mb-12">
+          <div className="flex items-center gap-4 mb-8 md:mb-12">
+            <div className="w-1.5 h-6 md:w-2 md:h-8 bg-brand-blue rounded-full"></div>
+            <h2 className="text-2xl md:text-3xl font-black text-brand-dark">🌍 全站基础信息 (Global & SEO)</h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
             <div className="space-y-8">
-              <h3 className="text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
-                <SearchIcon size={20} className="text-brand-blue" /> 品牌与 SEO (Brand & SEO)
+              <h3 className="text-lg md:text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
+                <SearchIcon size={20} className="text-brand-blue" /> 品牌与 SEO
               </h3>
-              <div className="bg-brand-gray/50 p-8 rounded-3xl border border-brand-border">
+              <div className="bg-brand-gray/50 p-6 md:p-8 rounded-2xl md:rounded-3xl border border-brand-border">
                 <div className="mb-8">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">企业 Logo (Site Logo)</h4>
-                  {user && <ImageUploadButton assetKey="site_logo" label="上传 Logo (建议矢量 .svg 或透明 .png)" user={user} />}
+                  <h4 className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">企业 Logo</h4>
+                  {user && <ImageUploadButton assetKey="site_logo" label="上传 Logo" user={user} />}
                 </div>
-                {user && <TextUpdateField assetKey="seo_title" label="网站标题 (Browser Title)" user={user} placeholder="例如：西顿新材料 - 全球领先的水性树脂专家" />}
-                {user && <TextUpdateField assetKey="seo_keywords" label="搜索关键词 (Keywords)" user={user} placeholder="关键词用逗号隔开，如：水性树脂, PUD, 环保涂料" />}
-                {user && <TextUpdateField assetKey="seo_description" label="页面描述 (Description)" user={user} type="textarea" placeholder="简短的公司介绍，会出现在搜索结果下方" />}
+                {user && <TextUpdateField assetKey="seo_title" label="网站标题" user={user} placeholder="例如：西顿新材料" />}
+                {user && <TextUpdateField assetKey="seo_keywords" label="搜索关键词" user={user} placeholder="关键词用逗号隔开" />}
+                {user && <TextUpdateField assetKey="seo_description" label="页面描述" user={user} type="textarea" placeholder="简短的公司介绍" />}
                 <div className="mt-6 pt-6 border-t border-brand-border">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">社交媒体分享图 (Open Graph Image)</h4>
-                  {user && <ImageUploadButton assetKey="og_image" label="上传分享预览图 (建议比例 1200x630)" user={user} />}
+                  <h4 className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">分享图 (OG Image)</h4>
+                  {user && <ImageUploadButton assetKey="og_image" label="上传分享预览图" user={user} />}
                 </div>
               </div>
             </div>
 
             <div className="space-y-8">
-              <h3 className="text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
+              <h3 className="text-lg md:text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
                 <Smartphone size={20} className="text-brand-blue" /> 联系方式 & 社交媒体
               </h3>
-              <div className="bg-brand-gray/50 p-8 rounded-3xl border border-brand-border">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-brand-gray/50 p-6 md:p-8 rounded-2xl md:rounded-3xl border border-brand-border">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   {user && <TextUpdateField assetKey="company_phone" label="公司热线" user={user} placeholder="400-XXX-XXXX" />}
                   {user && <TextUpdateField assetKey="company_email" label="联系邮箱" user={user} placeholder="info@example.com" />}
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-brand-border">
-                  {user && <TextUpdateField assetKey="company_factory_address" label="工厂地址" user={user} placeholder="工厂详细地理位置" />}
-                  {user && <TextUpdateField assetKey="company_rd_address" label="研发中心地址" user={user} placeholder="研发中心详细地理位置" />}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6 pt-6 border-t border-brand-border">
+                  {user && <TextUpdateField assetKey="company_factory_address" label="工厂地址" user={user} placeholder="工厂地理位置" />}
+                  {user && <TextUpdateField assetKey="company_rd_address" label="研发中心地址" user={user} placeholder="研发中心地理位置" />}
                 </div>
                 <div className="mt-6 pt-6 border-t border-brand-border">
                   {user && <TextUpdateField assetKey="company_linkedin" label="LinkedIn 链接" user={user} placeholder="LinkedIn URL" />}
                 </div>
                 <div className="mt-8 border-t border-brand-border pt-8">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">微信公众号二维码</h4>
+                  <h4 className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-brand-dark/40 mb-4">微信公众号二维码</h4>
                   {user && <ImageUploadButton assetKey="company_wechat_qr" label="上传微信二维码" user={user} />}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-12 border-t border-brand-border pt-12">
-            <h3 className="text-xl font-black text-brand-dark mb-6 flex items-center gap-3">
-              <Globe size={20} className="text-brand-blue" /> 公告栏管理
+          <div className="mt-8 md:mt-12 border-t border-brand-border pt-8 md:pt-12">
+            <h3 className="text-lg md:text-xl font-black text-brand-dark mb-4 md:mb-6 flex items-center gap-3">
+              <Globe className="w-4.5 h-4.5 md:w-5 md:h-5 text-brand-blue" /> 公告栏管理
             </h3>
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <input 
                 type="text"
                 placeholder="例如：热烈庆祝公司成为国家高新技术企业！..."
-                className="flex-1 px-5 py-4 border border-brand-border rounded-xl focus:border-brand-blue outline-none transition-colors text-sm"
+                className="w-full md:flex-1 px-5 py-3 md:py-4 border border-brand-border rounded-xl focus:border-brand-blue outline-none transition-colors text-sm"
                 id="quick-banner-input"
               />
-              <button 
-                onClick={async () => {
-                  const input = document.getElementById('quick-banner-input') as HTMLInputElement;
-                  if(!user || !input.value.trim()) {
-                    alert('请输入公告内容！');
-                    return;
-                  }
-                  try {
-                    await setDoc(doc(db, 'cms_assets', 'site_announcement_text'), {
-                      key: 'site_announcement_text', type: 'text', value: input.value.trim(), updatedAt: new Date().toISOString(), updatedBy: user.uid
-                    });
-                    await setDoc(doc(db, 'cms_assets', 'site_announcement_enabled'), {
-                      key: 'site_announcement_enabled', type: 'text', value: 'true', updatedAt: new Date().toISOString(), updatedBy: user.uid
-                    });
-                    alert('公告已点亮发布！');
-                    input.value = '';
-                  } catch(e) { console.error(e); }
-                }}
-                className="px-8 py-4 bg-brand-blue text-white font-black text-[12px] uppercase tracking-widest rounded-xl hover:bg-brand-dark transition-all shrink-0"
-              >
-                发布并开启
-              </button>
-              <button 
-                onClick={async () => {
-                  if(!user) return;
-                  try {
-                    await setDoc(doc(db, 'cms_assets', 'site_announcement_enabled'), {
-                      key: 'site_announcement_enabled', type: 'text', value: 'false', updatedAt: new Date().toISOString(), updatedBy: user.uid
-                    });
-                    alert('公告已关闭隐藏。');
-                  } catch(e) { console.error(e); }
-                }}
-                className="px-8 py-4 bg-brand-gray text-brand-dark font-black text-[12px] uppercase tracking-widest rounded-xl hover:bg-red-50 hover:text-red-500 transition-all border border-brand-border shrink-0"
-              >
-                关闭公告
-              </button>
+              <div className="flex items-center gap-4 w-full md:w-auto">
+                <button 
+                  onClick={async () => {
+                    const input = document.getElementById('quick-banner-input') as HTMLInputElement;
+                    if(!user || !input.value.trim()) {
+                      alert('请输入公告内容！');
+                      return;
+                    }
+                    try {
+                      await setDoc(doc(db, 'cms_assets', 'site_announcement_text'), {
+                        key: 'site_announcement_text', type: 'text', value: input.value.trim(), updatedAt: new Date().toISOString(), updatedBy: user.uid
+                      });
+                      await setDoc(doc(db, 'cms_assets', 'site_announcement_enabled'), {
+                        key: 'site_announcement_enabled', type: 'text', value: 'true', updatedAt: new Date().toISOString(), updatedBy: user.uid
+                      });
+                      alert('公告已点亮发布！');
+                      input.value = '';
+                    } catch(e) { console.error(e); }
+                  }}
+                  className="flex-1 md:flex-none px-6 md:px-8 py-3 md:py-4 bg-brand-blue text-white font-black text-[11px] md:text-[12px] uppercase tracking-widest rounded-xl hover:bg-brand-dark transition-all shrink-0"
+                >
+                  开启
+                </button>
+                <button 
+                  onClick={async () => {
+                    if(!user) return;
+                    try {
+                      await setDoc(doc(db, 'cms_assets', 'site_announcement_enabled'), {
+                        key: 'site_announcement_enabled', type: 'text', value: 'false', updatedAt: new Date().toISOString(), updatedBy: user.uid
+                      });
+                      alert('公告已关闭。');
+                    } catch(e) { console.error(e); }
+                  }}
+                  className="flex-1 md:flex-none px-6 md:px-8 py-3 md:py-4 bg-brand-gray text-brand-dark font-black text-[11px] md:text-[12px] uppercase tracking-widest rounded-xl hover:bg-red-50 hover:text-red-500 transition-all border border-brand-border shrink-0"
+                >
+                  关闭
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* ---- Stats Section ---- */}
-        <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border mb-12">
-          <div className="flex items-center gap-4 mb-12">
-            <div className="w-2 h-8 bg-brand-blue rounded-full"></div>
-            <h2 className="text-3xl font-black text-brand-dark">📊 核心运营数据 (Key Stats)</h2>
+        <div className="bg-white p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-sm border border-brand-border mb-8 md:mb-12">
+          <div className="flex items-center gap-4 mb-8 md:mb-12">
+            <div className="w-1.5 h-6 md:w-2 md:h-8 bg-brand-blue rounded-full"></div>
+            <h2 className="text-2xl md:text-3xl font-black text-brand-dark">📊 核心运营数据</h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <div className="space-y-8">
-              <h3 className="text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
-                 🔬 研发硬核数据 (R&D)
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16">
+            <div className="space-y-6 md:space-y-8">
+              <h3 className="text-lg md:text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
+                 🔬 研发硬核数据
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-brand-gray/50 p-8 rounded-3xl border border-brand-border">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 bg-brand-gray/50 p-6 md:p-8 rounded-2xl md:rounded-3xl border border-brand-border">
                 {user && <TextUpdateField assetKey="rd_stat_investment" label="研发投入比 (%)" user={user} placeholder="15" />}
                 {user && <TextUpdateField assetKey="rd_stat_patents" label="获得专利数 (+)" user={user} placeholder="50" />}
                 {user && <TextUpdateField assetKey="rd_stat_staff" label="研发人员 (+)" user={user} placeholder="50" />}
@@ -1369,11 +1367,11 @@ export default function Admin() {
               </div>
             </div>
 
-            <div className="space-y-8">
-              <h3 className="text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
-                 🌱 可持续发展数据 (ESG)
+            <div className="space-y-6 md:space-y-8">
+              <h3 className="text-lg md:text-xl font-black text-brand-dark border-b border-brand-border pb-4 flex items-center gap-3">
+                 🌱 可持续发展数据
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-brand-gray/50 p-8 rounded-3xl border border-brand-border">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 bg-brand-gray/50 p-6 md:p-8 rounded-2xl md:rounded-3xl border border-brand-border">
                 {user && <TextUpdateField assetKey="sust_stat_voc" label="VOC减排量 (吨)" user={user} placeholder="30,000+" />}
                 {user && <TextUpdateField assetKey="sust_stat_energy" label="清洁能源占比 (%)" user={user} placeholder="40" />}
                 {user && <TextUpdateField assetKey="sust_stat_investment" label="环保投入比 (%)" user={user} placeholder="15" />}
@@ -1384,17 +1382,17 @@ export default function Admin() {
         </div>
 
         {/* ---- Home Page Actions ---- */}
-        <div className="bg-white p-10 rounded-[40px] shadow-2xl border-2 border-brand-blue/20">
-          <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🏠 首页图片管理 (Home)</h2>
+        <div className="bg-white p-6 md:p-10 rounded-[32px] md:rounded-[40px] shadow-2xl border-2 border-brand-blue/20">
+          <h2 className="text-xl md:text-2xl font-black text-brand-dark mb-6 md:mb-8 border-l-4 border-brand-blue pl-4">🏠 首页图片管理</h2>
           
-          <div className="space-y-12">
+          <div className="space-y-8 md:space-y-12">
             {/* Home Hero */}
             <div>
-              <h3 className="text-lg font-black text-brand-dark mb-4">1. 首页顶部巨幅背景图与企业宣传片 (Hero)</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {user && <ImageUploadButton assetKey="home_hero_bg" label="上传首页大图背景 (建议 1920x1080)" user={user} />}
-                {user && <ImageUploadButton assetKey="home_video_poster" label="视频播放预览图 (Cover)" user={user} />}
-                {user && <TextUpdateField assetKey="home_promo_video" label="企业宣传片 (视频文件 URL 或 B站/优酷 嵌入代码)" user={user} placeholder="https://...mp4" />}
+              <h3 className="text-base md:text-lg font-black text-brand-dark mb-4">1. 首页背景图与宣传视频</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6">
+                {user && <ImageUploadButton assetKey="home_hero_bg" label="主背景图 (1920x1080)" user={user} />}
+                {user && <ImageUploadButton assetKey="home_video_poster" label="视频预览图" user={user} />}
+                {user && <TextUpdateField assetKey="home_promo_video" label="视频 URL / 嵌入代码" user={user} placeholder="https://..." />}
               </div>
               
               <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1466,19 +1464,6 @@ export default function Admin() {
 
               <div className="border-t border-brand-border pt-8">
                 <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
-                   荣誉奖项与资质 (Certificates & Honors)
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {user && <ImageUploadButton assetKey="honor_img_1" label="荣誉 1 (Giant)" user={user} />}
-                  {user && <ImageUploadButton assetKey="honor_img_2" label="荣誉 2 (PHD)" user={user} />}
-                  {user && <ImageUploadButton assetKey="honor_img_3" label="资质证书 3" user={user} />}
-                  {user && <ImageUploadButton assetKey="honor_img_4" label="专利授权 4" user={user} />}
-                  {user && <ImageUploadButton assetKey="honor_img_5" label="专利授权 5" user={user} />}
-                </div>
-              </div>
-
-              <div className="border-t border-brand-border pt-8">
-                <h3 className="text-sm font-black text-brand-dark mb-4 flex items-center gap-2 uppercase tracking-widest text-brand-dark/40">
                   <Factory size={16} className="text-brand-blue" /> 智能制造基地 (Manufacturing Gallery)
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1496,7 +1481,7 @@ export default function Admin() {
           </div>
 
           <div className="space-y-10">
-            <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
+            {/* <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
               <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🧪 产品中心 (Products)</h2>
               <div className="space-y-8">
                 <div>
@@ -1504,7 +1489,7 @@ export default function Admin() {
                   {user && <ImageUploadButton assetKey="product_hero_bg" label="上传产品页背景图" user={user} />}
                 </div>
               </div>
-            </div>
+            </div> */}
             
             <div className="bg-white p-10 rounded-[40px] shadow-sm border border-brand-border">
               <h2 className="text-2xl font-black text-brand-dark mb-8 border-l-4 border-brand-blue pl-4">🏭 事业部 (Divisions)</h2>

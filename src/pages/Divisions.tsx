@@ -67,11 +67,11 @@ export default function Divisions() {
   ];
 
   return (
-    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-32 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56 relative">
         {divisionsHeroBg ? (
-          <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden">
+          <div className="absolute inset-0 -z-10 rounded-b-[60px] md:rounded-b-[100px] overflow-hidden">
             <img src={divisionsHeroBg} alt="Divisions Hero" className="w-full h-full object-cover img-enhance object-right" />
             <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
@@ -92,9 +92,9 @@ export default function Divisions() {
               Business Structure
             </span>
           </div>
-          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("divisions_page.hero.title")}<br />
-            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">Business Structure & Divisions</span>
+            <span className="text-brand-blue text-[0.6em] sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal block md:inline mt-4 md:mt-0">Business Structure & Divisions</span>
           </h1>
           <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl font-light leading-relaxed max-w-5xl">
             {t("divisions_page.hero.desc")}
@@ -103,8 +103,8 @@ export default function Divisions() {
       </div>
 
       {/* Divisions Grid */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16">
           {divisions.map((division, index) => (
             <motion.div
               key={division.title}
@@ -112,7 +112,7 @@ export default function Divisions() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
-              className="group relative h-[750px] rounded-[60px] overflow-hidden border border-brand-border bg-brand-gray hover:border-brand-blue/30 transition-all duration-700 shadow-sm hover:shadow-2xl"
+              className="group relative h-[600px] md:h-[750px] rounded-[40px] md:rounded-[60px] overflow-hidden border border-brand-border bg-brand-gray hover:border-brand-blue/30 transition-all duration-700 shadow-sm hover:shadow-2xl"
             >
               {/* Background Image */}
               <div className="absolute inset-0 transition-all duration-1000 scale-110 group-hover:scale-100">
@@ -126,19 +126,19 @@ export default function Divisions() {
               </div>
 
               {/* Content */}
-              <div className="relative h-full p-16 flex flex-col justify-end">
-                <div className="w-20 h-20 bg-brand-blue/10 rounded-3xl flex items-center justify-center text-brand-blue mb-12 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
-                  {division.icon}
+              <div className="relative h-full p-8 md:p-16 flex flex-col justify-end">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-brand-blue/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-brand-blue mb-8 md:mb-12 border border-brand-blue/20 group-hover:bg-brand-blue group-hover:text-white transition-all duration-700">
+                  <div className="scale-75 md:scale-100">{division.icon}</div>
                 </div>
-                <h3 className="text-4xl font-black text-brand-dark mb-6 tracking-tight group-hover:text-brand-blue transition-colors">{division.title}</h3>
-                <div className="text-brand-blue text-[11px] font-black uppercase tracking-widest mb-8">{division.en}</div>
-                <p className="text-brand-dark/40 text-xl font-medium leading-relaxed mb-12 line-clamp-3">
+                <h3 className="text-3xl md:text-4xl font-black text-brand-dark mb-4 md:mb-6 tracking-tight group-hover:text-brand-blue transition-colors">{division.title}</h3>
+                <div className="text-brand-blue text-[9px] md:text-[11px] font-black uppercase tracking-widest mb-6 md:mb-8">{division.en}</div>
+                <p className="text-brand-dark/40 text-lg md:text-xl font-medium leading-relaxed mb-8 md:mb-12 line-clamp-3 md:line-clamp-none">
                   {division.desc}
                 </p>
                 
                 <Link 
                   to={`/products?division=${division.division}`}
-                  className="inline-flex items-center gap-4 text-brand-blue font-black text-[11px] uppercase tracking-[0.3em] group/link"
+                  className="inline-flex items-center gap-4 text-brand-blue font-black text-[10px] md:text-[11px] uppercase tracking-[0.3em] group/link"
                 >
                   <span className="relative">
                     {t("divisions_page.items.view_products")}
@@ -153,13 +153,13 @@ export default function Divisions() {
       </section>
 
       {/* Global Reach */}
-      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-56">
+      <section className="max-w-[1800px] mx-auto px-6 md:px-20 mb-16 md:mb-56">
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5 }}
-          className="relative rounded-[80px] overflow-hidden min-h-[700px] flex items-center bg-brand-blue text-white shadow-2xl"
+          className="relative rounded-[40px] md:rounded-[80px] overflow-hidden min-h-[500px] md:min-h-[700px] flex items-center bg-brand-blue text-white shadow-2xl"
         >
           <div className="absolute inset-0">
             <img 
@@ -170,19 +170,19 @@ export default function Divisions() {
             />
           </div>
           
-          <div className="relative z-10 p-16 md:p-32 max-w-5xl">
-            <div className="flex items-center gap-6 mb-12">
-              <Globe className="text-white/40" size={32} />
-              <span className="text-white/40 font-black uppercase tracking-[0.3em] text-[12px]">Global Reach</span>
+          <div className="relative z-10 p-8 md:p-16 lg:p-32 max-w-5xl">
+            <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-12">
+              <Globe className="text-white/40 w-6 h-6 md:w-8 md:h-8" />
+              <span className="text-white/40 font-black uppercase tracking-[0.3em] text-[10px] md:text-[12px]">Global Reach</span>
             </div>
-            <h2 className="text-5xl md:text-[9rem] font-black mb-16 tracking-tighter leading-[0.85]">
+            <h2 className="text-4xl md:text-[9rem] font-black mb-8 md:mb-16 tracking-tighter leading-[0.85]">
               {t("divisions_page.global.title")}
             </h2>
-            <p className="text-white/80 text-2xl md:text-3xl font-light leading-relaxed mb-24">
+            <p className="text-lg md:text-3xl font-light leading-relaxed mb-12 md:mb-24">
               {t("divisions_page.global.desc")}
             </p>
-            <Link to="/contact" className="group relative overflow-hidden px-20 py-8 bg-white rounded-full inline-block transition-all hover:scale-105 shadow-2xl">
-              <span className="relative z-10 text-brand-blue font-black tracking-[0.3em] text-[12px] uppercase">
+            <Link to="/contact" className="group relative overflow-hidden px-12 md:px-20 py-6 md:py-8 bg-white rounded-full inline-block transition-all hover:scale-105 shadow-2xl">
+              <span className="relative z-10 text-brand-blue font-black tracking-[0.3em] text-[10px] md:text-[12px] uppercase">
                 {t("divisions_page.global.contact")}
               </span>
             </Link>

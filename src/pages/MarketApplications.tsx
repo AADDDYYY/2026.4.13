@@ -75,9 +75,9 @@ export default function MarketApplications() {
   ];
 
   return (
-    <div className="pt-24 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
+    <div className="pt-32 md:pt-48 pb-16 md:pb-32 bg-white min-h-screen text-brand-dark overflow-hidden">
       {/* Hero Section */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-24 md:mb-56 relative">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-20 mb-20 md:mb-56 relative">
         {marketHeroBg ? (
           <div className="absolute inset-0 -z-10 rounded-b-[100px] overflow-hidden">
             <img src={marketHeroBg} alt="Market Hero" className="w-full h-full object-cover img-enhance object-right" />
@@ -100,9 +100,9 @@ export default function MarketApplications() {
               Market Applications
             </span>
           </div>
-          <h1 className="text-4xl sm:text-6xl md:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] font-black mb-8 md:mb-16 tracking-tight leading-[0.85]">
             {t("market_apps.hero.title")}<br />
-            <span className="text-brand-blue sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal">Market Applications</span>
+            <span className="text-brand-blue text-[0.6em] sm:text-[0.6em] md:text-[0.4em] lg:text-[0.3em] tracking-normal block md:inline mt-4 md:mt-0">Market Applications</span>
           </h1>
           <p className="text-brand-dark/40 text-lg sm:text-2xl md:text-4xl max-w-5xl font-light leading-relaxed">
             {t("market_apps.hero.desc")}
@@ -111,7 +111,7 @@ export default function MarketApplications() {
       </div>
 
       <div className="max-w-[1800px] mx-auto px-6 md:px-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-56">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-20 md:mb-56">
           {applications.map((app, index) => (
             <motion.div
               key={app.id}
@@ -119,7 +119,7 @@ export default function MarketApplications() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.15, duration: 1 }}
-              className="group relative rounded-[60px] overflow-hidden bg-brand-gray border border-brand-border hover:border-brand-blue/30 transition-all duration-700 shadow-sm hover:shadow-2xl"
+              className="group relative rounded-[40px] md:rounded-[60px] overflow-hidden bg-brand-gray border border-brand-border hover:border-brand-blue/30 transition-all duration-700 shadow-sm hover:shadow-2xl"
             >
               <div className="aspect-[16/10] overflow-hidden relative">
                 <img 
@@ -129,27 +129,27 @@ export default function MarketApplications() {
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
-                <div className="absolute bottom-12 left-12 p-8 bg-brand-blue rounded-[40px] text-white shadow-2xl shadow-brand-blue/20">
+                <div className="absolute bottom-6 md:bottom-12 left-6 md:left-12 p-6 md:p-8 bg-brand-blue rounded-[32px] md:rounded-[40px] text-white shadow-2xl shadow-brand-blue/20 transform scale-75 md:scale-100">
                   {app.icon}
                 </div>
               </div>
               
-              <div className="p-16">
-                <div className="flex justify-between items-start mb-12">
+              <div className="p-8 md:p-16">
+                <div className="flex justify-between items-start mb-8 md:mb-12">
                   <div>
-                    <h3 className="text-4xl font-black mb-6 tracking-tight group-hover:text-brand-blue transition-colors text-brand-dark">{app.title}</h3>
-                    <p className="text-brand-blue text-[11px] font-black uppercase tracking-widest">{app.en}</p>
+                    <h3 className="text-2xl md:text-4xl font-black mb-4 md:mb-6 tracking-tight group-hover:text-brand-blue transition-colors text-brand-dark">{app.title}</h3>
+                    <p className="text-brand-blue text-[9px] md:text-[11px] font-black uppercase tracking-widest">{app.en}</p>
                   </div>
                 </div>
                 
-                <p className="text-brand-dark/40 text-xl mb-12 font-medium leading-relaxed">
+                <p className="text-brand-dark/40 text-base md:text-xl mb-8 md:mb-12 font-medium leading-relaxed">
                   {app.desc}
                 </p>
 
-                <div className="grid grid-cols-2 gap-8 mb-16">
+                <div className="grid grid-cols-2 gap-4 md:gap-8 mb-8 md:mb-16">
                   {app.features.map(feature => (
-                    <div key={feature} className="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-brand-dark/30">
-                      <div className="w-2 h-2 bg-brand-blue rounded-full"></div>
+                    <div key={feature} className="flex items-center gap-2 md:gap-4 text-[10px] md:text-xs font-black uppercase tracking-widest text-brand-dark/30">
+                      <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-brand-blue rounded-full"></div>
                       {feature}
                     </div>
                   ))}
@@ -157,7 +157,7 @@ export default function MarketApplications() {
 
                 <Link 
                   to={`/market-applications/${app.id}`} 
-                  className="inline-flex items-center gap-6 text-brand-dark font-black text-[11px] uppercase tracking-[0.3em] group/link"
+                  className="inline-flex items-center gap-4 md:gap-6 text-brand-dark font-black text-[10px] md:text-[11px] uppercase tracking-[0.3em] group/link"
                 >
                   <span className="relative">
                     {t("market_apps.items.view_details")}
@@ -176,15 +176,15 @@ export default function MarketApplications() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2 }}
-          className="mt-56 p-24 lg:p-48 rounded-[80px] bg-brand-gray border border-brand-border text-center relative overflow-hidden shadow-2xl"
+          className="mt-20 md:mt-56 p-12 md:p-24 lg:p-48 rounded-[40px] md:rounded-[80px] bg-brand-gray border border-brand-border text-center relative overflow-hidden shadow-2xl"
         >
           <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-blue/5 rounded-full blur-[200px] -z-10"></div>
-          <h2 className="text-5xl md:text-[9rem] font-black mb-16 tracking-tighter leading-[0.8] text-brand-dark">{t("market_apps.custom.title")}</h2>
-          <p className="text-brand-dark/40 max-w-5xl mx-auto mb-24 text-2xl md:text-3xl font-light leading-relaxed">
+          <h2 className="text-3xl md:text-[9rem] font-black mb-8 md:mb-16 tracking-tighter leading-[0.8] text-brand-dark">{t("market_apps.custom.title")}</h2>
+          <p className="text-brand-dark/40 max-w-5xl mx-auto mb-12 md:mb-24 text-lg md:text-3xl font-light leading-relaxed">
             {t("market_apps.custom.desc")}
           </p>
-          <Link to="/contact" className="group relative overflow-hidden px-20 py-8 bg-brand-blue text-white rounded-full inline-block shadow-2xl shadow-brand-blue/20">
-            <span className="relative z-10 font-black tracking-[0.3em] text-[11px] uppercase transition-colors group-hover:text-white">
+          <Link to="/contact" className="group relative overflow-hidden px-12 md:px-20 py-6 md:py-8 bg-brand-blue text-white rounded-full inline-block shadow-2xl shadow-brand-blue/20">
+            <span className="relative z-10 font-black tracking-[0.3em] text-[10px] md:text-[11px] uppercase transition-colors group-hover:text-white">
               {t("market_apps.custom.cta")}
             </span>
           </Link>

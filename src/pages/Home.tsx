@@ -14,7 +14,7 @@ const Hero = () => {
   const { value: heroBgImage } = useCMSAsset('home_hero_bg', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden flex items-center bg-white pb-32 pt-48">
+    <section className="relative min-h-[80vh] md:min-h-screen w-full overflow-hidden flex items-center bg-white pb-20 md:pb-32 pt-32 md:pt-48">
       {/* Background Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-[#F8FAFC]">
         <motion.div style={{ scale, opacity }} className="absolute inset-0">
@@ -61,22 +61,36 @@ const Hero = () => {
 
       <div className="relative z-20 w-full max-w-[1800px] mx-auto px-6 md:px-20">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-5xl"
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-6xl"
         >
-          <h1 className="text-5xl sm:text-7xl md:text-[10rem] xl:text-[12rem] font-black tracking-tight text-brand-dark mb-8 md:mb-12 leading-[0.95]">
+          <h1 className="text-6xl sm:text-8xl md:text-[8rem] lg:text-[10rem] xl:text-[13rem] font-black tracking-tighter text-brand-dark mb-8 md:mb-16 leading-[0.85] uppercase">
             SEATON<br />
             <span className="text-brand-blue">MATERIALS</span>
           </h1>
           
-          <div className="max-w-6xl">
-            <p className="text-2xl md:text-5xl text-brand-dark/80 leading-[1.1] font-black tracking-tight">
+          <div className="max-w-4xl">
+            <p className="text-xl sm:text-2xl md:text-5xl text-brand-dark/80 leading-[1.1] font-black tracking-tight">
               全球领先的高性能水性聚氨酯专家，<br />
               以尖端材料科技驱动工业绿色转型，<br />
               为多元产业提供卓越的表面处理解决方案。
             </p>
+          </div>
+
+          {/* Quick Industry Access - Helps user identify what we do IMMEDIATELY */}
+          <div className="mt-12 md:mt-20 flex flex-wrap gap-4 md:gap-8">
+            {[
+              { label: "水性特种树脂", icon: <Beaker size={16} /> },
+              { label: "皮革/汽车涂饰", icon: <Zap size={16} /> },
+              { label: "工业/包装涂料", icon: <Globe size={16} /> }
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-3 px-6 py-3 bg-brand-gray border border-brand-border rounded-full text-[11px] md:text-sm font-black tracking-widest text-brand-dark uppercase hover:bg-brand-blue hover:text-white transition-all cursor-default">
+                {item.icon}
+                {item.label}
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>
@@ -99,16 +113,16 @@ const Hero = () => {
 const ValuePillars = () => {
   const { t } = useTranslation();
   const pillars = [
-    { icon: <Microscope className="text-brand-blue" size={40} />, title: "卓越研发", desc: "拥有50余项核心专利，持续突破聚合物合成边界。" },
-    { icon: <Leaf className="text-brand-blue" size={40} />, title: "绿色可持续", desc: "致力于低VOC、生物基材料开发，助力碳中和目标。" },
-    { icon: <Globe className="text-brand-blue" size={40} />, title: "全球视野", desc: "服务全球30多个国家，提供本地化的技术支持与服务。" },
-    { icon: <Shield className="text-brand-blue" size={40} />, title: "品质承诺", desc: "严格遵循ISO 9001体系，确保每一批次产品性能稳定。" }
+    { icon: <Microscope className="text-brand-blue" size={32} />, title: "卓越研发", desc: "拥有50余项核心专利，持续突破聚合物合成边界。" },
+    { icon: <Leaf className="text-brand-blue" size={32} />, title: "绿色可持续", desc: "致力于低VOC、生物基材料开发，助力碳中和目标。" },
+    { icon: <Globe className="text-brand-blue" size={32} />, title: "全球视野", desc: "服务全球30多个国家，提供本地化的技术支持与服务。" },
+    { icon: <Shield className="text-brand-blue" size={32} />, title: "品质承诺", desc: "严格遵循ISO 9001体系，确保每一批次产品性能稳定。" }
   ];
 
   return (
-    <section className="py-24 md:py-48 bg-white px-6 md:px-20">
+    <section className="py-20 md:py-48 bg-white px-6 md:px-20">
       <div className="max-w-[1800px] mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24">
           {pillars.map((pillar, idx) => (
             <motion.div 
               key={idx}
@@ -116,14 +130,14 @@ const ValuePillars = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.15, duration: 0.8 }}
               viewport={{ once: true }}
-              className="flex flex-col gap-10 group"
+              className="flex flex-col gap-6 md:gap-10 group"
             >
-              <div className="w-20 h-20 rounded-3xl bg-brand-gray flex items-center justify-center group-hover:bg-brand-blue/10 transition-colors duration-500">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-3xl bg-brand-gray flex items-center justify-center group-hover:bg-brand-blue/10 transition-colors duration-500">
                 {pillar.icon}
               </div>
               <div>
-                <h3 className="text-3xl font-black text-brand-dark mb-6 group-hover:text-brand-blue transition-colors">{pillar.title}</h3>
-                <p className="text-brand-dark/50 text-lg leading-relaxed font-medium">{pillar.desc}</p>
+                <h3 className="text-2xl md:text-3xl font-black text-brand-dark mb-4 md:mb-6 group-hover:text-brand-blue transition-colors">{pillar.title}</h3>
+                <p className="text-brand-dark/50 text-base md:text-lg leading-relaxed font-medium">{pillar.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -193,22 +207,22 @@ const FeaturedTechnologies = () => {
   const { value: techBgSub2 } = useCMSAsset('home_tech_bg_sub2', 'https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&q=80&w=800');
 
   return (
-    <section id="innovation" className="py-24 md:py-48 bg-white overflow-hidden relative">
+    <section id="innovation" className="py-20 md:py-48 bg-white overflow-hidden relative">
       <div className="w-full max-w-[1800px] mx-auto px-6 md:px-20 relative z-10">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 md:mb-32 gap-12 md:gap-16">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 md:mb-32 gap-8 md:gap-16">
           <div className="max-w-4xl">
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-6 md:mb-8 block">Innovation Center</span>
-            <h2 className="text-5xl sm:text-7xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px] mb-4 md:mb-8 block">Innovation Center</span>
+            <h2 className="text-4xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">
               聚合尖端科技<br />
               <span className="text-brand-blue">赋能产业升级</span>
             </h2>
           </div>
-          <Link to="/rd" className="text-brand-blue font-black flex items-center gap-4 hover:underline text-base md:text-lg uppercase tracking-[0.3em] group">
+          <Link to="/rd" className="text-brand-blue font-black flex items-center gap-4 hover:underline text-sm md:text-lg uppercase tracking-[0.3em] group mt-6 lg:mt-0">
             进入研发创新中心 <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -247,15 +261,15 @@ const FeaturedTechnologies = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2, duration: 1 }}
-                className="group relative flex-1 rounded-[50px] overflow-hidden shadow-xl"
+                className="group relative flex-1 rounded-[32px] md:rounded-[50px] overflow-hidden shadow-xl min-h-[300px]"
               >
-                <img src={tech.img} alt={tech.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
+                <img src={tech.img} alt={tech.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
                 <div className="absolute inset-0 bg-gradient-to-r from-brand-blue/80 via-brand-dark/40 to-transparent mix-blend-multiply opacity-50 transition-opacity group-hover:opacity-70"></div>
                 <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-transparent to-transparent"></div>
-                <div className="absolute inset-0 p-12 flex flex-col justify-center">
-                  <h3 className="text-3xl font-black text-white mb-6 tracking-tight">{tech.title}</h3>
-                  <p className="text-white/60 max-w-sm mb-8 leading-relaxed font-medium">{tech.desc}</p>
-                  <Link to="/products" className="inline-flex items-center gap-4 text-white font-black hover:text-brand-blue transition-colors uppercase tracking-widest">
+                <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-center">
+                  <h3 className="text-2xl md:text-3xl font-black text-white mb-3 md:mb-6 tracking-tight">{tech.title}</h3>
+                  <p className="text-white/60 text-sm md:text-base max-w-sm mb-6 md:mb-8 leading-relaxed font-medium">{tech.desc}</p>
+                  <Link to="/products" className="inline-flex items-center gap-4 text-white font-black hover:text-brand-blue transition-colors uppercase tracking-widest text-sm md:text-base mt-auto md:mt-0">
                     查看详情 <ArrowRight size={18} />
                   </Link>
                 </div>
@@ -288,17 +302,17 @@ const MarketSectors = () => {
   ];
 
   return (
-    <section className="py-24 md:py-56 bg-white px-6 md:px-20">
+    <section className="py-20 md:py-56 bg-white px-6 md:px-20">
       <div className="max-w-[1800px] mx-auto">
         <div className="text-center mb-16 md:mb-32">
           <span className="text-brand-blue font-black uppercase tracking-[0.4em] text-[10px] md:text-[11px] mb-6 md:mb-8 block">Market Applications</span>
-          <h2 className="text-4xl sm:text-5xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">
+          <h2 className="text-4xl md:text-8xl font-black text-brand-dark tracking-tighter leading-[0.9]">
             赋能多元行业<br />
             <span className="text-brand-blue">Market Applications</span>
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8 md:gap-10">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 md:gap-10">
           {sectors.map((sector, idx) => (
             <motion.div
               key={idx}
@@ -309,13 +323,13 @@ const MarketSectors = () => {
             >
               <Link 
                 to={`/products?industry=${sector.id}`}
-                className="group relative aspect-[3/4.5] md:aspect-[3/4.5] rounded-[40px] md:rounded-[60px] overflow-hidden cursor-pointer shadow-2xl block"
+                className="group relative aspect-[3/4.5] rounded-[32px] md:rounded-[60px] overflow-hidden cursor-pointer shadow-2xl block"
               >
                 <img src={sector.img} alt={sector.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" referrerPolicy="no-referrer" />
                 <div className="absolute inset-0 bg-brand-dark/30 group-hover:bg-brand-dark/10 transition-colors duration-700"></div>
-                <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
-                  <h3 className="text-2xl md:text-3xl font-black text-white mb-2 md:mb-4 tracking-tight">{sector.title}</h3>
-                  <p className="text-white/50 text-[10px] font-black uppercase tracking-widest">{sector.en}</p>
+                <div className="absolute inset-0 p-6 md:p-12 flex flex-col justify-end">
+                  <h3 className="text-lg md:text-3xl font-black text-white mb-1 md:mb-4 tracking-tight">{sector.title}</h3>
+                  <p className="text-white/50 text-[8px] md:text-[10px] font-black uppercase tracking-widest">{sector.en}</p>
                 </div>
               </Link>
             </motion.div>
@@ -328,7 +342,7 @@ const MarketSectors = () => {
 
 const GlobalPresence = () => {
   return (
-    <section className="py-56 bg-brand-gray px-6 md:px-20 relative overflow-hidden">
+    <section className="py-24 md:py-56 bg-brand-gray px-6 md:px-20 relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
         <img 
           src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=2000" 
@@ -339,30 +353,30 @@ const GlobalPresence = () => {
       </div>
       
       <div className="max-w-[1800px] mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
           <div>
-            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[11px] mb-8 block">Global Network</span>
-            <h2 className="text-5xl md:text-8xl font-black text-brand-dark tracking-tighter mb-16 leading-[0.9]">
+            <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] md:text-[11px] mb-4 md:mb-8 block">Global Network</span>
+            <h2 className="text-4xl md:text-8xl font-black text-brand-dark tracking-tighter mb-8 md:mb-16 leading-[0.9]">
               全球化布局<br />本地化服务<br />
               <span className="text-brand-blue">Global Network</span>
             </h2>
-            <p className="text-brand-dark/50 text-2xl leading-relaxed mb-20 max-w-2xl font-light">
+            <p className="text-brand-dark/50 text-lg md:text-2xl leading-relaxed mb-12 md:mb-20 max-w-2xl font-light">
               西顿新材料在亚洲、欧洲及美洲设有多个研发中心与销售分支，确保为全球客户提供高效、及时的技术支持与供应链保障。
             </p>
-            <div className="grid grid-cols-2 gap-16">
+            <div className="grid grid-cols-2 gap-8 md:gap-16">
               <div>
-                <div className="text-7xl font-black text-brand-blue mb-4 tracking-tighter">30+</div>
-                <div className="text-brand-dark/30 text-[11px] font-black uppercase tracking-[0.3em]">服务国家</div>
+                <div className="text-5xl md:text-7xl font-black text-brand-blue mb-2 md:mb-4 tracking-tighter">30+</div>
+                <div className="text-brand-dark/30 text-[9px] md:text-[11px] font-black uppercase tracking-[0.3em]">服务国家</div>
               </div>
               <div>
-                <div className="text-7xl font-black text-brand-blue mb-4 tracking-tighter">10+</div>
-                <div className="text-brand-dark/30 text-[11px] font-black uppercase tracking-[0.3em]">研发中心</div>
+                <div className="text-5xl md:text-7xl font-black text-brand-blue mb-2 md:mb-4 tracking-tighter">10+</div>
+                <div className="text-brand-dark/30 text-[9px] md:text-[11px] font-black uppercase tracking-[0.3em]">研发中心</div>
               </div>
             </div>
           </div>
           
-          <div className="relative">
-            <div className="aspect-[4/3] lg:aspect-square rounded-[60px] border border-brand-border flex items-center justify-center relative bg-white/50 backdrop-blur-xl shadow-2xl overflow-hidden group">
+          <div className="relative mt-16 lg:mt-0">
+            <div className="aspect-[4/3] rounded-[40px] md:rounded-[60px] border border-brand-border flex items-center justify-center relative bg-white/50 backdrop-blur-xl shadow-2xl overflow-hidden group">
               <WorldMap />
             </div>
           </div>
@@ -383,20 +397,20 @@ export default function Home() {
       <CorporateVideo />
       
       {/* Final CTA */}
-      <section className="py-64 bg-white px-6 md:px-20 text-center border-t border-brand-border">
+      <section className="py-32 md:py-64 bg-white px-6 md:px-20 text-center border-t border-brand-border">
         <div className="max-w-[1800px] mx-auto">
-          <h2 className="text-6xl md:text-[11rem] font-black text-brand-dark tracking-tighter mb-24 leading-[0.8]">
+          <h2 className="text-4xl md:text-[11rem] font-black text-brand-dark tracking-tighter mb-12 md:mb-24 leading-[0.8]">
             开启高性能材料<br />
             <span className="text-brand-blue">新篇章</span>
           </h2>
-          <p className="text-2xl md:text-4xl text-brand-dark/40 mb-24 max-w-4xl mx-auto font-light leading-relaxed">
+          <p className="text-lg md:text-4xl text-brand-dark/40 mb-12 md:mb-24 max-w-4xl mx-auto font-light leading-relaxed">
             联系我们的专家团队，获取定制化的表面处理解决方案。
           </p>
-          <div className="flex flex-wrap justify-center gap-12">
-            <Link to="/contact" className="bg-brand-blue text-white px-20 py-8 rounded-full font-black text-xl hover:bg-brand-dark transition-all shadow-2xl shadow-brand-blue/30 uppercase tracking-[0.3em]">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-6 md:gap-12">
+            <Link to="/contact" className="bg-brand-blue text-white px-10 md:px-20 py-6 md:py-8 rounded-full font-black text-lg md:text-xl hover:bg-brand-dark transition-all shadow-2xl shadow-brand-blue/30 uppercase tracking-[0.3em] w-full sm:w-auto">
               立即联系我们
             </Link>
-            <Link to="/products" className="border-2 border-brand-border text-brand-dark px-20 py-8 rounded-full font-black text-xl hover:bg-brand-gray transition-all uppercase tracking-[0.3em]">
+            <Link to="/products" className="border-2 border-brand-border text-brand-dark px-10 md:px-20 py-6 md:py-8 rounded-full font-black text-lg md:text-xl hover:bg-brand-gray transition-all uppercase tracking-[0.3em] w-full sm:w-auto">
               浏览产品目录
             </Link>
           </div>
